@@ -1,0 +1,55 @@
+name: build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  windows:
+    name: Build, regression tests, publish (win-x64)
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+
+      - name: Build + regression checks + self-contained publish
+        shell: pwsh
+        run: ./scripts/build.ps1 -Out "${{ github.workspace }}/artifacts"
+
+      - name: Bundle deployment package
+        shell: pwsh
+        run: |
+          $pkg = "${{ github.workspace }}/package"
+          New-Item -ItemType Directory -Force $pkg | Out-Null
+          Copy-Item artifacts -Destination "$pkg/artifacts" -Recurse
+          Copy-Item scripts -Destination "$pkg/scripts" -Recurse
+          Copy-Item README.md, DEPLOY.md, TOGARAK.md -Destination $pkg
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ClassroomGuard-win-x64
+          path: package/
+          retention-days: 30
+
+  learning:
+    name: Student learning page (browser checks)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install Playwright + Chromium
+        run: |
+          npm install --no-save playwright@1.56.1
+          npx playwright install --with-deps chromium
+      - name: Run browser checks
+        run: node tests/learning/browser.cjs

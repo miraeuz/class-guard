@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mirae · DTM Majburiy Matematika — Ifodalarni shakl almashtirish</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --canvas:#eaeef4; --panel:#ffffff; --ink:#0f1f33; --ink-soft:#43566e; --ink-faint:#8595a8;
+  --line:#dbe2ec; --line-strong:#c3cddb;
+  --primary:#2b5cff; --primary-ink:#1c46cc; --primary-tint:#eaf0ff;
+  --code:#0d9488; --code-tint:#e6f7f5;
+  --ok:#12a150; --ok-tint:#e5f7ec; --bad:#e5484d; --bad-tint:#fdecec;
+  --warn:#e0900a; --flag:#f5a623;
+  --radius:16px; --radius-sm:10px;
+  --shadow:0 1px 2px rgba(15,31,51,.05),0 8px 28px rgba(15,31,51,.07);
+  --shadow-lift:0 12px 40px rgba(15,31,51,.14);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:radial-gradient(1200px 500px at 88% -8%,#f4f7ff 0,transparent 60%),var(--canvas);
+  color:var(--ink); font-family:'Inter',system-ui,-apple-system,sans-serif;
+  font-size:16px; line-height:1.5; -webkit-font-smoothing:antialiased; min-height:100vh;
+}
+.mono{font-family:'IBM Plex Mono',ui-monospace,monospace}
+h1,h2,h3{font-family:'Space Grotesk','Inter',sans-serif;margin:0;letter-spacing:-.01em}
+button{font-family:inherit;cursor:pointer;border:none;background:none}
+button:focus-visible,input:focus-visible,[tabindex]:focus-visible{outline:3px solid var(--primary);outline-offset:2px;border-radius:6px}
+.screen{display:none}
+.screen.active{display:block;animation:rise .4s ease}
+@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+.frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;margin:0 3px;font-family:'IBM Plex Mono',ui-monospace,monospace;font-weight:600;line-height:1.05;font-size:1.05em}
+.frac .num,.frac .den{padding:1px 6px;text-align:center;min-width:1.2em}
+.frac .bar{display:block;width:100%;height:2px;background:currentColor;border-radius:1px;margin:1px 0}
+.mixed{display:inline-flex;align-items:center;gap:3px;vertical-align:middle;margin:0 2px;font-family:'IBM Plex Mono',ui-monospace,monospace;font-weight:600}
+.mixed .whole{font-size:1.15em;line-height:1;padding-bottom:2px}
+.mixed .frac{font-size:0.92em;margin:0}
+.qbody .frac,.opt .frac,.rev-q .frac,.tagans .frac{color:var(--ink)}
+.opt .frac{font-size:1.08em}
+.qbody{font-size:17.5px;line-height:1.75}
+.qbody p{margin:0 0 14px}
+
+.info-wrap{min-height:100vh;display:grid;place-items:center;padding:28px 20px}
+.info-card{width:min(560px,100%);background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
+.info-top{padding:30px 34px 22px;border-bottom:1px solid var(--line);position:relative;background:linear-gradient(180deg,#fbfcff,#fff)}
+.brandline{display:flex;align-items:center;gap:10px;color:var(--code);font-weight:600;font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;margin-bottom:14px}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 4px var(--ok-tint);animation:pulse 2.4s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.45}}
+.info-top h1{font-size:26px;line-height:1.2}
+.info-top p{color:var(--ink-soft);margin:.5rem 0 0;font-size:15px}
+.bitstrip{position:absolute;right:22px;top:26px;font-size:11px;color:var(--line-strong);letter-spacing:.18em;transform:rotate(90deg);transform-origin:right top}
+.info-body{padding:26px 34px 32px}
+.rules{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:26px}
+.rule{background:#f7f9fc;border:1px solid var(--line);border-radius:var(--radius-sm);padding:12px 14px}
+.rule b{display:block;font-family:'Space Grotesk';font-size:20px;line-height:1.1}
+.rule span{font-size:12.5px;color:var(--ink-soft)}
+.field{margin-bottom:16px}
+.field label{display:block;font-size:13px;font-weight:600;color:var(--ink-soft);margin-bottom:7px}
+.field input{width:100%;padding:13px 15px;border:1.5px solid var(--line-strong);border-radius:var(--radius-sm);font-size:16px;color:var(--ink);background:#fff;transition:border-color .15s,box-shadow .15s}
+.field input:focus{border-color:var(--primary);box-shadow:0 0 0 4px var(--primary-tint);outline:none}
+.field.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.err{color:var(--bad);font-size:13px;margin:2px 0 10px;min-height:0}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;font-weight:600;font-size:16px;padding:14px 22px;border-radius:var(--radius-sm);transition:transform .14s cubic-bezier(.22,1,.36,1),box-shadow .22s ease,background .2s ease,border-color .2s ease,color .2s ease}
+.btn:hover{transform:translateY(-1.5px)}
+.btn:active{transform:translateY(0) scale(.985)}
+.btn-primary{background:var(--primary);color:#fff;width:100%;box-shadow:0 8px 20px rgba(43,92,255,.28)}
+.btn-primary:hover{background:var(--primary-ink)}
+.btn-ghost{background:#fff;border:1.5px solid var(--line-strong);color:var(--ink)}
+.btn-ghost:hover{border-color:var(--primary);color:var(--primary)}
+.btn-ok{background:var(--ok);color:#fff}
+.btn-ok:hover{filter:brightness(.95)}
+
+.exam-head{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.86);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);padding:11px 22px;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.station{display:flex;align-items:center;gap:11px}
+.station-badge{font-family:'Space Grotesk';font-weight:700;font-size:15px;color:var(--ink);background:#fff;border:1.5px solid var(--line-strong);border-radius:10px;padding:6px 11px;letter-spacing:.02em}
+.station-badge small{display:block;font-size:9px;letter-spacing:.16em;color:var(--ink-faint);font-weight:600}
+.head-title{font-size:14.5px;font-weight:700}
+.head-title small{display:block;font-weight:500;color:var(--ink-faint);font-size:11.5px;letter-spacing:.04em}
+.head-spacer{flex:1}
+.cand{text-align:right;font-size:13px;line-height:1.25}
+.cand b{font-size:14px}
+.cand span{color:var(--ink-faint);font-size:11.5px}
+.timer{display:flex;align-items:center;gap:9px;background:#fff;border:1.5px solid var(--line-strong);padding:8px 14px;border-radius:10px;font-family:'IBM Plex Mono';font-weight:600;font-size:18px;letter-spacing:.02em;min-width:118px;justify-content:center}
+.timer svg{width:16px;height:16px}
+.timer.warn{border-color:var(--warn);color:var(--warn);background:#fffaf0}
+.timer.crit{border-color:var(--bad);color:var(--bad);background:var(--bad-tint);animation:blink 1s steps(2) infinite}
+@keyframes blink{50%{opacity:.6}}
+
+.exam-main{max-width:1180px;margin:0 auto;padding:22px;display:grid;grid-template-columns:minmax(200px, 230px) minmax(0, 1fr);gap:20px;align-items:start}
+.palette{position:sticky;top:78px;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:14px;max-height:calc(100vh - 100px);overflow-y:auto;overflow-x:hidden;z-index:5;min-width:0;width:100%;box-sizing:border-box}
+.palette h3{font-size:12px;text-transform:uppercase;letter-spacing:.12em;color:var(--ink-faint);margin-bottom:12px}
+.palette-grab{display:none}
+.palette-head{display:none}
+.pal-close{display:none}
+.pal-backdrop{position:fixed;inset:0;z-index:58;background:rgba(15,31,51,.42);opacity:0;pointer-events:none;transition:opacity .28s ease}
+.pal-backdrop.show{opacity:1;pointer-events:auto}
+.progress{height:7px;background:#eef2f8;border-radius:6px;overflow:hidden;margin-bottom:6px}
+.progress i{display:block;height:100%;background:linear-gradient(90deg,var(--primary),#5b82ff);width:0;border-radius:6px;transition:width .35s}
+.progress-lbl{font-size:12px;color:var(--ink-soft);margin-bottom:14px;display:flex;justify-content:space-between}
+.pgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;width:100%}
+.pcell{aspect-ratio:1;border-radius:7px;border:1.5px solid var(--line-strong);background:#fff;font-family:'IBM Plex Mono';font-weight:600;font-size:11px;color:var(--ink-soft);position:relative;display:grid;place-items:center;min-width:0;transition:transform .18s cubic-bezier(.34,1.56,.64,1),background .18s ease,border-color .18s ease,color .18s ease,box-shadow .18s ease}
+.pcell:hover{border-color:var(--primary);color:var(--primary)}
+.pcell.answered{background:var(--primary);border-color:var(--primary);color:#fff}
+.pcell.current{box-shadow:0 0 0 3px var(--primary-tint);border-color:var(--primary);transform:scale(1.06)}
+.pcell.flagged::after{content:"";position:absolute;top:-3px;right:-3px;width:10px;height:10px;background:var(--flag);border:2px solid #fff;border-radius:50%}
+.legend{margin-top:14px;display:grid;gap:7px;font-size:12px;color:var(--ink-soft)}
+.legend div{display:flex;align-items:center;gap:8px}
+.sw{width:15px;height:15px;border-radius:5px;border:1.5px solid var(--line-strong);flex:none}
+.sw.a{background:var(--primary);border-color:var(--primary)}
+.sw.f{background:#fff;position:relative}
+.sw.f::after{content:"";position:absolute;top:-3px;right:-3px;width:8px;height:8px;background:var(--flag);border:2px solid #fff;border-radius:50%}
+
+.qcard{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:28px 30px;min-height:60vh;display:flex;flex-direction:column;min-width:0;overflow:hidden;position:relative;z-index:1}
+.qtop{display:flex;align-items:center;gap:12px;margin-bottom:18px;flex-wrap:wrap}
+.qnum{font-family:'Space Grotesk';font-weight:700;font-size:15px;color:var(--ink)}
+.tur-tag{font-size:11.5px;font-weight:600;letter-spacing:.03em;color:var(--code);background:var(--code-tint);padding:5px 11px;border-radius:20px}
+.flagbtn{margin-left:auto;font-size:13px;font-weight:600;color:var(--ink-soft);border:1.5px solid var(--line-strong);border-radius:8px;padding:7px 13px;display:flex;align-items:center;gap:7px}
+.flagbtn:hover{border-color:var(--flag);color:var(--warn)}
+.flagbtn.on{background:#fff8ec;border-color:var(--flag);color:var(--warn)}
+.qbody{font-size:17.5px;line-height:1.75;color:var(--ink);margin-bottom:8px;word-wrap:break-word;overflow-wrap:anywhere}
+.opts{display:grid;gap:12px;margin-top:20px;min-width:0;width:100%}
+.opt{display:flex;align-items:center;gap:15px;text-align:left;width:100%;position:relative;background:#fff;border:1.5px solid var(--line-strong);border-radius:var(--radius-sm);padding:15px 18px;font-size:16px;color:var(--ink);transition:border-color .18s ease,background .18s ease,box-shadow .18s ease,transform .12s cubic-bezier(.22,1,.36,1)}
+.opt:hover{border-color:var(--primary);background:var(--primary-tint);transform:translateY(-1px)}
+.opt:active{transform:translateY(0) scale(.995)}
+.opt .key{width:34px;height:34px;flex:none;border-radius:9px;border:1.5px solid var(--line-strong);display:grid;place-items:center;font-family:'Space Grotesk';font-weight:700;font-size:15px;color:var(--ink-soft);transition:.18s cubic-bezier(.22,1,.36,1)}
+.opt.sel{border-color:var(--primary);background:var(--primary-tint);box-shadow:0 0 0 1px var(--primary),0 6px 18px rgba(43,92,255,.14)}
+.opt.sel .key{background:var(--primary);border-color:var(--primary);color:#fff;transform:scale(1.05)}
+.opt .otxt{flex:1;display:flex;align-items:center;gap:4px;flex-wrap:wrap;font-weight:500}
+.opt .check{margin-left:auto;width:24px;height:24px;flex:none;border-radius:50%;border:2px solid var(--line-strong);display:grid;place-items:center;color:#fff;opacity:0;transform:scale(.5);transition:.22s cubic-bezier(.34,1.56,.64,1)}
+.opt .check svg{width:13px;height:13px;stroke-dasharray:20;stroke-dashoffset:20;transition:stroke-dashoffset .3s .05s ease}
+.opt.sel .check{opacity:1;transform:scale(1);background:var(--primary);border-color:var(--primary)}
+.opt.sel .check svg{stroke-dashoffset:0}
+.opt.correct{border-color:var(--ok)!important;background:var(--ok-tint)!important;box-shadow:0 0 0 1px var(--ok)}
+.opt.correct .key{background:var(--ok)!important;border-color:var(--ok)!important;color:#fff}
+.opt.correct .check{opacity:1;transform:scale(1);background:var(--ok);border-color:var(--ok)}
+.opt.wrong{border-color:var(--bad)!important;background:var(--bad-tint)!important;box-shadow:0 0 0 1px var(--bad)}
+.opt.wrong .key{background:var(--bad)!important;border-color:var(--bad)!important;color:#fff}
+.opt.wrong .check{opacity:1;transform:scale(1);background:var(--bad);border-color:var(--bad)}
+.opt.locked{pointer-events:none;cursor:default}
+.feedback-box{margin-top:14px;padding:12px 14px;border-radius:10px;font-size:14px;line-height:1.5;display:none}
+.feedback-box.show{display:block}
+.feedback-box.ok{background:var(--ok-tint);color:var(--ok);border:1px solid #b7e4c7}
+.feedback-box.bad{background:var(--bad-tint);color:var(--bad);border:1px solid #f5c2c7}
+@keyframes pop{0%{transform:scale(1)}45%{transform:scale(1.22)}100%{transform:scale(1)}}
+.pcell.pop{animation:pop .32s cubic-bezier(.34,1.56,.64,1)}
+
+.qnav{margin-top:auto;padding-top:24px;display:flex;gap:12px;align-items:center}
+.qnav .btn{padding:12px 20px}
+.qnav .spacer{flex:1}
+
+.result-wrap{max-width:900px;margin:0 auto;padding:34px 22px 70px}
+.res-hero{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:34px;display:grid;grid-template-columns:auto 1fr;gap:30px;align-items:center;margin-bottom:22px}
+.ring{--p:0;width:150px;height:150px;border-radius:50%;flex:none;display:grid;place-items:center;background:conic-gradient(var(--ring-c) calc(var(--p)*1%),#eef2f8 0)}
+.ring .inner{width:118px;height:118px;border-radius:50%;background:#fff;display:grid;place-items:center;text-align:center}
+.ring .pct{font-family:'Space Grotesk';font-weight:700;font-size:34px;line-height:1}
+.ring .pl{font-size:11px;color:var(--ink-faint);letter-spacing:.1em;text-transform:uppercase}
+.res-meta h2{font-size:26px;margin-bottom:4px}
+.res-meta .sub{color:var(--ink-soft);margin-bottom:16px}
+.res-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.stat{background:#f7f9fc;border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.stat b{display:block;font-family:'Space Grotesk';font-size:22px}
+.stat span{font-size:12px;color:var(--ink-soft)}
+.baho{display:inline-block;font-weight:700;padding:5px 14px;border-radius:20px;font-size:14px;margin-top:2px}
+
+.tahlil-head{display:flex;align-items:center;gap:14px;margin:26px 4px 14px;flex-wrap:wrap}
+.tahlil-head h3{font-size:19px}
+.filters{margin-left:auto;display:flex;gap:8px}
+.filters button{font-size:13px;font-weight:600;color:var(--ink-soft);border:1.5px solid var(--line-strong);border-radius:20px;padding:7px 15px}
+.filters button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.review{display:grid;gap:12px}
+.rev{background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow)}
+.rev.correct{border-left-color:var(--ok)}
+.rev.wrong{border-left-color:var(--bad)}
+.rev.skipped{border-left-color:var(--ink-faint)}
+.rev-top{display:flex;align-items:center;gap:10px;margin-bottom:9px;flex-wrap:wrap}
+.rev-n{font-family:'Space Grotesk';font-weight:700;font-size:14px}
+.rev-badge{font-size:11.5px;font-weight:700;padding:4px 10px;border-radius:16px}
+.rev-badge.c{background:var(--ok-tint);color:var(--ok)}
+.rev-badge.w{background:var(--bad-tint);color:var(--bad)}
+.rev-badge.s{background:#eef2f8;color:var(--ink-soft)}
+.rev-q{font-size:15px;color:var(--ink);margin-bottom:10px;line-height:1.65}
+.rev-ans{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px;font-size:13.5px}
+.tagans{padding:5px 11px;border-radius:8px;font-weight:600;display:inline-flex;align-items:center;gap:4px}
+.tagans.you{background:#f1f4f9;color:var(--ink-soft)}
+.tagans.you.bad{background:var(--bad-tint);color:var(--bad)}
+.tagans.right{background:var(--ok-tint);color:var(--ok)}
+.rev-exp{font-size:13.5px;color:var(--ink-soft);background:#f7f9fc;border-radius:10px;padding:11px 13px;line-height:1.55}
+.rev-exp b{color:var(--ink)}
+
+.modal{position:fixed;inset:0;z-index:80;background:rgba(15,31,51,.4);display:none;place-items:center;padding:20px;backdrop-filter:blur(3px)}
+.modal.show{display:grid;animation:rise .25s ease}
+.modal-card{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow-lift);padding:28px;width:min(440px,100%);text-align:center}
+.modal-card h3{font-size:21px;margin-bottom:8px}
+.modal-card p{color:var(--ink-soft);margin-bottom:22px}
+.modal-card .row{display:flex;gap:12px}
+.modal-card .row .btn{flex:1}
+.warn-num{color:var(--warn);font-weight:700}
+
+.palette-toggle{display:none}
+@media(max-width:860px){
+  .exam-main{grid-template-columns:1fr;padding:14px}
+  .palette{position:fixed;left:0;right:0;bottom:0;top:auto;border-radius:22px 22px 0 0;max-height:76vh;overflow:auto;transform:translateY(105%);transition:transform .34s cubic-bezier(.22,1,.36,1);z-index:60;box-shadow:var(--shadow-lift);padding-top:6px}
+  .palette.open{transform:none}
+  .palette .palette-grab{display:block;width:44px;height:5px;border-radius:3px;background:var(--line-strong);margin:8px auto 4px;cursor:grab}
+  .palette .palette-head{display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--panel);padding-bottom:8px;z-index:2}
+  .palette .palette-head h3{margin:0}
+  .palette .pal-close{display:grid;place-items:center;width:34px;height:34px;border-radius:9px;border:1.5px solid var(--line-strong);color:var(--ink-soft);background:#fff}
+  .palette .pal-close:active{transform:scale(.92)}
+  .palette-toggle{display:flex;position:fixed;bottom:16px;right:16px;z-index:55;background:var(--ink);color:#fff;border-radius:50px;padding:13px 20px;font-weight:600;font-size:14px;gap:9px;box-shadow:var(--shadow-lift);transition:transform .2s,opacity .2s}
+  .palette-toggle:active{transform:scale(.95)}
+  .pgrid{grid-template-columns:repeat(5,1fr)}
+  .res-hero{grid-template-columns:1fr;text-align:center;justify-items:center}
+  .res-stats{grid-template-columns:repeat(2,1fr);width:100%}
+  .rules{grid-template-columns:1fr 1fr}
+  .cand{display:none}
+}
+@media(max-width:520px){
+  .qcard{padding:20px 17px}.info-body,.info-top{padding-left:22px;padding-right:22px}
+  .field.two{grid-template-columns:1fr}.pgrid{grid-template-columns:repeat(5,1fr)}
+  .head-title small{display:none}
+}
+</style>
+</head>
+<body>
+
+<section id="screen-info" class="screen active">
+  <div class="info-wrap">
+    <div class="info-card">
+      <div class="info-top">
+        <div class="bitstrip mono">DTM</div>
+        <div class="brandline"><span class="dot"></span> Mirae o'quv markazi · DTM majburiy</div>
+        <h1>Ifodalarni shakl almashtirish</h1>
+        <p>O‘xshash qo‘shiluvchilarni ixchamlash, qavslarni ochish va ifodalarni soddalashtirish. 10 ta savol · 30 daqiqa.</p>
+      </div>
+      <div class="info-body">
+        <div class="rules">
+          <div class="rule"><b>10</b><span>ta savol (A–D)</span></div>
+          <div class="rule"><b>30:00</b><span>daqiqa vaqt</span></div>
+          <div class="rule"><b>4</b><span>variant</span></div>
+          <div class="rule"><b>1</b><span>to‘g‘ri javob</span></div>
+        </div>
+        <div class="field two">
+          <div>
+            <label for="in-name">Ism</label>
+            <input id="in-name" type="text" autocomplete="given-name" placeholder="Masalan: Alisher">
+          </div>
+          <div>
+            <label for="in-sur">Familiya</label>
+            <input id="in-sur" type="text" autocomplete="family-name" placeholder="Masalan: Navoiy">
+          </div>
+        </div>
+        <div class="field">
+          <label for="in-group">Guruh / sinf (ixtiyoriy)</label>
+          <input id="in-group" type="text" placeholder="Masalan: 11-A">
+        </div>
+        <div class="err" id="info-err"></div>
+        <button class="btn btn-primary" id="start-btn">
+          Testni boshlash
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="screen-exam" class="screen">
+  <header class="exam-head">
+    <div class="station">
+      <div class="station-badge"><small>STANSIYA</small><span id="station-no">158</span></div>
+    </div>
+    <div class="head-title">Mirae · DTM Majburiy<small>Ifodalarni shakl almashtirish · 10 savol</small></div>
+    <div class="head-spacer"></div>
+    <div class="cand"><b id="cand-name">—</b><br><span id="cand-group"></span></div>
+    <div class="timer" id="timer">
+      <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="13" r="8" stroke="currentColor" stroke-width="2"/><path d="M12 9v4l2.5 2M9 2h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      <span id="timer-txt">30:00</span>
+    </div>
+    <button class="btn btn-ok" id="finish-btn">Yakunlash</button>
+  </header>
+
+  <div class="exam-main">
+    <aside class="palette" id="palette">
+      <div class="palette-grab" id="pal-grab"></div>
+      <div class="palette-head">
+        <h3>Savollar xaritasi</h3>
+        <button class="pal-close" id="pal-close" aria-label="Xaritani yopish">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+      <div class="progress"><i id="prog-bar"></i></div>
+      <div class="progress-lbl"><span id="prog-answered">0 ta belgilandi</span><span id="prog-total"></span></div>
+      <div class="pgrid" id="pgrid"></div>
+      <div class="legend">
+        <div><span class="sw a"></span> Javob belgilangan</div>
+        <div><span class="sw"></span> Belgilanmagan</div>
+        <div><span class="sw f"></span> Keyinroq qaytish</div>
+      </div>
+    </aside>
+
+    <main class="qcard">
+      <div class="qtop">
+        <span class="qnum" id="q-num">1-savol</span>
+        <span class="tur-tag" id="q-tur">Ifodalar</span>
+        <button class="flagbtn" id="flag-btn">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M5 21V4m0 0h11l-2 4 2 4H5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Belgilab qo‘yish
+        </button>
+      </div>
+      <div class="qbody" id="q-body"></div>
+      <div class="opts" id="q-opts"></div>
+      <div class="qnav">
+        <button class="btn btn-ghost" id="prev-btn">← Oldingi</button>
+        <div class="spacer"></div>
+        <button class="btn btn-primary" id="next-btn" style="width:auto">Keyingi →</button>
+      </div>
+    </main>
+  </div>
+
+  <div class="pal-backdrop" id="pal-backdrop"></div>
+  <button class="palette-toggle" id="pal-toggle">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    Xarita
+  </button>
+</section>
+
+<section id="screen-result" class="screen">
+  <div class="result-wrap">
+    <div class="res-hero">
+      <div class="ring" id="res-ring"><div class="inner"><div><div class="pct" id="res-pct">0%</div><div class="pl">natija</div></div></div></div>
+      <div class="res-meta">
+        <h2 id="res-title">Test yakunlandi</h2>
+        <div class="sub" id="res-sub">—</div>
+        <span class="baho" id="res-baho">—</span>
+        <div class="res-stats" style="margin-top:16px">
+          <div class="stat"><b id="s-correct">0</b><span>To‘g‘ri</span></div>
+          <div class="stat"><b id="s-wrong">0</b><span>Xato</span></div>
+          <div class="stat"><b id="s-skip">0</b><span>Belgilanmagan</span></div>
+          <div class="stat"><b id="s-time">0:00</b><span>Sarflangan vaqt</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tahlil-head">
+      <h3>Natijalar tahlili</h3>
+      <div class="filters">
+        <button class="on" data-f="all">Barchasi</button>
+        <button data-f="wrong">Faqat xatolar</button>
+        <button data-f="correct">To‘g‘rilari</button>
+      </div>
+    </div>
+    <div class="review" id="review"></div>
+
+    <div style="margin-top:28px;display:flex;gap:12px;flex-wrap:wrap">
+      <button class="btn btn-primary" id="restart-btn" style="width:auto">Yangi test topshirish</button>
+      <button class="btn btn-ghost" id="print-btn">Natijani chop etish</button>
+    </div>
+  </div>
+</section>
+
+<div class="modal" id="finish-modal">
+  <div class="modal-card">
+    <h3>Testni yakunlaysizmi?</h3>
+    <p id="finish-modal-txt">Javob belgilanmagan savollar bor.</p>
+    <div class="row">
+      <button class="btn btn-ghost" id="fm-cancel">Davom etish</button>
+      <button class="btn btn-ok" id="fm-confirm">Ha, yakunlash</button>
+    </div>
+  </div>
+</div>
+
+<script>
+function fracHTML(num, den){
+  return `<span class="frac"><span class="num">${num}</span><span class="bar"></span><span class="den">${den}</span></span>`;
+}
+function mixedHTML(whole, num, den){
+  return `<span class="mixed"><span class="whole">${whole}</span>${fracHTML(num, den)}</span>`;
+}
+function renderMath(text){
+  if(!text) return '';
+  let s = String(text);
+  s = s.replace(/(\d+)\s+(\d+)\/(\d+)/g, (_,w,n,d) => mixedHTML(w,n,d));
+  s = s.replace(/(\d+)\/(\d+)/g, (_,n,d) => fracHTML(n,d));
+  return s;
+}
+
+const BANK = [
+  // 1. O'xshash qo'shiluvchilarni ixchamlash
+  {id:1, prompt:"5a + 27a − a ifodasini ixchamlang.", options:[{label:"A",text:"31a"},{label:"B",text:"32a"},{label:"C",text:"33a"},{label:"D",text:"30a"}], correct:"A", explain:"5a + 27a − a = (5+27−1)a = 31a."},
+  {id:2, prompt:"12b − 17b − b ifodasini ixchamlang.", options:[{label:"A",text:"−6b"},{label:"B",text:"−5b"},{label:"C",text:"6b"},{label:"D",text:"−29b"}], correct:"A", explain:"12b − 17b − b = (12−17−1)b = −6b."},
+  {id:3, prompt:"6x − 14 − 13x + 26 ifodasini ixchamlang.", options:[{label:"A",text:"−7x + 12"},{label:"B",text:"−7x − 12"},{label:"C",text:"7x + 12"},{label:"D",text:"−19x + 40"}], correct:"A", explain:"(6x − 13x) + (−14 + 26) = −7x + 12."},
+  {id:4, prompt:"8y − y + 17 − 10y ifodasini ixchamlang.", options:[{label:"A",text:"−3y + 17"},{label:"B",text:"−2y + 17"},{label:"C",text:"3y + 17"},{label:"D",text:"−19y + 17"}], correct:"A", explain:"(8y − y − 10y) + 17 = −3y + 17."},
+  {id:5, prompt:"13a + 2a − 2a − b ifodasini ixchamlang.", options:[{label:"A",text:"13a − b"},{label:"B",text:"15a − b"},{label:"C",text:"13a + b"},{label:"D",text:"11a − b"}], correct:"A", explain:"13a + 2a − 2a − b = 13a − b."},
+  {id:6, prompt:"−5,1a − 4b − 4,9a + b ifodasini ixchamlang.", options:[{label:"A",text:"−10a − 3b"},{label:"B",text:"−10a − 5b"},{label:"C",text:"−0,2a − 3b"},{label:"D",text:"10a − 3b"}], correct:"A", explain:"(−5,1a − 4,9a) + (−4b + b) = −10a − 3b."},
+  {id:7, prompt:"41x − 58x + 6y − y ifodasini ixchamlang.", options:[{label:"A",text:"−17x + 5y"},{label:"B",text:"−17x − 5y"},{label:"C",text:"17x + 5y"},{label:"D",text:"−99x + 5y"}], correct:"A", explain:"(41x − 58x) + (6y − y) = −17x + 5y."},
+  {id:8, prompt:"7,5x + y − 8,5x − 3,5y ifodasini ixchamlang.", options:[{label:"A",text:"−x − 2,5y"},{label:"B",text:"−x + 2,5y"},{label:"C",text:"x − 2,5y"},{label:"D",text:"−16x − 2,5y"}], correct:"A", explain:"(7,5x − 8,5x) + (y − 3,5y) = −x − 2,5y."},
+  {id:9, prompt:"8x − 6y − 7x − 2y ifodasini ixchamlang.", options:[{label:"A",text:"x − 8y"},{label:"B",text:"x + 8y"},{label:"C",text:"15x − 8y"},{label:"D",text:"−x − 8y"}], correct:"A", explain:"(8x − 7x) + (−6y − 2y) = x − 8y."},
+  {id:10, prompt:"3,5b − 2,4c − 0,6c − 0,7b ifodasini ixchamlang.", options:[{label:"A",text:"2,8b − 3c"},{label:"B",text:"2,8b − 1,8c"},{label:"C",text:"4,2b − 3c"},{label:"D",text:"2,8b + 3c"}], correct:"A", explain:"(3,5b − 0,7b) + (−2,4c − 0,6c) = 2,8b − 3c."},
+
+  // 2. Qavslarni ochish
+  {id:11, prompt:"x + (b + c + d − m) ifodasida qavslarni oching.", options:[{label:"A",text:"x + b + c + d − m"},{label:"B",text:"x − b − c − d + m"},{label:"C",text:"x + b − c − d − m"},{label:"D",text:"−x + b + c + d − m"}], correct:"A", explain:"Oldida musbat ishora bo‘lsa, qavs ichidagi ishoralar o‘zgarmaydi."},
+  {id:12, prompt:"x − (b − c − d) ifodasida qavslarni oching.", options:[{label:"A",text:"x − b + c + d"},{label:"B",text:"x − b − c − d"},{label:"C",text:"x + b − c − d"},{label:"D",text:"−x − b + c + d"}], correct:"A", explain:"Oldida manfiy ishora: barcha ishoralar o‘zgaradi."},
+  {id:13, prompt:"x + y − (b + c − m) ifodasida qavslarni oching.", options:[{label:"A",text:"x + y − b − c + m"},{label:"B",text:"x + y − b − c − m"},{label:"C",text:"x + y + b + c − m"},{label:"D",text:"x − y − b − c + m"}], correct:"A", explain:"Manfiy ishora oldida: ishoralar o‘zgaradi."},
+  {id:14, prompt:"x + (a − b) − (c + d) ifodasida qavslarni oching.", options:[{label:"A",text:"x + a − b − c − d"},{label:"B",text:"x + a − b + c + d"},{label:"C",text:"x − a + b − c − d"},{label:"D",text:"x + a + b − c − d"}], correct:"A", explain:"Birinchi qavs musbat, ikkinchisi manfiy."},
+  {id:15, prompt:"m − (a − k − b) ifodasida qavslarni oching.", options:[{label:"A",text:"m − a + k + b"},{label:"B",text:"m − a − k − b"},{label:"C",text:"m + a − k − b"},{label:"D",text:"−m − a + k + b"}], correct:"A", explain:"Manfiy ishora: ishoralar o‘zgaradi."},
+  {id:16, prompt:"x + a + (m − 2) ifodasida qavslarni oching.", options:[{label:"A",text:"x + a + m − 2"},{label:"B",text:"x + a − m + 2"},{label:"C",text:"x − a + m − 2"},{label:"D",text:"x + a + m + 2"}], correct:"A", explain:"Musbat ishora: ishoralar saqlanadi."},
+  {id:17, prompt:"m − (a − k − b) ifodasida qavslarni oching.", options:[{label:"A",text:"m − a + k + b"},{label:"B",text:"m − a − k − b"},{label:"C",text:"m + a + k + b"},{label:"D",text:"−m + a − k − b"}], correct:"A", explain:"Manfiy ishora oldida ishoralar o‘zgaradi."},
+  {id:18, prompt:"a − (b − c) + (m + n) ifodasida qavslarni oching.", options:[{label:"A",text:"a − b + c + m + n"},{label:"B",text:"a − b − c + m + n"},{label:"C",text:"a + b − c + m + n"},{label:"D",text:"a − b + c − m − n"}], correct:"A", explain:"Birinchi qavs manfiy, ikkinchisi musbat."},
+  {id:19, prompt:"(x − y) − (a − k) ifodasida qavslarni oching.", options:[{label:"A",text:"x − y − a + k"},{label:"B",text:"x − y − a − k"},{label:"C",text:"x + y − a + k"},{label:"D",text:"−x + y − a + k"}], correct:"A", explain:"Ikkinchi qavs oldida manfiy."},
+  {id:20, prompt:"−(m − n + 5) ifodasida qavslarni oching.", options:[{label:"A",text:"−m + n − 5"},{label:"B",text:"−m − n − 5"},{label:"C",text:"m − n + 5"},{label:"D",text:"−m + n + 5"}], correct:"A", explain:"Oldida manfiy ishora: barcha ishoralar o‘zgaradi."},
+
+  // 3. Ifodani soddalashtirish
+  {id:21, prompt:"5 − (a − 3) ifodasini soddalashtiring.", options:[{label:"A",text:"8 − a"},{label:"B",text:"2 − a"},{label:"C",text:"5 − a − 3"},{label:"D",text:"a − 8"}], correct:"A", explain:"5 − a + 3 = 8 − a."},
+  {id:22, prompt:"7 + (12 − 2b) ifodasini soddalashtiring.", options:[{label:"A",text:"19 − 2b"},{label:"B",text:"19 + 2b"},{label:"C",text:"−5 − 2b"},{label:"D",text:"5 − 2b"}], correct:"A", explain:"7 + 12 − 2b = 19 − 2b."},
+  {id:23, prompt:"64 − (14 + 7x) ifodasini soddalashtiring.", options:[{label:"A",text:"50 − 7x"},{label:"B",text:"50 + 7x"},{label:"C",text:"78 − 7x"},{label:"D",text:"−50 − 7x"}], correct:"A", explain:"64 − 14 − 7x = 50 − 7x."},
+  {id:24, prompt:"38 + (12 − 8p) ifodasini soddalashtiring.", options:[{label:"A",text:"50 − 8p"},{label:"B",text:"50 + 8p"},{label:"C",text:"26 − 8p"},{label:"D",text:"−50 − 8p"}], correct:"A", explain:"38 + 12 − 8p = 50 − 8p."},
+  {id:25, prompt:"x + (2x + 0,5) ifodasini soddalashtiring.", options:[{label:"A",text:"3x + 0,5"},{label:"B",text:"3x − 0,5"},{label:"C",text:"x + 2,5"},{label:"D",text:"2x + 0,5"}], correct:"A", explain:"x + 2x + 0,5 = 3x + 0,5."},
+  {id:26, prompt:"3x − (x − 2) ifodasini soddalashtiring.", options:[{label:"A",text:"2x + 2"},{label:"B",text:"2x − 2"},{label:"C",text:"4x − 2"},{label:"D",text:"−2x + 2"}], correct:"A", explain:"3x − x + 2 = 2x + 2."},
+  {id:27, prompt:"4a − (a − 6) ifodasini soddalashtiring.", options:[{label:"A",text:"3a + 6"},{label:"B",text:"3a − 6"},{label:"C",text:"5a − 6"},{label:"D",text:"−3a + 6"}], correct:"A", explain:"4a − a + 6 = 3a + 6."},
+  {id:28, prompt:"60 + (10 − 4,5b) ifodasini soddalashtiring.", options:[{label:"A",text:"70 − 4,5b"},{label:"B",text:"70 + 4,5b"},{label:"C",text:"50 − 4,5b"},{label:"D",text:"−70 − 4,5b"}], correct:"A", explain:"60 + 10 − 4,5b = 70 − 4,5b."},
+  {id:29, prompt:"(5x − 1) − (2 − 8x) ifodasini soddalashtiring.", options:[{label:"A",text:"13x − 3"},{label:"B",text:"3x − 3"},{label:"C",text:"13x + 3"},{label:"D",text:"7x − 3"}], correct:"A", explain:"5x − 1 − 2 + 8x = 13x − 3."},
+  {id:30, prompt:"(6 − 2x) + (15 − 3x) ifodasini soddalashtiring.", options:[{label:"A",text:"21 − 5x"},{label:"B",text:"21 + 5x"},{label:"C",text:"9 − 5x"},{label:"D",text:"−21 − 5x"}], correct:"A", explain:"6 − 2x + 15 − 3x = 21 − 5x."},
+
+  // 4. Qavslarni ochib, o'xshashlarni ixchamlash
+  {id:31, prompt:"(5x − 1) − (2 − 8x) ifodasini soddalashtiring.", options:[{label:"A",text:"13x − 3"},{label:"B",text:"3x − 3"},{label:"C",text:"7x − 1"},{label:"D",text:"13x + 1"}], correct:"A", explain:"5x − 1 − 2 + 8x = 13x − 3."},
+  {id:32, prompt:"(6 − 2x) + (15 − 3x) ifodasini soddalashtiring.", options:[{label:"A",text:"21 − 5x"},{label:"B",text:"9 − 5x"},{label:"C",text:"21 + 5x"},{label:"D",text:"−21 − 5x"}], correct:"A", explain:"6+15 −2x−3x = 21 − 5x."},
+  {id:33, prompt:"12 − 7x − (1 − 3x) ifodasini soddalashtiring.", options:[{label:"A",text:"11 − 4x"},{label:"B",text:"13 − 4x"},{label:"C",text:"11 − 10x"},{label:"D",text:"−11 − 4x"}], correct:"A", explain:"12 − 7x − 1 + 3x = 11 − 4x."},
+  {id:34, prompt:"37 − (x − 16) + (1x − 53) ifodasini soddalashtiring.", options:[{label:"A",text:"−x"},{label:"B",text:"x"},{label:"C",text:"106 − x"},{label:"D",text:"−106 + x"}], correct:"A", explain:"37 − x + 16 + x − 53 = 0."},
+  {id:35, prompt:"(x − 1) + (12 − 7,5x) ifodasini soddalashtiring.", options:[{label:"A",text:"11 − 6,5x"},{label:"B",text:"13 − 6,5x"},{label:"C",text:"11 + 6,5x"},{label:"D",text:"−11 − 6,5x"}], correct:"A", explain:"x − 1 + 12 − 7,5x = 11 − 6,5x."},
+  {id:36, prompt:"(2p + 1,9) − (7 − p) ifodasini soddalashtiring.", options:[{label:"A",text:"3p − 5,1"},{label:"B",text:"3p + 5,1"},{label:"C",text:"p − 5,1"},{label:"D",text:"−3p − 5,1"}], correct:"A", explain:"2p + 1,9 − 7 + p = 3p − 5,1."},
+  {id:37, prompt:"3 − (0,4a) − (10 − 0,8a) ifodasini soddalashtiring.", options:[{label:"A",text:"−7 + 0,4a"},{label:"B",text:"−7 − 0,4a"},{label:"C",text:"13 − 0,4a"},{label:"D",text:"7 + 0,4a"}], correct:"A", explain:"3 − 0,4a − 10 + 0,8a = −7 + 0,4a."},
+  {id:38, prompt:"4b − (4 − 2b) + (3b − 1) ifodasini soddalashtiring.", options:[{label:"A",text:"9b − 5"},{label:"B",text:"5b − 5"},{label:"C",text:"9b + 5"},{label:"D",text:"−9b − 5"}], correct:"A", explain:"4b − 4 + 2b + 3b − 1 = 9b − 5."},
+  {id:39, prompt:"y − (y + 4) + (y − 4) ifodasini soddalashtiring.", options:[{label:"A",text:"y − 8"},{label:"B",text:"y"},{label:"C",text:"−y − 8"},{label:"D",text:"3y − 8"}], correct:"A", explain:"y − y − 4 + y − 4 = y − 8."},
+  {id:40, prompt:"4x − (1 − 2x) + (2x − 7) ifodasini soddalashtiring.", options:[{label:"A",text:"8x − 8"},{label:"B",text:"6x − 8"},{label:"C",text:"8x + 8"},{label:"D",text:"−8x − 8"}], correct:"A", explain:"4x − 1 + 2x + 2x − 7 = 8x − 8."},
+
+  // 5. Qiymat topish
+  {id:41, prompt:"(5x − 1) − (2 − 8x) ifodasini soddalashtiring va x = 0,75 da qiymatini toping.", options:[{label:"A",text:"6,75"},{label:"B",text:"5,75"},{label:"C",text:"7,75"},{label:"D",text:"6,25"}], correct:"A", explain:"13x − 3; 13×0,75 − 3 = 9,75 − 3 = 6,75."},
+  {id:42, prompt:"(6 − 2x) + (15 − 3x) ifodasini soddalashtiring va x = −0,2 da qiymatini toping.", options:[{label:"A",text:"22"},{label:"B",text:"20"},{label:"C",text:"21"},{label:"D",text:"19"}], correct:"A", explain:"21 − 5x; 21 − 5(−0,2) = 21 + 1 = 22."},
+  {id:43, prompt:"12 − 7x − (1 − 3x) ifodasini soddalashtiring va x = −1,7 da qiymatini toping.", options:[{label:"A",text:"17,8"},{label:"B",text:"15,8"},{label:"C",text:"4,2"},{label:"D",text:"−17,8"}], correct:"A", explain:"11 − 4x; 11 − 4(−1,7) = 11 + 6,8 = 17,8."},
+  {id:44, prompt:"37 − (x − 16) + (x − 53) ifodasini soddalashtiring va x = −0,03 da qiymatini toping.", options:[{label:"A",text:"0"},{label:"B",text:"−0,03"},{label:"C",text:"0,03"},{label:"D",text:"53"}], correct:"A", explain:"Ifoda doim 0 ga teng."},
+  {id:45, prompt:"(x − 1) + (12 − 7,5x) ifodasini soddalashtiring va x = 2 da qiymatini toping.", options:[{label:"A",text:"−2"},{label:"B",text:"2"},{label:"C",text:"11"},{label:"D",text:"−11"}], correct:"A", explain:"11 − 6,5x; 11 − 6,5×2 = 11 − 13 = −2."},
+
+  // 6. Yana soddalashtirish
+  {id:46, prompt:"(x − 1) + (12 − 7,5x) ifodasini soddalashtiring.", options:[{label:"A",text:"11 − 6,5x"},{label:"B",text:"13 − 6,5x"},{label:"C",text:"11 + 6,5x"},{label:"D",text:"−11 − 6,5x"}], correct:"A", explain:"x − 1 + 12 − 7,5x = 11 − 6,5x."},
+  {id:47, prompt:"(2p + 1,9) − (7 − p) ifodasini soddalashtiring.", options:[{label:"A",text:"3p − 5,1"},{label:"B",text:"p − 5,1"},{label:"C",text:"3p + 5,1"},{label:"D",text:"−3p − 5,1"}], correct:"A", explain:"2p + 1,9 − 7 + p = 3p − 5,1."},
+  {id:48, prompt:"3 − (0,4a) − (10 − 0,8a) ifodasini soddalashtiring.", options:[{label:"A",text:"−7 + 0,4a"},{label:"B",text:"−7 − 0,4a"},{label:"C",text:"13 + 0,4a"},{label:"D",text:"7 − 0,4a"}], correct:"A", explain:"3 − 0,4a − 10 + 0,8a = −7 + 0,4a."},
+  {id:49, prompt:"4b − (4 − 2b) + (3b − 1) ifodasini soddalashtiring.", options:[{label:"A",text:"9b − 5"},{label:"B",text:"5b − 5"},{label:"C",text:"9b + 5"},{label:"D",text:"−5b − 5"}], correct:"A", explain:"4b − 4 + 2b + 3b − 1 = 9b − 5."},
+  {id:50, prompt:"y − (y + 4) + (y − 4) ifodasini soddalashtiring.", options:[{label:"A",text:"y − 8"},{label:"B",text:"y"},{label:"C",text:"−y"},{label:"D",text:"3y − 8"}], correct:"A", explain:"y − y − 4 + y − 4 = y − 8."},
+
+  // 7. Maxsus
+  {id:51, prompt:"a ning istalgan qiymatida ham 3(a + 2) − 3a ifodasining qiymati nechaga teng?", options:[{label:"A",text:"6"},{label:"B",text:"0"},{label:"C",text:"3"},{label:"D",text:"2"}], correct:"A", explain:"3a + 6 − 3a = 6. Doim 6."},
+  {id:52, prompt:"5(x − 2) − 5x ifodasining qiymati qanday?", options:[{label:"A",text:"−10"},{label:"B",text:"10"},{label:"C",text:"0"},{label:"D",text:"5"}], correct:"A", explain:"5x − 10 − 5x = −10."},
+  {id:53, prompt:"2(3x + 4) − 6x ifodasining qiymati qanday?", options:[{label:"A",text:"8"},{label:"B",text:"−8"},{label:"C",text:"0"},{label:"D",text:"4"}], correct:"A", explain:"6x + 8 − 6x = 8."},
+  {id:54, prompt:"4(y − 1) − 4y ifodasining qiymati qanday?", options:[{label:"A",text:"−4"},{label:"B",text:"4"},{label:"C",text:"0"},{label:"D",text:"−1"}], correct:"A", explain:"4y − 4 − 4y = −4."},
+  {id:55, prompt:"7(2 − x) + 7x ifodasining qiymati qanday?", options:[{label:"A",text:"14"},{label:"B",text:"−14"},{label:"C",text:"0"},{label:"D",text:"7"}], correct:"A", explain:"14 − 7x + 7x = 14."},
+
+  // Ko'proq ixchamlash
+  {id:56, prompt:"2a + 5b − 3a + 7b ifodasini ixchamlang.", options:[{label:"A",text:"−a + 12b"},{label:"B",text:"5a + 12b"},{label:"C",text:"−a − 12b"},{label:"D",text:"a + 2b"}], correct:"A", explain:"(2a − 3a) + (5b + 7b) = −a + 12b."},
+  {id:57, prompt:"9m − 4n − 5m + 2n ifodasini ixchamlang.", options:[{label:"A",text:"4m − 2n"},{label:"B",text:"14m − 2n"},{label:"C",text:"4m + 2n"},{label:"D",text:"−4m − 2n"}], correct:"A", explain:"(9m − 5m) + (−4n + 2n) = 4m − 2n."},
+  {id:58, prompt:"−3p + 8q + 5p − 11q ifodasini ixchamlang.", options:[{label:"A",text:"2p − 3q"},{label:"B",text:"−8p − 3q"},{label:"C",text:"2p + 3q"},{label:"D",text:"8p − 3q"}], correct:"A", explain:"(−3p + 5p) + (8q − 11q) = 2p − 3q."},
+  {id:59, prompt:"6x − 2y − 9x + 5y ifodasini ixchamlang.", options:[{label:"A",text:"−3x + 3y"},{label:"B",text:"15x + 3y"},{label:"C",text:"−3x − 3y"},{label:"D",text:"3x + 3y"}], correct:"A", explain:"(6x − 9x) + (−2y + 5y) = −3x + 3y."},
+  {id:60, prompt:"4c − 7d − 4c + 7d ifodasini ixchamlang.", options:[{label:"A",text:"0"},{label:"B",text:"8c"},{label:"C",text:"−14d"},{label:"D",text:"8c − 14d"}], correct:"A", explain:"Barcha hadlar yo‘qoladi."},
+
+  // Qavslar + ixchamlash
+  {id:61, prompt:"3(a + 2) − 2(a − 1) ifodasini soddalashtiring.", options:[{label:"A",text:"a + 8"},{label:"B",text:"a − 8"},{label:"C",text:"5a + 4"},{label:"D",text:"a + 4"}], correct:"A", explain:"3a + 6 − 2a + 2 = a + 8."},
+  {id:62, prompt:"5(x − 3) + 2(x + 4) ifodasini soddalashtiring.", options:[{label:"A",text:"7x − 7"},{label:"B",text:"7x − 15"},{label:"C",text:"3x − 7"},{label:"D",text:"7x + 7"}], correct:"A", explain:"5x − 15 + 2x + 8 = 7x − 7."},
+  {id:63, prompt:"4(2y − 1) − 3(y + 2) ifodasini soddalashtiring.", options:[{label:"A",text:"5y − 10"},{label:"B",text:"5y − 2"},{label:"C",text:"11y − 10"},{label:"D",text:"5y + 10"}], correct:"A", explain:"8y − 4 − 3y − 6 = 5y − 10."},
+  {id:64, prompt:"2(3m − 5) + (m − 4) ifodasini soddalashtiring.", options:[{label:"A",text:"7m − 14"},{label:"B",text:"7m − 6"},{label:"C",text:"5m − 14"},{label:"D",text:"7m + 14"}], correct:"A", explain:"6m − 10 + m − 4 = 7m − 14."},
+  {id:65, prompt:"−2(x − 4) + 3(x + 1) ifodasini soddalashtiring.", options:[{label:"A",text:"x + 11"},{label:"B",text:"x − 5"},{label:"C",text:"5x + 11"},{label:"D",text:"−x + 11"}], correct:"A", explain:"−2x + 8 + 3x + 3 = x + 11."},
+  {id:66, prompt:"6(a − 1) − 4(a − 3) ifodasini soddalashtiring.", options:[{label:"A",text:"2a + 6"},{label:"B",text:"2a − 6"},{label:"C",text:"10a + 6"},{label:"D",text:"−2a + 6"}], correct:"A", explain:"6a − 6 − 4a + 12 = 2a + 6."},
+  {id:67, prompt:"3(2b + 5) − 5(b − 1) ifodasini soddalashtiring.", options:[{label:"A",text:"b + 20"},{label:"B",text:"b + 10"},{label:"C",text:"11b + 20"},{label:"D",text:"−b + 20"}], correct:"A", explain:"6b + 15 − 5b + 5 = b + 20."},
+  {id:68, prompt:"−3(2x − 1) + 4(x + 2) ifodasini soddalashtiring.", options:[{label:"A",text:"−2x + 11"},{label:"B",text:"−2x − 5"},{label:"C",text:"10x + 11"},{label:"D",text:"−10x + 11"}], correct:"A", explain:"−6x + 3 + 4x + 8 = −2x + 11."},
+  {id:69, prompt:"5(y − 2) − 2(3y − 4) ifodasini soddalashtiring.", options:[{label:"A",text:"−y − 2"},{label:"B",text:"−y + 2"},{label:"C",text:"11y − 2"},{label:"D",text:"y − 2"}], correct:"A", explain:"5y − 10 − 6y + 8 = −y − 2."},
+  {id:70, prompt:"4(3z + 1) − 3(2z − 5) ifodasini soddalashtiring.", options:[{label:"A",text:"6z + 19"},{label:"B",text:"6z − 11"},{label:"C",text:"18z + 19"},{label:"D",text:"−6z + 19"}], correct:"A", explain:"12z + 4 − 6z + 15 = 6z + 19."},
+
+  // Qo'shimcha
+  {id:71, prompt:"2(a + 3b) − (a − 5b) ifodasini soddalashtiring.", options:[{label:"A",text:"a + 11b"},{label:"B",text:"a − 11b"},{label:"C",text:"3a + 11b"},{label:"D",text:"−a + 11b"}], correct:"A", explain:"2a + 6b − a + 5b = a + 11b."},
+  {id:72, prompt:"3(2x − y) + 2(x + 3y) ifodasini soddalashtiring.", options:[{label:"A",text:"8x + 3y"},{label:"B",text:"8x − 3y"},{label:"C",text:"4x + 3y"},{label:"D",text:"8x − y"}], correct:"A", explain:"6x − 3y + 2x + 6y = 8x + 3y."},
+  {id:73, prompt:"−(4m − 3n) + 2(m + n) ifodasini soddalashtiring.", options:[{label:"A",text:"−2m + 5n"},{label:"B",text:"−2m − 5n"},{label:"C",text:"6m + 5n"},{label:"D",text:"−6m + 5n"}], correct:"A", explain:"−4m + 3n + 2m + 2n = −2m + 5n."},
+  {id:74, prompt:"5(p − 2q) − 3(2p − q) ifodasini soddalashtiring.", options:[{label:"A",text:"−p − 7q"},{label:"B",text:"−p + 7q"},{label:"C",text:"11p − 7q"},{label:"D",text:"p − 7q"}], correct:"A", explain:"5p − 10q − 6p + 3q = −p − 7q."},
+  {id:75, prompt:"4(2a − b) − (3a − 5b) ifodasini soddalashtiring.", options:[{label:"A",text:"5a + b"},{label:"B",text:"5a − b"},{label:"C",text:"11a + b"},{label:"D",text:"−5a + b"}], correct:"A", explain:"8a − 4b − 3a + 5b = 5a + b."},
+  {id:76, prompt:"2(3x + 4y) − 5(x − y) ifodasini soddalashtiring.", options:[{label:"A",text:"x + 13y"},{label:"B",text:"x − 13y"},{label:"C",text:"11x + 13y"},{label:"D",text:"−x + 13y"}], correct:"A", explain:"6x + 8y − 5x + 5y = x + 13y."},
+  {id:77, prompt:"−3(2c − d) + 4(c + 2d) ifodasini soddalashtiring.", options:[{label:"A",text:"−2c + 11d"},{label:"B",text:"−2c − 11d"},{label:"C",text:"10c + 11d"},{label:"D",text:"−10c + 11d"}], correct:"A", explain:"−6c + 3d + 4c + 8d = −2c + 11d."},
+  {id:78, prompt:"6(r − 3s) − 2(2r − 5s) ifodasini soddalashtiring.", options:[{label:"A",text:"2r − 8s"},{label:"B",text:"2r − 28s"},{label:"C",text:"10r − 8s"},{label:"D",text:"−2r − 8s"}], correct:"A", explain:"6r − 18s − 4r + 10s = 2r − 8s."},
+  {id:79, prompt:"3(4k − 1) − 2(3k + 5) ifodasini soddalashtiring.", options:[{label:"A",text:"6k − 13"},{label:"B",text:"6k + 7"},{label:"C",text:"18k − 13"},{label:"D",text:"−6k − 13"}], correct:"A", explain:"12k − 3 − 6k − 10 = 6k − 13."},
+  {id:80, prompt:"−(5t − 2) + 3(t − 4) ifodasini soddalashtiring.", options:[{label:"A",text:"−2t − 10"},{label:"B",text:"−2t + 10"},{label:"C",text:"8t − 10"},{label:"D",text:"−8t − 10"}], correct:"A", explain:"−5t + 2 + 3t − 12 = −2t − 10."},
+
+  // Qiymat topish davomi
+  {id:81, prompt:"3(a + 2) − 2(a − 1) ifodasini soddalashtiring va a = 3 da qiymatini toping.", options:[{label:"A",text:"11"},{label:"B",text:"5"},{label:"C",text:"17"},{label:"D",text:"8"}], correct:"A", explain:"a + 8; 3 + 8 = 11."},
+  {id:82, prompt:"5(x − 3) + 2(x + 4) ifodasini soddalashtiring va x = −1 da qiymatini toping.", options:[{label:"A",text:"−14"},{label:"B",text:"−7"},{label:"C",text:"0"},{label:"D",text:"14"}], correct:"A", explain:"7x − 7; 7(−1) − 7 = −14."},
+  {id:83, prompt:"4(2y − 1) − 3(y + 2) ifodasini soddalashtiring va y = 2 da qiymatini toping.", options:[{label:"A",text:"0"},{label:"B",text:"10"},{label:"C",text:"−10"},{label:"D",text:"20"}], correct:"A", explain:"5y − 10; 5×2 − 10 = 0."},
+  {id:84, prompt:"−2(x − 4) + 3(x + 1) ifodasini soddalashtiring va x = 0 da qiymatini toping.", options:[{label:"A",text:"11"},{label:"B",text:"−11"},{label:"C",text:"5"},{label:"D",text:"8"}], correct:"A", explain:"x + 11; 0 + 11 = 11."},
+  {id:85, prompt:"6(a − 1) − 4(a − 3) ifodasini soddalashtiring va a = 5 da qiymatini toping.", options:[{label:"A",text:"16"},{label:"B",text:"4"},{label:"C",text:"26"},{label:"D",text:"−4"}], correct:"A", explain:"2a + 6; 2×5 + 6 = 16."},
+
+  // Yana qavslar
+  {id:86, prompt:"x − (2x − 5) + (3x + 1) ifodasini soddalashtiring.", options:[{label:"A",text:"2x + 6"},{label:"B",text:"2x − 4"},{label:"C",text:"6x + 6"},{label:"D",text:"−2x + 6"}], correct:"A", explain:"x − 2x + 5 + 3x + 1 = 2x + 6."},
+  {id:87, prompt:"5 − (3 − 2a) − (a + 4) ifodasini soddalashtiring.", options:[{label:"A",text:"a − 2"},{label:"B",text:"−a − 2"},{label:"C",text:"3a − 2"},{label:"D",text:"a + 2"}], correct:"A", explain:"5 − 3 + 2a − a − 4 = a − 2."},
+  {id:88, prompt:"(2b − 7) − (b − 3) + (4 − b) ifodasini soddalashtiring.", options:[{label:"A",text:"0"},{label:"B",text:"2b"},{label:"C",text:"−2b"},{label:"D",text:"14"}], correct:"A", explain:"2b − 7 − b + 3 + 4 − b = 0."},
+  {id:89, prompt:"3c − (c + 5) − (2c − 8) ifodasini soddalashtiring.", options:[{label:"A",text:"3"},{label:"B",text:"−3"},{label:"C",text:"6c + 3"},{label:"D",text:"−6c + 3"}], correct:"A", explain:"3c − c − 5 − 2c + 8 = 3."},
+  {id:90, prompt:"(4d − 1) + (2 − 3d) − (d + 5) ifodasini soddalashtiring.", options:[{label:"A",text:"−4"},{label:"B",text:"4"},{label:"C",text:"8d − 4"},{label:"D",text:"−8d − 4"}], correct:"A", explain:"4d − 1 + 2 − 3d − d − 5 = −4."},
+
+  // Oxirgi 30 ta
+  {id:91, prompt:"2(3x − 4) − 5(x − 1) ifodasini soddalashtiring.", options:[{label:"A",text:"x − 3"},{label:"B",text:"x + 3"},{label:"C",text:"11x − 3"},{label:"D",text:"−x − 3"}], correct:"A", explain:"6x − 8 − 5x + 5 = x − 3."},
+  {id:92, prompt:"−4(y − 2) + 3(2y + 1) ifodasini soddalashtiring.", options:[{label:"A",text:"2y + 11"},{label:"B",text:"2y − 5"},{label:"C",text:"10y + 11"},{label:"D",text:"−2y + 11"}], correct:"A", explain:"−4y + 8 + 6y + 3 = 2y + 11."},
+  {id:93, prompt:"5(2m − 3) − 2(4m − 7) ifodasini soddalashtiring.", options:[{label:"A",text:"2m − 1"},{label:"B",text:"2m − 29"},{label:"C",text:"18m − 1"},{label:"D",text:"−2m − 1"}], correct:"A", explain:"10m − 15 − 8m + 14 = 2m − 1."},
+  {id:94, prompt:"3(4n + 1) − 4(2n − 3) ifodasini soddalashtiring.", options:[{label:"A",text:"4n + 15"},{label:"B",text:"4n − 9"},{label:"C",text:"20n + 15"},{label:"D",text:"−4n + 15"}], correct:"A", explain:"12n + 3 − 8n + 12 = 4n + 15."},
+  {id:95, prompt:"−2(5p − 1) + 3(2p + 4) ifodasini soddalashtiring.", options:[{label:"A",text:"−4p + 14"},{label:"B",text:"−4p − 10"},{label:"C",text:"16p + 14"},{label:"D",text:"4p + 14"}], correct:"A", explain:"−10p + 2 + 6p + 12 = −4p + 14."},
+  {id:96, prompt:"4(3q − 2) − 5(q + 1) ifodasini soddalashtiring.", options:[{label:"A",text:"7q − 13"},{label:"B",text:"7q − 3"},{label:"C",text:"17q − 13"},{label:"D",text:"−7q − 13"}], correct:"A", explain:"12q − 8 − 5q − 5 = 7q − 13."},
+  {id:97, prompt:"−3(2r + 5) + 4(r − 2) ifodasini soddalashtiring.", options:[{label:"A",text:"−2r − 23"},{label:"B",text:"−2r − 7"},{label:"C",text:"10r − 23"},{label:"D",text:"2r − 23"}], correct:"A", explain:"−6r − 15 + 4r − 8 = −2r − 23."},
+  {id:98, prompt:"6(s − 3) − 2(3s − 5) ifodasini soddalashtiring.", options:[{label:"A",text:"−8"},{label:"B",text:"−28"},{label:"C",text:"12s − 8"},{label:"D",text:"8"}], correct:"A", explain:"6s − 18 − 6s + 10 = −8."},
+  {id:99, prompt:"5(2t − 1) − 3(3t − 4) ifodasini soddalashtiring.", options:[{label:"A",text:"t + 7"},{label:"B",text:"t − 17"},{label:"C",text:"19t + 7"},{label:"D",text:"−t + 7"}], correct:"A", explain:"10t − 5 − 9t + 12 = t + 7."},
+  {id:100, prompt:"−4(u − 3) + 2(2u + 5) ifodasini soddalashtiring.", options:[{label:"A",text:"22"},{label:"B",text:"−2"},{label:"C",text:"8u + 22"},{label:"D",text:"−8u + 22"}], correct:"A", explain:"−4u + 12 + 4u + 10 = 22."},
+
+  {id:101, prompt:"2(3a − 5b) − (a − 7b) ifodasini soddalashtiring.", options:[{label:"A",text:"5a − 3b"},{label:"B",text:"5a − 17b"},{label:"C",text:"7a − 3b"},{label:"D",text:"−5a − 3b"}], correct:"A", explain:"6a − 10b − a + 7b = 5a − 3b."},
+  {id:102, prompt:"3(2x + y) − 2(x − 3y) ifodasini soddalashtiring.", options:[{label:"A",text:"4x + 9y"},{label:"B",text:"4x − 3y"},{label:"C",text:"8x + 9y"},{label:"D",text:"−4x + 9y"}], correct:"A", explain:"6x + 3y − 2x + 6y = 4x + 9y."},
+  {id:103, prompt:"−(4m − 5n) + 3(m + 2n) ifodasini soddalashtiring.", options:[{label:"A",text:"−m + 11n"},{label:"B",text:"−m − 11n"},{label:"C",text:"7m + 11n"},{label:"D",text:"−7m + 11n"}], correct:"A", explain:"−4m + 5n + 3m + 6n = −m + 11n."},
+  {id:104, prompt:"5(p − 2q) − 4(2p − q) ifodasini soddalashtiring.", options:[{label:"A",text:"−3p − 6q"},{label:"B",text:"−3p + 6q"},{label:"C",text:"13p − 6q"},{label:"D",text:"3p − 6q"}], correct:"A", explain:"5p − 10q − 8p + 4q = −3p − 6q."},
+  {id:105, prompt:"4(3c − 2d) − 3(2c − 5d) ifodasini soddalashtiring.", options:[{label:"A",text:"6c + 7d"},{label:"B",text:"6c − 23d"},{label:"C",text:"18c + 7d"},{label:"D",text:"−6c + 7d"}], correct:"A", explain:"12c − 8d − 6c + 15d = 6c + 7d."},
+  {id:106, prompt:"−2(5r − 3s) + 4(r + s) ifodasini soddalashtiring.", options:[{label:"A",text:"−6r + 10s"},{label:"B",text:"−6r − 2s"},{label:"C",text:"14r + 10s"},{label:"D",text:"6r + 10s"}], correct:"A", explain:"−10r + 6s + 4r + 4s = −6r + 10s."},
+  {id:107, prompt:"3(4k − 1) − 5(2k − 3) ifodasini soddalashtiring.", options:[{label:"A",text:"2k + 12"},{label:"B",text:"2k − 18"},{label:"C",text:"22k + 12"},{label:"D",text:"−2k + 12"}], correct:"A", explain:"12k − 3 − 10k + 15 = 2k + 12."},
+  {id:108, prompt:"−5(2t + 1) + 3(3t − 2) ifodasini soddalashtiring.", options:[{label:"A",text:"−t − 11"},{label:"B",text:"−t + 1"},{label:"C",text:"19t − 11"},{label:"D",text:"t − 11"}], correct:"A", explain:"−10t − 5 + 9t − 6 = −t − 11."},
+  {id:109, prompt:"6(2u − 3) − 4(3u − 5) ifodasini soddalashtiring.", options:[{label:"A",text:"2"},{label:"B",text:"−38"},{label:"C",text:"24u + 2"},{label:"D",text:"−2"}], correct:"A", explain:"12u − 18 − 12u + 20 = 2."},
+  {id:110, prompt:"2(5v − 4) − 3(2v − 7) ifodasini soddalashtiring.", options:[{label:"A",text:"4v + 13"},{label:"B",text:"4v − 29"},{label:"C",text:"16v + 13"},{label:"D",text:"−4v + 13"}], correct:"A", explain:"10v − 8 − 6v + 21 = 4v + 13."},
+
+  {id:111, prompt:"3(a − 2b) + 2(3a + b) ifodasini soddalashtiring.", options:[{label:"A",text:"9a − 4b"},{label:"B",text:"9a − 8b"},{label:"C",text:"3a − 4b"},{label:"D",text:"−9a − 4b"}], correct:"A", explain:"3a − 6b + 6a + 2b = 9a − 4b."},
+  {id:112, prompt:"−4(2x − y) + 5(x + 2y) ifodasini soddalashtiring.", options:[{label:"A",text:"−3x + 14y"},{label:"B",text:"−3x − 6y"},{label:"C",text:"13x + 14y"},{label:"D",text:"3x + 14y"}], correct:"A", explain:"−8x + 4y + 5x + 10y = −3x + 14y."},
+  {id:113, prompt:"5(3m − 2n) − 2(4m − 5n) ifodasini soddalashtiring.", options:[{label:"A",text:"7m"},{label:"B",text:"7m − 20n"},{label:"C",text:"23m"},{label:"D",text:"−7m"}], correct:"A", explain:"15m − 10n − 8m + 10n = 7m."},
+  {id:114, prompt:"−3(4p − 5q) + 2(3p + 4q) ifodasini soddalashtiring.", options:[{label:"A",text:"−6p + 23q"},{label:"B",text:"−6p − 7q"},{label:"C",text:"18p + 23q"},{label:"D",text:"6p + 23q"}], correct:"A", explain:"−12p + 15q + 6p + 8q = −6p + 23q."},
+  {id:115, prompt:"4(2r − 3s) − 3(r − 4s) ifodasini soddalashtiring.", options:[{label:"A",text:"5r"},{label:"B",text:"5r − 24s"},{label:"C",text:"11r"},{label:"D",text:"−5r"}], correct:"A", explain:"8r − 12s − 3r + 12s = 5r."},
+  {id:116, prompt:"2(5k − 3) − 4(2k − 1) ifodasini soddalashtiring.", options:[{label:"A",text:"2k − 2"},{label:"B",text:"2k − 10"},{label:"C",text:"18k − 2"},{label:"D",text:"−2k − 2"}], correct:"A", explain:"10k − 6 − 8k + 4 = 2k − 2."},
+  {id:117, prompt:"−5(2t + 3) + 3(4t − 1) ifodasini soddalashtiring.", options:[{label:"A",text:"2t − 18"},{label:"B",text:"2t − 12"},{label:"C",text:"22t − 18"},{label:"D",text:"−2t − 18"}], correct:"A", explain:"−10t − 15 + 12t − 3 = 2t − 18."},
+  {id:118, prompt:"6(3u − 2) − 5(2u − 3) ifodasini soddalashtiring.", options:[{label:"A",text:"8u + 3"},{label:"B",text:"8u − 27"},{label:"C",text:"28u + 3"},{label:"D",text:"−8u + 3"}], correct:"A", explain:"18u − 12 − 10u + 15 = 8u + 3."},
+  {id:119, prompt:"−2(4v − 5) + 3(2v + 1) ifodasini soddalashtiring.", options:[{label:"A",text:"−2v + 13"},{label:"B",text:"−2v − 7"},{label:"C",text:"14v + 13"},{label:"D",text:"2v + 13"}], correct:"A", explain:"−8v + 10 + 6v + 3 = −2v + 13."},
+  {id:120, prompt:"3(5w − 4) − 4(3w − 2) ifodasini soddalashtiring.", options:[{label:"A",text:"3w − 4"},{label:"B",text:"3w − 20"},{label:"C",text:"27w − 4"},{label:"D",text:"−3w − 4"}], correct:"A", explain:"15w − 12 − 12w + 8 = 3w − 4."}
+];
+
+const TOTAL_Q = 10, TIME_SECONDS = 30*60;
+const el = id => document.getElementById(id);
+const screens = {info:el('screen-info'), exam:el('screen-exam'), result:el('screen-result')};
+function show(name){for(const k in screens)screens[k].classList.toggle('active',k===name);window.scrollTo(0,0);}
+
+let exam = null, timerInt = null;
+
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+
+function prepareQuestions(){
+  const picked = shuffle(BANK).slice(0, TOTAL_Q);
+  return picked.map(q => {
+    const order = shuffle(q.options || []);
+    const labels = ['A','B','C','D'];
+    let correctLabel = null;
+    const opts = order.map((o, i) => {
+      if (o.label === q.correct) correctLabel = labels[i];
+      return { label: labels[i], text: o.text };
+    });
+    return { ...q, type: 'text', options: opts, correct: correctLabel };
+  });
+}
+
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+function formatPrompt(text){
+  return `<p>${renderMath(esc(text))}</p>`;
+}
+
+function formatOption(text){
+  return renderMath(esc(text));
+}
+
+function renderQuestion(){
+  const q = exam.questions[exam.current];
+  el('q-num').textContent = `${exam.current+1}-savol`;
+  el('q-tur').textContent = `Ifodalar`;
+  el('q-body').innerHTML = formatPrompt(q.prompt);
+
+  const oldFb = document.querySelector('.feedback-box');
+  if (oldFb) oldFb.remove();
+
+  const chosen = exam.answers[q.id];
+  const revealed = !!chosen;
+
+  el('q-opts').innerHTML = (q.options || []).map(o => {
+    let cls = 'opt';
+    if (revealed) {
+      cls += ' locked';
+      if (o.label === q.correct) cls += ' correct';
+      else if (o.label === chosen) cls += ' wrong';
+    } else if (chosen === o.label) {
+      cls += ' sel';
+    }
+    return `<button class="${cls}" data-l="${o.label}">
+      <span class="key">${o.label}</span><span class="otxt">${formatOption(o.text)}</span>
+      <span class="check"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12l5 5L19 7" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+    </button>`;
+  }).join('');
+
+  if (revealed) {
+    const ok = chosen === q.correct;
+    const fbHtml = `<div class="feedback-box show ${ok?'ok':'bad'}">
+      <b>${ok ? "✓ To‘g‘ri!" : "✗ Noto‘g‘ri"}</b>
+      ${ok ? '' : ' To‘g‘ri javob: <b>'+q.correct+'</b>.'}
+      <div style="margin-top:6px;opacity:.9">${renderMath(esc(q.explain||''))}</div>
+    </div>`;
+    el('q-opts').insertAdjacentHTML('afterend', fbHtml);
+  } else {
+    el('q-opts').querySelectorAll('.opt').forEach(b => {
+      b.addEventListener('click', () => selectAnswer(q.id, b.dataset.l));
+    });
+  }
+
+  const fb = el('flag-btn');
+  const flagged = exam.flags.has(q.id);
+  fb.classList.toggle('on', flagged);
+  fb.lastChild.textContent = flagged ? " Belgilangan" : " Belgilab qo‘yish";
+
+  el('prev-btn').style.visibility = exam.current === 0 ? 'hidden' : 'visible';
+  el('next-btn').textContent = exam.current === exam.questions.length - 1 ? 'Yakunlashga →' : 'Keyingi →';
+  renderPalette();
+}
+
+function selectAnswer(qid, label) {
+  if (exam.answers[qid]) return;
+  exam.answers[qid] = label;
+  renderQuestion();
+  const cell = el('pgrid').children[exam.current];
+  if (cell) { cell.classList.remove('pop'); void cell.offsetWidth; cell.classList.add('pop'); }
+}
+
+function renderPalette(){
+  const g = el('pgrid');
+  g.innerHTML = exam.questions.map((q,i)=>{
+    const cls = ['pcell'];
+    if(exam.answers[q.id]) cls.push('answered');
+    if(i===exam.current) cls.push('current');
+    if(exam.flags.has(q.id)) cls.push('flagged');
+    return `<button class="${cls.join(' ')}" data-i="${i}">${i+1}</button>`;
+  }).join('');
+  g.querySelectorAll('.pcell').forEach(c=>c.addEventListener('click',()=>{
+    exam.current=+c.dataset.i; renderQuestion(); closePalette();
+  }));
+  const ans = Object.keys(exam.answers).length;
+  el('prog-bar').style.width = (ans/exam.questions.length*100)+'%';
+  el('prog-answered').textContent = `${ans} ta belgilandi`;
+  el('prog-total').textContent = `${exam.questions.length} tadan`;
+}
+
+function fmt(s){const m=Math.floor(s/60),x=s%60; return `${m}:${String(x).padStart(2,'0')}`;}
+function tick(){
+  const left = Math.max(0, Math.round((exam.endTime-Date.now())/1000));
+  el('timer-txt').textContent = fmt(left);
+  const t = el('timer');
+  t.classList.toggle('warn', left<=300 && left>60);
+  t.classList.toggle('crit', left<=60);
+  if(left<=0){clearInterval(timerInt); finishExam(true);}
+}
+
+el('start-btn').addEventListener('click',startExam);
+[el('in-name'),el('in-sur')].forEach(inp=>inp.addEventListener('keydown',e=>{if(e.key==='Enter')startExam();}));
+function startExam(){
+  const name=el('in-name').value.trim(), sur=el('in-sur').value.trim(), grp=el('in-group').value.trim();
+  if(!name || !sur){ el('info-err').textContent='Iltimos, ism va familiyani to‘liq kiriting.'; return; }
+  el('info-err').textContent='';
+  exam = {
+    questions: prepareQuestions(),
+    answers:{}, flags:new Set(), current:0,
+    name, sur, group:grp,
+    endTime: Date.now()+TIME_SECONDS*1000,
+    startTime: Date.now()
+  };
+  el('cand-name').textContent = `${sur} ${name}`;
+  el('cand-group').textContent = grp || 'Nomzod';
+  el('station-no').textContent = 100 + Math.floor(Math.random()*899);
+  show('exam');
+  renderQuestion();
+  clearInterval(timerInt); tick(); timerInt=setInterval(tick,1000);
+}
+
+el('prev-btn').addEventListener('click',()=>{if(exam.current>0){exam.current--;renderQuestion();}});
+el('next-btn').addEventListener('click',()=>{
+  if(exam.current<exam.questions.length-1){exam.current++;renderQuestion();}
+  else openFinish();
+});
+el('flag-btn').addEventListener('click',()=>{
+  const id=exam.questions[exam.current].id;
+  exam.flags.has(id)?exam.flags.delete(id):exam.flags.add(id);
+  renderQuestion();
+});
+function openPalette(){
+  el('palette').classList.add('open');
+  el('pal-backdrop').classList.add('show');
+  el('pal-toggle').style.opacity='0';
+  el('pal-toggle').style.pointerEvents='none';
+  document.body.style.overflow='hidden';
+}
+function closePalette(){
+  el('palette').classList.remove('open');
+  el('pal-backdrop').classList.remove('show');
+  el('pal-toggle').style.opacity='';
+  el('pal-toggle').style.pointerEvents='';
+  document.body.style.overflow='';
+}
+el('pal-toggle').addEventListener('click',openPalette);
+el('pal-close').addEventListener('click',closePalette);
+el('pal-backdrop').addEventListener('click',closePalette);
+
+document.addEventListener('keydown',e=>{
+  if(!screens.exam.classList.contains('active'))return;
+  if(e.key==='Escape'){ closePalette(); return; }
+  if(e.target.tagName==='INPUT' || e.target.tagName==='TEXTAREA')return;
+  const q=exam.questions[exam.current];
+  const k=e.key.toUpperCase();
+  if(['A','B','C','D'].includes(k) && (q.options||[]).some(o=>o.label===k)) selectAnswer(q.id,k);
+  if(['1','2','3','4'].includes(e.key)){const o=(q.options||[])[+e.key-1]; if(o)selectAnswer(q.id,o.label);}
+  if(e.key==='ArrowRight' && exam.current<exam.questions.length-1){exam.current++;renderQuestion();}
+  if(e.key==='ArrowLeft' && exam.current>0){exam.current--;renderQuestion();}
+});
+
+el('finish-btn').addEventListener('click',openFinish);
+function openFinish(){
+  const unanswered = exam.questions.length - Object.keys(exam.answers).length;
+  el('finish-modal-txt').innerHTML = unanswered>0
+    ? `Hali <span class="warn-num">${unanswered} ta</span> savolga javob belgilanmagan. Baribir yakunlaysizmi?`
+    : `Barcha savollar belgilangan. Javoblaringizni yakuniy tasdiqlaysizmi?`;
+  el('finish-modal').classList.add('show');
+}
+el('fm-cancel').addEventListener('click',()=>el('finish-modal').classList.remove('show'));
+el('fm-confirm').addEventListener('click',()=>{el('finish-modal').classList.remove('show');finishExam(false);});
+
+function isAnswerCorrect(q, a) {
+  if (!a) return false;
+  return a === q.correct;
+}
+
+function finishExam(auto){
+  clearInterval(timerInt);
+  let correct = 0, wrong = 0, skip = 0;
+  const wrongDetails = [];
+  const allDetails = [];
+
+  exam.questions.forEach((q, i) => {
+    const a = exam.answers[q.id];
+    const isCorrect = isAnswerCorrect(q, a);
+    
+    let selectedText = 'Belgilanmagan';
+    if (a) {
+      const opt = (q.options || []).find(o => o.label === a);
+      selectedText = opt ? a + ') ' + opt.text : a;
+    }
+
+    const correctOpt = (q.options || []).find(o => o.label === q.correct);
+    const correctText = correctOpt ? q.correct + ') ' + correctOpt.text : q.correct;
+
+    if (!a) {
+      skip++;
+      allDetails.push((i+1) + '. Belgilanmagan | To‘g‘ri: ' + correctText);
+    } else if (isCorrect) {
+      correct++;
+      allDetails.push((i+1) + '. To‘g‘ri → ' + selectedText);
+    } else {
+      wrong++;
+      wrongDetails.push(
+        (i+1) + '-savol: ' + q.prompt + ' | Tanlangan: ' + selectedText + ' | To‘g‘ri: ' + correctText
+      );
+      allDetails.push((i+1) + '. XATO → Tanlangan: ' + selectedText + ' | To‘g‘ri: ' + correctText);
+    }
+  });
+
+  const pct = Math.round(correct / exam.questions.length * 100);
+  const used = Math.round((Date.now() - exam.startTime) / 1000);
+  const timeFormatted = fmt(used);
+
+  const r = {correct, wrong, skip, pct, used, auto};
+  buildResult(r);
+  show('result');
+
+  const payload = {
+    name: exam.name || '',
+    surname: exam.sur || '',
+    group: exam.group || '',
+    correct: correct,
+    wrong: wrong,
+    skip: skip,
+    time: timeFormatted,
+    wrongQuestions: wrongDetails.join(' || '),
+    details: allDetails.join(' || '),
+    device: navigator.userAgent.substring(0, 80)
+  };
+
+  const formData = new FormData();
+  for (let key in payload) {
+    formData.append(key, payload[key]);
+  }
+
+  fetch('https://script.google.com/macros/s/AKfycbxjgC415jKzU6yXT8DlZlBKEQrzVEFumdBgXsB0NDmwCKWD0dmk1J42koZKcElI6QEV/exec', {
+    method: 'POST',
+    body: formData
+  }).catch(function(){});
+
+  fetch('https://script.google.com/macros/s/AKfycbxjgC415jKzU6yXT8DlZlBKEQrzVEFumdBgXsB0NDmwCKWD0dmk1J42koZKcElI6QEV/exec', {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: {'Content-Type': 'text/plain'},
+    body: JSON.stringify(payload)
+  }).catch(function(){});
+}
+
+function bahoInfo(pct){
+  if(pct>=90) return {t:"A'lo",n:"5",c:"var(--ok)",bg:"var(--ok-tint)"};
+  if(pct>=70) return {t:"Yaxshi",n:"4",c:"#1c46cc",bg:"var(--primary-tint)"};
+  if(pct>=50) return {t:"Qoniqarli",n:"3",c:"var(--warn)",bg:"#fff6e6"};
+  return {t:"Qoniqarsiz",n:"2",c:"var(--bad)",bg:"var(--bad-tint)"};
+}
+
+function buildResult(r){
+  const b=bahoInfo(r.pct);
+  const ring=el('res-ring');
+  ring.style.setProperty('--p',r.pct);
+  ring.style.setProperty('--ring-c',b.c);
+  el('res-pct').textContent=r.pct+'%';
+  el('res-title').textContent = `${exam.sur} ${exam.name}`;
+  el('res-sub').innerHTML = `${exam.group?exam.group+' · ':''}${exam.questions.length} savoldan <b>${r.correct}</b> tasi to‘g‘ri`
+    + (r.auto?` · <span style="color:var(--bad)">vaqt tugadi</span>`:'');
+  const baho=el('res-baho');
+  baho.textContent=`Baho: ${b.t} (${b.n})`;
+  baho.style.color=b.c; baho.style.background=b.bg;
+  el('s-correct').textContent=r.correct;
+  el('s-wrong').textContent=r.wrong;
+  el('s-skip').textContent=r.skip;
+  el('s-time').textContent=fmt(r.used);
+
+  const rev=el('review');
+  rev.innerHTML = exam.questions.map((q,i)=>{
+    const a=exam.answers[q.id];
+    const ok = isAnswerCorrect(q, a);
+    const state = !a ? 'skipped' : (ok ? 'correct' : 'wrong');
+    const badge = state==='correct'?'<span class="rev-badge c">To‘g‘ri</span>'
+      : state==='wrong'?'<span class="rev-badge w">Xato</span>'
+      : '<span class="rev-badge s">Belgilanmagan</span>';
+
+    let ansLine = '';
+    const optHTML = l => {
+      const o = (q.options || []).find(x => x.label === l);
+      if (!o) return '—';
+      return `${l}) ${formatOption(o.text)}`;
+    };
+    if (a) ansLine += `<span class="tagans you ${ok?'':'bad'}">Sizning javobingiz: ${optHTML(a)}</span>`;
+    else ansLine += `<span class="tagans you">Javob belgilanmagan</span>`;
+    if (!ok) ansLine += `<span class="tagans right">To‘g‘ri javob: ${optHTML(q.correct)}</span>`;
+
+    return `<div class="rev ${state}" data-state="${state}">
+      <div class="rev-top"><span class="rev-n">${i+1}-savol</span>
+        <span class="tur-tag">Ifodalar</span>${badge}</div>
+      <div class="rev-q">${formatPrompt(q.prompt)}</div>
+      <div class="rev-ans">${ansLine}</div>
+      <div class="rev-exp"><b>Tahlil:</b> ${renderMath(esc(q.explain||''))}</div>
+    </div>`;
+  }).join('');
+  applyFilter('all');
+}
+
+let curFilter='all';
+function applyFilter(f){
+  curFilter=f;
+  el('review').querySelectorAll('.rev[data-state]').forEach(d=>{
+    const s=d.dataset.state;
+    let visible = f==='all' || (f==='wrong'&&(s==='wrong'||s==='skipped')) || (f==='correct'&&s==='correct');
+    d.style.display=visible?'':'none';
+  });
+}
+document.querySelectorAll('.filters button').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('.filters button').forEach(x=>x.classList.remove('on'));
+  b.classList.add('on'); applyFilter(b.dataset.f);
+}));
+
+el('restart-btn').addEventListener('click',()=>{
+  el('in-name').value=exam.name; el('in-sur').value=exam.sur; el('in-group').value=exam.group||'';
+  show('info');
+});
+el('print-btn').addEventListener('click',()=>window.print());
+</script>
+</body>
+</html>

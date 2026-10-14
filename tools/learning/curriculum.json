@@ -1,0 +1,2443 @@
+{
+  "version": 1,
+  "modules": [
+    {
+      "id": 1,
+      "start": 1,
+      "end": 10,
+      "title": "CMD",
+      "description": "Buyruq satridan ishonchli foydalanish",
+      "tag": "Terminal"
+    },
+    {
+      "id": 2,
+      "start": 11,
+      "end": 20,
+      "title": "PowerShell",
+      "description": "Obyektlar, skriptlar va xavfsiz avtomatlashtirish",
+      "tag": "Avtomatlashtirish"
+    },
+    {
+      "id": 3,
+      "start": 21,
+      "end": 25,
+      "title": "Microsoft Word",
+      "description": "Tartibli va o‘qilishi oson hujjatlar",
+      "tag": "Hujjatlar"
+    },
+    {
+      "id": 4,
+      "start": 26,
+      "end": 30,
+      "title": "Microsoft Excel",
+      "description": "Ma’lumot, formulalar va tahlil",
+      "tag": "Jadvallar"
+    },
+    {
+      "id": 5,
+      "start": 31,
+      "end": 40,
+      "title": "Flowgorithm",
+      "description": "Algoritmlarni ko‘rib va kuzatib o‘rganish",
+      "tag": "Mantiq"
+    },
+    {
+      "id": 6,
+      "start": 41,
+      "end": 55,
+      "title": "Vibe Coding · Python",
+      "description": "AI yordamida tushunib kod yozish",
+      "tag": "Dasturlash"
+    },
+    {
+      "id": 7,
+      "start": 56,
+      "end": 70,
+      "title": "Loyihalar va deploy",
+      "description": "G‘oyadan ishlaydigan mahsulotgacha",
+      "tag": "Amaliyot"
+    }
+  ],
+  "lessons": [
+    {
+      "id": 1,
+      "module": 1,
+      "title": "CMD oynasi va birinchi buyruq",
+      "body": "Command Prompt Windows buyruq satri interpretatoridir. Buyruq joriy papka va foydalanuvchi huquqlari bilan bajariladi. Win+R → cmd → Enter orqali oching; oddiy mashqlar uchun administrator rejimi kerak emas.",
+      "example": "ver\nhelp\necho Salom, Mirae!",
+      "task": "CMD oching, Windows versiyasini ko‘ring, ekranga ismingizni chiqaring.",
+      "criterion": "Uch buyruq natijasini izohlab bera olaman.",
+      "minutes": 45,
+      "questions": [
+        {
+          "id": "1a",
+          "prompt": "CMD nima qiladi?",
+          "options": [
+            "Matnli buyruqlarni bajaradi",
+            "Faqat rasmlarni tahrirlaydi",
+            "Har doim administrator bo‘lib ishlaydi"
+          ],
+          "correct": "Matnli buyruqlarni bajaradi",
+          "explain": "Command Prompt Windows buyruq satri interpretatoridir. Buyruq joriy papka va foydalanuvchi huquqlari bilan bajariladi. Win+R → cmd → Enter orqali oching; oddiy mashqlar uchun administrator rejimi kerak emas."
+        },
+        {
+          "id": "1b",
+          "prompt": "Oddiy mashqni qaysi huquqda boshlaysiz?",
+          "options": [
+            "Oddiy foydalanuvchi",
+            "SYSTEM",
+            "Har doim administrator"
+          ],
+          "correct": "Oddiy foydalanuvchi",
+          "explain": "Eng kam huquq tamoyili tasodifiy tizim o‘zgarishlarini cheklaydi."
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "module": 1,
+      "title": "CMD: papkalar bo‘ylab yurish",
+      "body": "dir papka tarkibini, cd joriy manzilni ko‘rsatadi. cd .. ota papkaga; cd \\ joriy disk ildiziga olib boradi. Boshqa diskka o‘tishda cd /d ishlating. Bo‘sh joyli manzil qo‘shtirnoqqa olinadi.",
+      "example": "cd /d \"%USERPROFILE%\"\ndir\ncd ..\ncls",
+      "task": "Uy papkangizga o‘ting, tarkibini ko‘ring, ota papkaga qayting.",
+      "criterion": "cd va dir natijalari farqini tushuntiraman.",
+      "minutes": 45,
+      "questions": [
+        {
+          "id": "2a",
+          "prompt": "D diskdagi papkaga o‘tishning to‘g‘ri usuli?",
+          "options": [
+            "cd /d \"D:\\Mening ishlarim\"",
+            "dir /d D:\\",
+            "cls D:\\"
+          ],
+          "correct": "cd /d \"D:\\Mening ishlarim\"",
+          "explain": "dir papka tarkibini, cd joriy manzilni ko‘rsatadi. cd .. ota papkaga; cd \\ joriy disk ildiziga olib boradi. Boshqa diskka o‘tishda cd /d ishlating. Bo‘sh joyli manzil qo‘shtirnoqqa olinadi."
+        },
+        {
+          "id": "2b",
+          "prompt": "cls nimani o‘chiradi?",
+          "options": [
+            "Oynadagi ko‘rinadigan matnni",
+            "Diskdagi fayllarni",
+            "Joriy papkani"
+          ],
+          "correct": "Oynadagi ko‘rinadigan matnni",
+          "explain": "cls ekran tozalash buyrug‘i; fayllarni o‘chirmaydi."
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "module": 1,
+      "title": "CMD: fayl va papka yaratish",
+      "body": "mkdir papka yaratadi; copy nusxa oladi; type matnni ko‘rsatadi. del faylni, rmdir bo‘sh papkani o‘chiradi. O‘chirish savatchaga yubormasligi mumkin: faqat o‘zingiz yaratgan MiraeLab papkasida mashq qiling.",
+      "example": "mkdir \"%USERPROFILE%\\MiraeLab\"\ncd /d \"%USERPROFILE%\\MiraeLab\"\necho Salom> note.txt\ncopy note.txt backup.txt\ntype backup.txt",
+      "task": "MiraeLab ichida ikkita fayl yarating. Faqat backup.txt ni o‘chiring.",
+      "criterion": "Asl note.txt saqlangan, nusxa o‘chgan.",
+      "minutes": 45,
+      "questions": [
+        {
+          "id": "3a",
+          "prompt": "Bo‘sh papka yaratish buyrug‘i?",
+          "options": [
+            "mkdir",
+            "del",
+            "type"
+          ],
+          "correct": "mkdir",
+          "explain": "mkdir papka yaratadi; copy nusxa oladi; type matnni ko‘rsatadi. del faylni, rmdir bo‘sh papkani o‘chiradi. O‘chirish savatchaga yubormasligi mumkin: faqat o‘zingiz yaratgan MiraeLab papkasida mashq qiling."
+        },
+        {
+          "id": "3b",
+          "prompt": "del ishlatishdan oldin nima qilasiz?",
+          "options": [
+            "Joriy manzil va fayl nomini tekshiraman",
+            "Butun diskni tanlayman",
+            "Har doim /s /q qo‘shaman"
+          ],
+          "correct": "Joriy manzil va fayl nomini tekshiraman",
+          "explain": "O‘chirishni tor manzil bilan cheklash kerak; keng rekursiv o‘chirish boshlang‘ich mashq emas."
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "module": 1,
+      "title": "CMD: matn va redirection",
+      "body": "type faylni o‘qiydi, notepad tahrirlaydi. > chiqishni faylga yozadi va mavjud matnni almashtiradi; >> oxiriga qo‘shadi. Redirection buyrug‘ini bajarishdan oldin fayl nomini tekshiring.",
+      "example": "echo Birinchi> note.txt\necho Ikkinchi>> note.txt\ntype note.txt\nnotepad note.txt",
+      "task": "MiraeLab ichida ikki qatorli kundalik yarating.",
+      "criterion": "Ikki qator saqlangan; > va >> farqini aytaman.",
+      "minutes": 45,
+      "questions": [
+        {
+          "id": "4a",
+          "prompt": "Mavjud fayl oxiriga qator qo‘shish belgisi?",
+          "options": [
+            ">>",
+            ">",
+            "<"
+          ],
+          "correct": ">>",
+          "explain": "type faylni o‘qiydi, notepad tahrirlaydi. > chiqishni faylga yozadi va mavjud matnni almashtiradi; >> oxiriga qo‘shadi. Redirection buyrug‘ini bajarishdan oldin fayl nomini tekshiring."
+        },
+        {
+          "id": "4b",
+          "prompt": "Nega > bilan ikkinchi yozuv birinchini yo‘qotdi?",
+          "options": [
+            "> fayl tarkibini almashtiradi",
+            "type faylni o‘chiradi",
+            "CMD ikki qator saqlamaydi"
+          ],
+          "correct": "> fayl tarkibini almashtiradi",
+          "explain": "> qayta yozadi, >> qo‘shadi. Muhim faylda avval nusxa oling."
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "module": 1,
+      "title": "CMD: tizim haqida ma’lumot",
+      "body": "hostname kompyuter nomi, whoami joriy hisob, systeminfo tizim tafsilotlari, ipconfig tarmoq adapterlari manzillarini ko‘rsatadi. Ichki IP internetdagi ommaviy IP bilan bir xil bo‘lishi shart emas.",
+      "example": "hostname\nwhoami\nipconfig\nsysteminfo",
+      "task": "Hisob nomi, Windows versiyasi va faol adapter nomini yozing; shaxsiy ma’lumotlarni ommaga yubormang.",
+      "criterion": "Har natija qaysi buyruqdan kelganini bilaman.",
+      "minutes": 45,
+      "questions": [
+        {
+          "id": "5a",
+          "prompt": "Joriy foydalanuvchini ko‘rsatadigan buyruq?",
+          "options": [
+            "whoami",
+            "hostname",
+            "cls"
+          ],
+          "correct": "whoami",
+          "explain": "hostname kompyuter nomi, whoami joriy hisob, systeminfo tizim tafsilotlari, ipconfig tarmoq adapterlari manzillarini ko‘rsatadi. Ichki IP internetdagi ommaviy IP bilan bir xil bo‘lishi shart emas."
+        },
+        {
+          "id": "5b",
+          "prompt": "ipconfig ko‘rsatgan IP nimaga tegishli?",
+          "options": [
+            "Mahalliy adapter konfiguratsiyasiga",
+            "Har doim sayt serveriga",
+            "Har doim ommaviy internet IP ga"
+          ],
+          "correct": "Mahalliy adapter konfiguratsiyasiga",
+          "explain": "Bir nechta adapter va xususiy manzil bo‘lishi mumkin."
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "module": 1,
+      "title": "CMD: move, ren, attrib va wildcards",
+      "body": "move fayl joyini, ren nomini o‘zgartiradi. attrib atributlarni ko‘rsatadi yoki o‘zgartiradi. * nol yoki ko‘p belgiga, ? bitta belgiga mos keladi. Wildcard bilan avval dir orqali mos fayllarni ko‘ring.",
+      "example": "dir *.txt\nren note.txt diary.txt\nattrib diary.txt",
+      "task": "MiraeLab ichida note.txt ni diary.txt ga o‘zgartiring va arxiv papkasiga ko‘chiring.",
+      "criterion": "Nusxa olish va ko‘chirish farqini natija bilan ko‘rsataman.",
+      "minutes": 45,
+      "questions": [
+        {
+          "id": "6a",
+          "prompt": "*.txt nimaga mos keladi?",
+          "options": [
+            ".txt bilan tugagan nomlarga",
+            "Faqat bitta harfli nomga",
+            "Barcha .png rasmlarga"
+          ],
+          "correct": ".txt bilan tugagan nomlarga",
+          "explain": "move fayl joyini, ren nomini o‘zgartiradi. attrib atributlarni ko‘rsatadi yoki o‘zgartiradi. * nol yoki ko‘p belgiga, ? bitta belgiga mos keladi. Wildcard bilan avval dir orqali mos fayllarni ko‘ring."
+        },
+        {
+          "id": "6b",
+          "prompt": "O‘chirishga wildcard berishdan oldin nima kerak?",
+          "options": [
+            "dir bilan mos fayllarni ko‘rish",
+            "Tizim papkasiga o‘tish",
+            "Yashirin atributni yoqish"
+          ],
+          "correct": "dir bilan mos fayllarni ko‘rish",
+          "explain": "Noto‘g‘ri andoza ko‘p faylni qamrab olishi mumkin."
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "module": 1,
+      "title": "CMD: tarmoq diagnostikasi",
+      "body": "ping ICMP javobini, tracert yo‘l bo‘ylab tugunlarni, nslookup DNS yechimini tekshiradi. Ping javobsiz qolishi sayt ishlamayotganini isbotlamaydi: ICMP bloklangan bo‘lishi mumkin. Faqat ruxsat berilgan manzillarni tekshiring.",
+      "example": "ping 127.0.0.1\nnslookup example.com\ntracert example.com",
+      "task": "Loopback ping va DNS natijasini taqqoslang. Internet bo‘lmasa xatoni yozing.",
+      "criterion": "DNS va ulanish muammolarini farqlayman.",
+      "minutes": 45,
+      "questions": [
+        {
+          "id": "7a",
+          "prompt": "Domenning IP manzilini DNS orqali tekshiradigan buyruq?",
+          "options": [
+            "nslookup",
+            "tasklist",
+            "ren"
+          ],
+          "correct": "nslookup",
+          "explain": "ping ICMP javobini, tracert yo‘l bo‘ylab tugunlarni, nslookup DNS yechimini tekshiradi. Ping javobsiz qolishi sayt ishlamayotganini isbotlamaydi: ICMP bloklangan bo‘lishi mumkin. Faqat ruxsat berilgan manzillarni tekshiring."
+        },
+        {
+          "id": "7b",
+          "prompt": "Ping javobi yo‘q. To‘g‘ri xulosa?",
+          "options": [
+            "ICMP bloklanishi ham mumkin",
+            "Sayt aniq o‘chirilgan",
+            "DNS har doim buzilgan"
+          ],
+          "correct": "ICMP bloklanishi ham mumkin",
+          "explain": "Bitta diagnostika signali barcha tarmoq qatlamlarini isbotlamaydi."
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "module": 1,
+      "title": "CMD: jarayonlarni boshqarish",
+      "body": "tasklist ishlayotgan jarayonlarni PID bilan ko‘rsatadi. taskkill /PID aniq jarayonni tugatadi. /F majburiy tugatish saqlanmagan ishni yo‘qotishi mumkin. Faqat o‘zingiz ochgan sinov Notepad jarayonidan foydalaning.",
+      "example": "tasklist /FI \"IMAGENAME eq notepad.exe\"\nREM PID ni ro‘yxatdan tekshiring\nREM taskkill /PID 1234",
+      "task": "Sinov Notepad oching, PID ni aniqlang, matnni saqlab odatiy yopish bilan taqqoslang.",
+      "criterion": "PID ni taxmin qilmayman; boshqa foydalanuvchi jarayoniga tegmayman.",
+      "minutes": 45,
+      "questions": [
+        {
+          "id": "8a",
+          "prompt": "PID nimani bildiradi?",
+          "options": [
+            "Jarayon identifikatorini",
+            "Fayl kengaytmasini",
+            "Internet parolini"
+          ],
+          "correct": "Jarayon identifikatorini",
+          "explain": "tasklist ishlayotgan jarayonlarni PID bilan ko‘rsatadi. taskkill /PID aniq jarayonni tugatadi. /F majburiy tugatish saqlanmagan ishni yo‘qotishi mumkin. Faqat o‘zingiz ochgan sinov Notepad jarayonidan foydalaning."
+        },
+        {
+          "id": "8b",
+          "prompt": "taskkill /F xavfi?",
+          "options": [
+            "Saqlanmagan ma’lumot yo‘qolishi",
+            "Faqat shrift o‘zgarishi",
+            "Avtomatik zaxira yaratilishi"
+          ],
+          "correct": "Saqlanmagan ma’lumot yo‘qolishi",
+          "explain": "Majburiy to‘xtatish ilovaga ma’lumotni saqlash imkonini bermaydi."
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "module": 1,
+      "title": "CMD: .bat skript",
+      "body": "Batch fayl CMD buyruqlarini ketma-ket bajaradi. @echo off buyruqlarning aksini yashiradi; REM izoh; pause natijani o‘qishga vaqt beradi. Notepadda All files tanlab .bat bilan saqlang; yashirin .txt kengaytmasini tekshiring.",
+      "example": "@echo off\necho Salom, %USERNAME%!\nREM Bu o‘quv skripti\npause",
+      "task": "welcome.bat yarating va ikki marta ishga tushiring.",
+      "criterion": "Fayl nomi welcome.bat.txt emas va kutilgan salom chiqadi.",
+      "minutes": 45,
+      "questions": [
+        {
+          "id": "9a",
+          "prompt": "Batch skript kengaytmasi?",
+          "options": [
+            ".bat",
+            ".jpg",
+            ".docx"
+          ],
+          "correct": ".bat",
+          "explain": "Batch fayl CMD buyruqlarini ketma-ket bajaradi. @echo off buyruqlarning aksini yashiradi; REM izoh; pause natijani o‘qishga vaqt beradi. Notepadda All files tanlab .bat bilan saqlang; yashirin .txt kengaytmasini tekshiring."
+        },
+        {
+          "id": "9b",
+          "prompt": "pause nima uchun qo‘yiladi?",
+          "options": [
+            "Natijani ko‘rib tugma bosishni kutish uchun",
+            "Kompyuterni o‘chirish uchun",
+            "Faylni shifrlash uchun"
+          ],
+          "correct": "Natijani ko‘rib tugma bosishni kutish uchun",
+          "explain": "pause skriptni foydalanuvchi tugma bosguncha kutdiradi."
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "module": 1,
+      "title": "CMD loyiha: shaxsiy menyu",
+      "body": "choice cheklangan tanlov oladi. errorlevel tekshiruvida katta qiymatdan kichikka qarang, chunki if errorlevel N qiymat N yoki undan katta bo‘lsa rost. Temp tozalashni birinchi versiyada faqat fayllarni ko‘rish sifatida bajaring.",
+      "example": "@echo off\nchoice /c 12 /m \"1 Papka, 2 Chiqish\"\nif errorlevel 2 exit /b\nif errorlevel 1 start \"\" \"%USERPROFILE%\\MiraeLab\"",
+      "task": "Papka ochish, vaqtinchalik mashq fayllarini ko‘rsatish va chiqish menyusini tuzing.",
+      "criterion": "Har yo‘l sinovdan o‘tgan; hech qanday tizim fayli o‘chirilmaydi.",
+      "minutes": 60,
+      "questions": [
+        {
+          "id": "10a",
+          "prompt": "if errorlevel 2 qachon rost?",
+          "options": [
+            "Qiymat 2 yoki undan katta bo‘lsa",
+            "Faqat 0 bo‘lsa",
+            "Faqat matn bo‘lsa"
+          ],
+          "correct": "Qiymat 2 yoki undan katta bo‘lsa",
+          "explain": "choice cheklangan tanlov oladi. errorlevel tekshiruvida katta qiymatdan kichikka qarang, chunki if errorlevel N qiymat N yoki undan katta bo‘lsa rost. Temp tozalashni birinchi versiyada faqat fayllarni ko‘rish sifatida bajaring."
+        },
+        {
+          "id": "10b",
+          "prompt": "Nega errorlevel katta qiymatdan tekshiriladi?",
+          "options": [
+            "Kichik chegara kattalarni ham qamraydi",
+            "choice faqat teskari ishlaydi",
+            "CMD kichik sonni tushunmaydi"
+          ],
+          "correct": "Kichik chegara kattalarni ham qamraydi",
+          "explain": "if errorlevel tenglik emas, pastki chegarani tekshiradi."
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "module": 2,
+      "title": "PowerShell va CMD",
+      "body": "CMD ko‘pincha matn uzatadi; PowerShell cmdletlari tuzilgan obyektlarni pipeline orqali uzatadi. Get-Help yordam beradi. Windows PowerShell 5.1 va PowerShell 7 o‘rtasida farqlar bor; versiyani avval tekshiring.",
+      "example": "$PSVersionTable.PSVersion\nGet-Help Get-Process",
+      "task": "CMD dir va PowerShell Get-ChildItem chiqishini taqqoslang.",
+      "criterion": "Qaysi qobiqda ishlayotganimni va versiyasini aytaman.",
+      "minutes": 45,
+      "questions": [
+        {
+          "id": "11a",
+          "prompt": "PowerShell pipeline odatda nima uzatadi?",
+          "options": [
+            "Obyektlar",
+            "Faqat rasmlar",
+            "Faqat oddiy matn"
+          ],
+          "correct": "Obyektlar",
+          "explain": "CMD ko‘pincha matn uzatadi; PowerShell cmdletlari tuzilgan obyektlarni pipeline orqali uzatadi. Get-Help yordam beradi. Windows PowerShell 5.1 va PowerShell 7 o‘rtasida farqlar bor; versiyani avval tekshiring."
+        },
+        {
+          "id": "11b",
+          "prompt": "Versiyani tekshirish uchun?",
+          "options": [
+            "$PSVersionTable.PSVersion",
+            "cls",
+            "hostname /version"
+          ],
+          "correct": "$PSVersionTable.PSVersion",
+          "explain": "$PSVersionTable ishlayotgan PowerShell muhiti haqidagi ma’lumotni saqlaydi."
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "module": 2,
+      "title": "PowerShell: navigatsiya",
+      "body": "Get-Location joriy manzil, Set-Location manzilni o‘zgartirish, Get-ChildItem tarkibni ko‘rish uchun. Buyruqlarni to‘liq nom bilan o‘rganing; aliaslar boshqa qobiqda bir xil ma’no bermaydi.",
+      "example": "Set-Location $HOME\nGet-Location\nGet-ChildItem -File",
+      "task": "Uy papkasidagi faqat fayllarni sanang va MiraeLab ga o‘ting.",
+      "criterion": "Papka bilan fayl filtri farqini bilaman.",
+      "minutes": 45,
+      "questions": [
+        {
+          "id": "12a",
+          "prompt": "Joriy manzilni ko‘rsatadigan cmdlet?",
+          "options": [
+            "Get-Location",
+            "Set-Content",
+            "Stop-Process"
+          ],
+          "correct": "Get-Location",
+          "explain": "Get-Location joriy manzil, Set-Location manzilni o‘zgartirish, Get-ChildItem tarkibni ko‘rish uchun. Buyruqlarni to‘liq nom bilan o‘rganing; aliaslar boshqa qobiqda bir xil ma’no bermaydi."
+        },
+        {
+          "id": "12b",
+          "prompt": "Get-ChildItem -File nimani cheklaydi?",
+          "options": [
+            "Natijani fayllarga",
+            "Faqat papkalarga",
+            "Faqat administratorlarga"
+          ],
+          "correct": "Natijani fayllarga",
+          "explain": "-File kataloglarni chiqarib tashlaydi."
+        }
+      ]
+    },
+    {
+      "id": 13,
+      "module": 2,
+      "title": "PowerShell: obyektlar va jarayonlar",
+      "body": "Get-Process obyektida Id, ProcessName kabi xususiyatlar bor. Get-Service xizmat holatini ko‘rsatadi. Stop-Process faqat tanlangan o‘zingizning sinov jarayoningizga qo‘llanadi; -WhatIf avval nima bo‘lishini ko‘rsatadi.",
+      "example": "Get-Process | Select-Object -First 5 Id,ProcessName\nGet-Service | Select-Object -First 5 Name,Status",
+      "task": "Notepad jarayonining nomi va Id sini toping, Stop-Process -Id ... -WhatIf bilan reja ko‘ring.",
+      "criterion": "Jarayon va xizmatni farqlayman; tasodifiy tizim xizmatini to‘xtatmayman.",
+      "minutes": 45,
+      "questions": [
+        {
+          "id": "13a",
+          "prompt": "Jarayon identifikatori xususiyati?",
+          "options": [
+            "Id",
+            "Color",
+            "Font"
+          ],
+          "correct": "Id",
+          "explain": "Get-Process obyektida Id, ProcessName kabi xususiyatlar bor. Get-Service xizmat holatini ko‘rsatadi. Stop-Process faqat tanlangan o‘zingizning sinov jarayoningizga qo‘llanadi; -WhatIf avval nima bo‘lishini ko‘rsatadi."
+        },
+        {
+          "id": "13b",
+          "prompt": "-WhatIf nima qiladi?",
+          "options": [
+            "Rejalangan amalni bajarishsiz ko‘rsatadi",
+            "Jarayonni majburiy o‘chiradi",
+            "Tizimni qayta o‘rnatadi"
+          ],
+          "correct": "Rejalangan amalni bajarishsiz ko‘rsatadi",
+          "explain": "WhatIf qo‘llab-quvvatlangan cmdletlarda amaldan oldin ko‘rib chiqishga yordam beradi."
+        }
+      ]
+    },
+    {
+      "id": 14,
+      "module": 2,
+      "title": "PowerShell: pipeline, filtr va tanlash",
+      "body": "Where-Object obyektlarni shart bo‘yicha filtrlaydi; Select-Object xususiyatlarni tanlaydi. $_ joriy pipeline obyektidir. Filtrlash ustun yashirishdan farq qiladi.",
+      "example": "Get-Process | Where-Object { $_.CPU -gt 10 } | Select-Object ProcessName,CPU",
+      "task": "CPU qiymati mavjud jarayonlardan chegaradan yuqorilarini ko‘rsating.",
+      "criterion": "Filtr qatorlarni, Select-Object ustunlarni tanlashini tushuntiraman.",
+      "minutes": 45,
+      "questions": [
+        {
+          "id": "14a",
+          "prompt": "Qaysi cmdlet shart bo‘yicha obyektlarni tanlaydi?",
+          "options": [
+            "Where-Object",
+            "Set-Location",
+            "Out-File"
+          ],
+          "correct": "Where-Object",
+          "explain": "Where-Object obyektlarni shart bo‘yicha filtrlaydi; Select-Object xususiyatlarni tanlaydi. $_ joriy pipeline obyektidir. Filtrlash ustun yashirishdan farq qiladi."
+        },
+        {
+          "id": "14b",
+          "prompt": "$_ nimani bildiradi?",
+          "options": [
+            "Pipeline dagi joriy obyektni",
+            "Barcha disklarni",
+            "Faqat bo‘sh satrni"
+          ],
+          "correct": "Pipeline dagi joriy obyektni",
+          "explain": "Skript blokida har kiruvchi obyekt $_ orqali tekshiriladi."
+        }
+      ]
+    },
+    {
+      "id": 15,
+      "module": 2,
+      "title": "PowerShell: fayl va papkalar",
+      "body": "New-Item yaratadi, Copy-Item nusxalaydi, Move-Item ko‘chiradi, Remove-Item o‘chiradi. -LiteralPath nomni wildcard deb talqin qilmaydi. O‘chirish mashqi faqat MiraeLab ichida va avval -WhatIf bilan.",
+      "example": "New-Item -ItemType Directory -Path \"$HOME\\MiraeLab\" -Force\nNew-Item -ItemType File -Path \"$HOME\\MiraeLab\\demo.txt\"",
+      "task": "Sinov fayli yarating, nusxalang, nusxani -WhatIf bilan o‘chirish rejasini ko‘ring.",
+      "criterion": "Asl fayl saqlanadi; aniq manzil ishlatilgan.",
+      "minutes": 45,
+      "questions": [
+        {
+          "id": "15a",
+          "prompt": "Fayl nusxalash cmdleti?",
+          "options": [
+            "Copy-Item",
+            "Remove-Item",
+            "Stop-Service"
+          ],
+          "correct": "Copy-Item",
+          "explain": "New-Item yaratadi, Copy-Item nusxalaydi, Move-Item ko‘chiradi, Remove-Item o‘chiradi. -LiteralPath nomni wildcard deb talqin qilmaydi. O‘chirish mashqi faqat MiraeLab ichida va avval -WhatIf bilan."
+        },
+        {
+          "id": "15b",
+          "prompt": "Nom ichidagi [ belgini oddiy belgi sifatida ishlatish uchun?",
+          "options": [
+            "-LiteralPath",
+            "-Recurse",
+            "-Force"
+          ],
+          "correct": "-LiteralPath",
+          "explain": "LiteralPath wildcard talqinini chetlab o‘tadi; Force xavfsizlik tekshiruvi emas."
+        }
+      ]
+    },
+    {
+      "id": 16,
+      "module": 2,
+      "title": "PowerShell: o‘zgaruvchilar",
+      "body": "O‘zgaruvchi $ bilan boshlanadi. Bir tirnoq literal satrni, ikki tirnoq o‘zgaruvchi qiymati kiritilgan satrni beradi. Son bilan satrni aralashtirmang; kerak bo‘lsa turga aylantiring.",
+      "example": "$name = 'Mirae'\n$price = 12000\n$count = 3\n\"${name}: jami $($price * $count)\"",
+      "task": "Narx va miqdor bilan jami hisoblovchi uch qatorli skript tuzing.",
+      "criterion": "12000 × 3 natijasi 36000 chiqadi.",
+      "minutes": 45,
+      "questions": [
+        {
+          "id": "16a",
+          "prompt": "PowerShell o‘zgaruvchi belgisi?",
+          "options": [
+            "$",
+            "#",
+            "@"
+          ],
+          "correct": "$",
+          "explain": "O‘zgaruvchi $ bilan boshlanadi. Bir tirnoq literal satrni, ikki tirnoq o‘zgaruvchi qiymati kiritilgan satrni beradi. Son bilan satrni aralashtirmang; kerak bo‘lsa turga aylantiring."
+        },
+        {
+          "id": "16b",
+          "prompt": "\"$($price * $count)\" ichidagi $() vazifasi?",
+          "options": [
+            "Ifodani hisoblab satrga kiritish",
+            "Faylni o‘chirish",
+            "Izoh boshlash"
+          ],
+          "correct": "Ifodani hisoblab satrga kiritish",
+          "explain": "Subexpression ichidagi hisob natijasi ikki tirnoqli satrga joylanadi."
+        }
+      ]
+    },
+    {
+      "id": 17,
+      "module": 2,
+      "title": "PowerShell: matn fayllari",
+      "body": "Get-Content o‘qiydi, Set-Content almashtiradi, Add-Content qo‘shadi. Out-File chiqishni faylga yo‘naltiradi. Kodlash versiyaga qarab farqlanadi: UTF-8 ni aniq belgilang va qayta o‘qib tekshiring.",
+      "example": "'Salom' | Set-Content -LiteralPath \"$HOME\\MiraeLab\\log.txt\" -Encoding UTF8\n'Ikkinchi qator' | Add-Content -LiteralPath \"$HOME\\MiraeLab\\log.txt\" -Encoding UTF8\nGet-Content -LiteralPath \"$HOME\\MiraeLab\\log.txt\"",
+      "task": "O‘zbekcha matnli ikki qator yozing va o‘qing.",
+      "criterion": "O‘, g‘ kabi belgilar yo‘qolmagan.",
+      "minutes": 45,
+      "questions": [
+        {
+          "id": "17a",
+          "prompt": "Fayl oxiriga qo‘shish cmdleti?",
+          "options": [
+            "Add-Content",
+            "Set-Content",
+            "Clear-Content"
+          ],
+          "correct": "Add-Content",
+          "explain": "Get-Content o‘qiydi, Set-Content almashtiradi, Add-Content qo‘shadi. Out-File chiqishni faylga yo‘naltiradi. Kodlash versiyaga qarab farqlanadi: UTF-8 ni aniq belgilang va qayta o‘qib tekshiring."
+        },
+        {
+          "id": "17b",
+          "prompt": "Nega kodlashni qayta o‘qib tekshiramiz?",
+          "options": [
+            "Versiya va dasturlarda kodlash farq qilishi mumkin",
+            "UTF-8 faqat son saqlaydi",
+            "Get-Content faylni buzadi"
+          ],
+          "correct": "Versiya va dasturlarda kodlash farq qilishi mumkin",
+          "explain": "Kodlashni aniq tanlash va round-trip tekshiruvi belgilarni saqlaydi."
+        }
+      ]
+    },
+    {
+      "id": 18,
+      "module": 2,
+      "title": "PowerShell: tizim boshqaruvi",
+      "body": "Get-Service xizmatlarni, Get-WinEvent hodisalarni ko‘rsatadi. Get-LocalUser Windows mahalliy hisoblarini ko‘rsatadi, lekin modul har muhitda mavjud emas. Avval faqat o‘qish amallari; foydalanuvchi yaratish va xizmat sozlash ustoz nazoratida.",
+      "example": "Get-Service | Select-Object -First 5\nGet-WinEvent -LogName System -MaxEvents 5",
+      "task": "Oxirgi hodisalarning vaqtini va darajasini yozing; ruxsat xatosi bo‘lsa qayd eting.",
+      "criterion": "O‘qish va tizim holatini o‘zgartirish amallarini farqlayman.",
+      "minutes": 45,
+      "questions": [
+        {
+          "id": "18a",
+          "prompt": "Hodisalar jurnalini o‘qiydigan cmdlet?",
+          "options": [
+            "Get-WinEvent",
+            "Stop-Process",
+            "Set-Content"
+          ],
+          "correct": "Get-WinEvent",
+          "explain": "Get-Service xizmatlarni, Get-WinEvent hodisalarni ko‘rsatadi. Get-LocalUser Windows mahalliy hisoblarini ko‘rsatadi, lekin modul har muhitda mavjud emas. Avval faqat o‘qish amallari; foydalanuvchi yaratish va xizmat sozlash ustoz nazoratida."
+        },
+        {
+          "id": "18b",
+          "prompt": "Access denied ko‘rinsa birinchi qadam?",
+          "options": [
+            "Talab qilinayotgan huquqni ustoz bilan tekshirish",
+            "Barcha himoyalarni o‘chirish",
+            "Tasodifiy skript yuklash"
+          ],
+          "correct": "Talab qilinayotgan huquqni ustoz bilan tekshirish",
+          "explain": "Ruxsat xatosini tahlil qilish kerak; barcha ishni administratorga aylantirish yechim emas."
+        }
+      ]
+    },
+    {
+      "id": 19,
+      "module": 2,
+      "title": "PowerShell: skript va funksiya",
+      "body": ".ps1 fayl takrorlanadigan ishni saqlaydi. Funksiyaga parametr berib natija olamiz. Ishga tushirish siyosati xato bersa maktab qoidasini tekshiring; ExecutionPolicy ni butun kompyuter uchun asossiz o‘zgartirmang.",
+      "example": "function Get-Total {\n  param([int]$Price, [int]$Count)\n  $Price * $Count\n}\nGet-Total -Price 12000 -Count 3",
+      "task": "Get-Total ni .ps1 ga yozing. 0, 1, 3 miqdorlar bilan tekshiring.",
+      "criterion": "Natijalar 0, 12000, 36000.",
+      "minutes": 45,
+      "questions": [
+        {
+          "id": "19a",
+          "prompt": "Funksiyaga qiymat uzatish nimadan foydalanadi?",
+          "options": [
+            "Parametrlardan",
+            "Faqat fayl nomidan",
+            "Ekran o‘lchamidan"
+          ],
+          "correct": "Parametrlardan",
+          "explain": ".ps1 fayl takrorlanadigan ishni saqlaydi. Funksiyaga parametr berib natija olamiz. Ishga tushirish siyosati xato bersa maktab qoidasini tekshiring; ExecutionPolicy ni butun kompyuter uchun asossiz o‘zgartirmang."
+        },
+        {
+          "id": "19b",
+          "prompt": "Skript siyosat tufayli ochilmasa?",
+          "options": [
+            "Siyosatni ustoz bilan tekshiraman",
+            "Har doim global Unrestricted qilaman",
+            "Faylni rasmga aylantiraman"
+          ],
+          "correct": "Siyosatni ustoz bilan tekshiraman",
+          "explain": "Execution policy tashkilot qoidalari bilan muvofiq bo‘lishi kerak."
+        }
+      ]
+    },
+    {
+      "id": 20,
+      "module": 2,
+      "title": "PowerShell loyiha: tozalash va holat",
+      "body": "Avval tozalanadigan sinov fayllarini ro‘yxatlang; aniq yosh chegarasi va faqat o‘z laboratoriya papkangizni tanlang. -WhatIf natijasini ustoz bilan tekshiring. Qulflangan fayl xatosini qayd eting. Sog‘liq hisoboti bitta CPU oniy qiymatidan tashxis qo‘ymaydi.",
+      "example": "Get-ChildItem -LiteralPath \"$HOME\\MiraeLab\" -File | Where-Object { $_.LastWriteTime -lt (Get-Date).AddDays(-7) } | Remove-Item -WhatIf\nGet-PSDrive -PSProvider FileSystem",
+      "task": "7 kundan eski sinov fayllari ro‘yxati va disk bo‘sh joyi hisobotini yarating.",
+      "criterion": "Haqiqiy temp ga o‘tishdan oldin dry-run, chegaralar, xatolar va tasdiq bor.",
+      "minutes": 60,
+      "questions": [
+        {
+          "id": "20a",
+          "prompt": "Birinchi tozalash bosqichi?",
+          "options": [
+            "Nomzodlarni ko‘rish va -WhatIf",
+            "Butun diskni rekursiv o‘chirish",
+            "Windows papkasini tanlash"
+          ],
+          "correct": "Nomzodlarni ko‘rish va -WhatIf",
+          "explain": "Avval tozalanadigan sinov fayllarini ro‘yxatlang; aniq yosh chegarasi va faqat o‘z laboratoriya papkangizni tanlang. -WhatIf natijasini ustoz bilan tekshiring. Qulflangan fayl xatosini qayd eting. Sog‘liq hisoboti bitta CPU oniy qiymatidan tashxis qo‘ymaydi."
+        },
+        {
+          "id": "20b",
+          "prompt": "Qulflangan fayl uchrasa?",
+          "options": [
+            "Xatoni qayd etib xavfsiz to‘xtash yoki o‘tkazish",
+            "Hamma jarayonni o‘ldirish",
+            "Huquqlarni barcha uchun ochish"
+          ],
+          "correct": "Xatoni qayd etib xavfsiz to‘xtash yoki o‘tkazish",
+          "explain": "Tozalash foydalanuvchi ishini buzmasligi kerak."
+        }
+      ]
+    },
+    {
+      "id": 21,
+      "module": 3,
+      "title": "Word: matn va uslublar",
+      "body": "Hujjatni nom va manzil bilan saqlang. Shrift belgilar ko‘rinishi, paragraf butun abzats tekislanishi va oralig‘ini boshqaradi. Heading 1 va Heading 2 uslublari tuzilma yaratadi; faqat katta shrift sarlavha tuzilmasi emas.",
+      "example": "Sarlavha → Heading 1\nBo‘lim → Heading 2\nAsosiy matn → Normal",
+      "task": "Bir sahifali «Men haqimda» hujjat yarating: sarlavha, ikki bo‘lim, ro‘yxat.",
+      "criterion": ".docx qayta ochiladi; uslublar bir xil qo‘llangan.",
+      "minutes": 45,
+      "questions": [
+        {
+          "id": "21a",
+          "prompt": "Avtomatik mundarijaga asos bo‘ladigan narsa?",
+          "options": [
+            "Heading uslublari",
+            "Faqat qalin shrift",
+            "Ko‘p bo‘sh joy"
+          ],
+          "correct": "Heading uslublari",
+          "explain": "Hujjatni nom va manzil bilan saqlang. Shrift belgilar ko‘rinishi, paragraf butun abzats tekislanishi va oralig‘ini boshqaradi. Heading 1 va Heading 2 uslublari tuzilma yaratadi; faqat katta shrift sarlavha tuzilmasi emas."
+        },
+        {
+          "id": "21b",
+          "prompt": "Matnni tekislashda bo‘sh joylarni takrorlash o‘rniga?",
+          "options": [
+            "Paragraf tekislash sozlamasi",
+            "Yuzta probel",
+            "Rasmga aylantirish"
+          ],
+          "correct": "Paragraf tekislash sozlamasi",
+          "explain": "Paragraf sozlamasi sahifa o‘lchami o‘zgarganda ham barqaror."
+        }
+      ]
+    },
+    {
+      "id": 22,
+      "module": 3,
+      "title": "Word: sahifa tuzilishi",
+      "body": "Margins sahifa chetlarini, orientation yo‘nalishini belgilaydi. Header/footer takrorlanuvchi ma’lumot uchun. Page Number avtomatik sahifa raqami; raqamni qo‘lda yozmang. Alohida bo‘lim yo‘nalishi uchun section break kerak.",
+      "example": "Layout → Margins\nInsert → Page Number\nLayout → Breaks → Section Break",
+      "task": "Uch sahifali hujjatga pastki raqam, sarlavha va bitta gorizontal bo‘lim qo‘shing.",
+      "criterion": "Sahifa qo‘shilganda raqamlar avtomatik yangilanadi.",
+      "minutes": 45,
+      "questions": [
+        {
+          "id": "22a",
+          "prompt": "Avtomatik sahifa raqami vositasi?",
+          "options": [
+            "Page Number",
+            "Qo‘lda terilgan 1, 2, 3",
+            "Font Color"
+          ],
+          "correct": "Page Number",
+          "explain": "Margins sahifa chetlarini, orientation yo‘nalishini belgilaydi. Header/footer takrorlanuvchi ma’lumot uchun. Page Number avtomatik sahifa raqami; raqamni qo‘lda yozmang. Alohida bo‘lim yo‘nalishi uchun section break kerak."
+        },
+        {
+          "id": "22b",
+          "prompt": "Faqat bir bo‘limni landscape qilish uchun?",
+          "options": [
+            "Section break va bo‘lim sozlamasi",
+            "Barcha matnni qalin qilish",
+            "Ko‘p Enter"
+          ],
+          "correct": "Section break va bo‘lim sozlamasi",
+          "explain": "Bo‘limlar sahifa sozlamalarini alohida qo‘llashga imkon beradi."
+        }
+      ]
+    },
+    {
+      "id": 23,
+      "module": 3,
+      "title": "Word: jadval va tasvirlar",
+      "body": "Jadval ma’lumot tuzilishi uchun; rasmga alt text bering. In line with text rasmni matn belgisi kabi tutadi; Square kabi wrapping matnni atrofga joylaydi. SmartArt jarayon yoki tuzilmani ko‘rsatishi mumkin; ortiqcha bezak o‘qishni qiyinlashtiradi.",
+      "example": "Insert → Table\nPicture → Wrap Text → In Line with Text\nPicture → Alt Text",
+      "task": "Dars jadvali, bitta rasm va uch bosqichli jarayon qo‘shing.",
+      "criterion": "Jadval sarlavhalari aniq, rasm kesilmagan, alt text mazmunli.",
+      "minutes": 45,
+      "questions": [
+        {
+          "id": "23a",
+          "prompt": "Matnning rasm atrofidagi joylashuvini nima boshqaradi?",
+          "options": [
+            "Wrap Text",
+            "Spell Check",
+            "Page Number"
+          ],
+          "correct": "Wrap Text",
+          "explain": "Jadval ma’lumot tuzilishi uchun; rasmga alt text bering. In line with text rasmni matn belgisi kabi tutadi; Square kabi wrapping matnni atrofga joylaydi. SmartArt jarayon yoki tuzilmani ko‘rsatishi mumkin; ortiqcha bezak o‘qishni qiyinlashtiradi."
+        },
+        {
+          "id": "23b",
+          "prompt": "Alt text kimga va nimaga yordam beradi?",
+          "options": [
+            "Rasm mazmunini ko‘rmasdan tushunishga",
+            "Faqat faylni kattalashtirishga",
+            "Parolni yashirishga"
+          ],
+          "correct": "Rasm mazmunini ko‘rmasdan tushunishga",
+          "explain": "Alt text ekran o‘quvchi yoki tasvir yuklanmagan holatda mazmunni beradi."
+        }
+      ]
+    },
+    {
+      "id": 24,
+      "module": 3,
+      "title": "Word: havolalar va mundarija",
+      "body": "Heading uslublaridan Table of Contents yarating. Citation manbani, footnote izohni, caption rasm/jadval nomini beradi. Hujjat o‘zgargach mundarija va maydonlarni yangilang. Manbasiz ko‘chirilgan matnni o‘zingizniki deb ko‘rsatmang.",
+      "example": "References → Table of Contents\nReferences → Insert Footnote\nReferences → Insert Caption",
+      "task": "Ikki bo‘limli hisobotga mundarija, bitta manba, izoh va rasm nomi qo‘shing.",
+      "criterion": "Bo‘lim sahifasi o‘zgarganda mundarija yangilangan.",
+      "minutes": 45,
+      "questions": [
+        {
+          "id": "24a",
+          "prompt": "Rasm nomi va raqami uchun vosita?",
+          "options": [
+            "Caption",
+            "WordArt",
+            "Margins"
+          ],
+          "correct": "Caption",
+          "explain": "Heading uslublaridan Table of Contents yarating. Citation manbani, footnote izohni, caption rasm/jadval nomini beradi. Hujjat o‘zgargach mundarija va maydonlarni yangilang. Manbasiz ko‘chirilgan matnni o‘zingizniki deb ko‘rsatmang."
+        },
+        {
+          "id": "24b",
+          "prompt": "Yangi bo‘lim mundarijada yo‘q bo‘lsa?",
+          "options": [
+            "Heading uslubi va Update Table ni tekshirish",
+            "Matn rangini o‘zgartirish",
+            "Rasm qo‘shish"
+          ],
+          "correct": "Heading uslubi va Update Table ni tekshirish",
+          "explain": "Mundarija tuzilmali sarlavhalarga va yangilanishga bog‘liq."
+        }
+      ]
+    },
+    {
+      "id": 25,
+      "module": 3,
+      "title": "Word loyiha: hamkorlik va Mail Merge",
+      "body": "Mail Merge shablonni jadvaldagi har qator bilan birlashtiradi. Preview Results bilan tekshiring. Track Changes tahrir tarixini ko‘rsatadi, Comments fikr bildiradi; yakuniy nusxada o‘zgarishlarni qabul/rad eting. CV da uydirma tajriba kiritmang.",
+      "example": "Shablon: Hurmatli «Ism»!\nJadval ustunlari: Ism, Guruh\nReview → Track Changes",
+      "task": "Bir sahifali CV yoki hisobot tayyorlang; sun’iy uch kishilik jadval bilan taklifnoma merge qiling.",
+      "criterion": "Barcha yozuvlar preview qilingan, maxfiy ma’lumot yo‘q, yakuniy PDF tekshirilgan.",
+      "minutes": 60,
+      "questions": [
+        {
+          "id": "25a",
+          "prompt": "Mail Merge nimani birlashtiradi?",
+          "options": [
+            "Shablon va ma’lumot qatorlarini",
+            "Faqat ikki rasmni",
+            "Faqat shriftlarni"
+          ],
+          "correct": "Shablon va ma’lumot qatorlarini",
+          "explain": "Mail Merge shablonni jadvaldagi har qator bilan birlashtiradi. Preview Results bilan tekshiring. Track Changes tahrir tarixini ko‘rsatadi, Comments fikr bildiradi; yakuniy nusxada o‘zgarishlarni qabul/rad eting. CV da uydirma tajriba kiritmang."
+        },
+        {
+          "id": "25b",
+          "prompt": "Track Changes yoqilgan faylni yakunlashda?",
+          "options": [
+            "O‘zgarishlarni ko‘rib qabul/rad etish",
+            "Faqat matnni kichraytirish",
+            "Barcha izohlarni e’tiborsiz qoldirish"
+          ],
+          "correct": "O‘zgarishlarni ko‘rib qabul/rad etish",
+          "explain": "Yakuniy hujjatda tasodifiy tahrir va izohlar qolmasin."
+        }
+      ]
+    },
+    {
+      "id": 26,
+      "module": 4,
+      "title": "Excel: kataklar va formulalar",
+      "body": "Katak manzili ustun harfi va qator sonidan iborat. Formula = bilan boshlanadi. SUM yig‘indi, AVERAGE o‘rtacha, COUNT sonli kataklar sonini beradi. Son ko‘rinishidagi matn hisobga kirmasligi mumkin.",
+      "example": "=SUM(B2:B6)\n=AVERAGE(B2:B6)\n=COUNT(B2:B6)",
+      "task": "Besh xarajat yozing; jami, o‘rtacha va sonli yozuvlar sonini hisoblang.",
+      "criterion": "Qo‘lda hisob bilan formula natijasini taqqosladim.",
+      "minutes": 45,
+      "questions": [
+        {
+          "id": "26a",
+          "prompt": "COUNT nimani sanaydi?",
+          "options": [
+            "Sonli kataklarni",
+            "Barcha formatlarni",
+            "Faqat rangli kataklarni"
+          ],
+          "correct": "Sonli kataklarni",
+          "explain": "Katak manzili ustun harfi va qator sonidan iborat. Formula = bilan boshlanadi. SUM yig‘indi, AVERAGE o‘rtacha, COUNT sonli kataklar sonini beradi. Son ko‘rinishidagi matn hisobga kirmasligi mumkin."
+        },
+        {
+          "id": "26b",
+          "prompt": "Formula o‘rniga matn ko‘rinsa nima tekshiriladi?",
+          "options": [
+            "= belgisi va katak formati",
+            "Monitor yorqinligi",
+            "Sahifa hoshiyasi"
+          ],
+          "correct": "= belgisi va katak formati",
+          "explain": "Formula = bilan boshlanishi va matn formatida qolmasligi kerak."
+        }
+      ]
+    },
+    {
+      "id": 27,
+      "module": 4,
+      "title": "Excel: havolalar va shartlar",
+      "body": "A1 nisbiy havola nusxalashda siljiydi; $A$1 o‘zgarmaydi. IF shart bo‘yicha ikki qiymatdan birini qaytaradi. VLOOKUP aniq qidiruv uchun FALSE oladi; XLOOKUP mavjudligi Excel versiyasiga bog‘liq. Data Validation kiritishni cheklaydi, lekin yakka o‘zi xavfsizlik emas.",
+      "example": "=B2*$F$1\n=IF(C2>=60,\"O‘tdi\",\"Qayta\")\n=VLOOKUP(A2,$H$2:$J$9,3,FALSE)",
+      "task": "Narxga qat’iy soliq stavkasi qo‘llang va ball bo‘yicha natija chiqaring.",
+      "criterion": "Pastga nusxalashda stavka manzili o‘zgarmaydi.",
+      "minutes": 45,
+      "questions": [
+        {
+          "id": "27a",
+          "prompt": "Qaysi havola to‘liq absolyut?",
+          "options": [
+            "$A$1",
+            "A1",
+            "A$1"
+          ],
+          "correct": "$A$1",
+          "explain": "A1 nisbiy havola nusxalashda siljiydi; $A$1 o‘zgarmaydi. IF shart bo‘yicha ikki qiymatdan birini qaytaradi. VLOOKUP aniq qidiruv uchun FALSE oladi; XLOOKUP mavjudligi Excel versiyasiga bog‘liq. Data Validation kiritishni cheklaydi, lekin yakka o‘zi xavfsizlik emas."
+        },
+        {
+          "id": "27b",
+          "prompt": "VLOOKUP da FALSE nima uchun?",
+          "options": [
+            "Aniq moslik uchun",
+            "Tasodifiy qator uchun",
+            "Formula o‘chishi uchun"
+          ],
+          "correct": "Aniq moslik uchun",
+          "explain": "Taxminiy qidiruv tartiblangan ma’lumot va boshqa shartlarni talab qiladi; identifikatorda aniq moslik kerak."
+        }
+      ]
+    },
+    {
+      "id": 28,
+      "module": 4,
+      "title": "Excel: diagramma va vizual tahlil",
+      "body": "Ustun diagramma toifalarni, chiziq vaqt bo‘yicha trendni ko‘rsatadi. Conditional Formatting qoida asosida format beradi. Sparkline bitta katak ichida trend. Rangga qo‘shimcha raqam va yorliq bering; o‘q masshtabi xulosani chalg‘itmasin.",
+      "example": "Oy | Xarajat\nYanvar | 120\nFevral | 150\nMart | 140",
+      "task": "Uch oylik xarajat grafigi, yuqori qiymatlar uchun qoida va sparkline yarating.",
+      "criterion": "Sarlavha, birlik, o‘qlar aniq; faqat rangga tayanmagan.",
+      "minutes": 45,
+      "questions": [
+        {
+          "id": "28a",
+          "prompt": "Vaqt bo‘yicha trend uchun qulay diagramma?",
+          "options": [
+            "Chiziqli",
+            "Har doim doira",
+            "Faqat SmartArt"
+          ],
+          "correct": "Chiziqli",
+          "explain": "Ustun diagramma toifalarni, chiziq vaqt bo‘yicha trendni ko‘rsatadi. Conditional Formatting qoida asosida format beradi. Sparkline bitta katak ichida trend. Rangga qo‘shimcha raqam va yorliq bering; o‘q masshtabi xulosani chalg‘itmasin."
+        },
+        {
+          "id": "28b",
+          "prompt": "Conditional Formatting nima qiladi?",
+          "options": [
+            "Qiymat yoki formula bo‘yicha formatlaydi",
+            "Asl qiymatni doim almashtiradi",
+            "Faylga parol beradi"
+          ],
+          "correct": "Qiymat yoki formula bo‘yicha formatlaydi",
+          "explain": "U ko‘rinishni o‘zgartiradi, ma’lumotning o‘zini emas."
+        }
+      ]
+    },
+    {
+      "id": 29,
+      "module": 4,
+      "title": "Excel: saralash va PivotTable",
+      "body": "Filter satrlarni vaqtincha yashiradi; Sort tartibni o‘zgartiradi. Saralashda butun jadval bog‘lanishini saqlang. PivotTable toifa bo‘yicha jamlaydi. Manba o‘zgarsa Refresh qiling va manba diapazonini tekshiring.",
+      "example": "Rows: Toifa\nValues: Sum of Xarajat\nFilter: Oy",
+      "task": "O‘nta xarajatni toifa va oy bo‘yicha jamlang; yangi qator qo‘shib yangilang.",
+      "criterion": "Pivot jami manba jami bilan teng.",
+      "minutes": 45,
+      "questions": [
+        {
+          "id": "29a",
+          "prompt": "PivotTable asosiy vazifasi?",
+          "options": [
+            "Ma’lumotni guruhlab jamlash",
+            "Faqat katak bo‘yash",
+            "Rasm siqish"
+          ],
+          "correct": "Ma’lumotni guruhlab jamlash",
+          "explain": "Filter satrlarni vaqtincha yashiradi; Sort tartibni o‘zgartiradi. Saralashda butun jadval bog‘lanishini saqlang. PivotTable toifa bo‘yicha jamlaydi. Manba o‘zgarsa Refresh qiling va manba diapazonini tekshiring."
+        },
+        {
+          "id": "29b",
+          "prompt": "Yangi qator Pivot da ko‘rinmasa?",
+          "options": [
+            "Manba diapazoni va Refresh ni tekshirish",
+            "Shriftni qalin qilish",
+            "Barcha sonlarni o‘chirish"
+          ],
+          "correct": "Manba diapazoni va Refresh ni tekshirish",
+          "explain": "Refresh manbani qayta o‘qiydi; yangi qator diapazonga ham kirishi kerak."
+        }
+      ]
+    },
+    {
+      "id": 30,
+      "module": 4,
+      "title": "Excel loyiha: baholar yoki byudjet",
+      "body": "Hisob kitobini avval kichik ma’lumotda tekshiring. Bahoda vaznlar yig‘indisi 100% bo‘lsin; yetishmagan ballni nol bilan aralashtirmang. Byudjetda daromad va xarajat belgilarini bir xil qoida bilan yuriting. Formula kataklarini ajrating.",
+      "example": "=SUM(B2:D2)\n=IF(COUNT(B2:D2)=3,AVERAGE(B2:D2),\"To‘liq emas\")",
+      "task": "Besh talaba va uch fanli baho jadvali yoki bir oylik byudjet yarating.",
+      "criterion": "Bo‘sh katak, 0, maksimal ball va noto‘g‘ri kiritish tekshirilgan.",
+      "minutes": 60,
+      "questions": [
+        {
+          "id": "30a",
+          "prompt": "Bo‘sh ball har doim nolmi?",
+          "options": [
+            "Yo‘q, hali kiritilmagan bo‘lishi mumkin",
+            "Ha, doim nol",
+            "Ha, doim yuz"
+          ],
+          "correct": "Yo‘q, hali kiritilmagan bo‘lishi mumkin",
+          "explain": "Hisob kitobini avval kichik ma’lumotda tekshiring. Bahoda vaznlar yig‘indisi 100% bo‘lsin; yetishmagan ballni nol bilan aralashtirmang. Byudjetda daromad va xarajat belgilarini bir xil qoida bilan yuriting. Formula kataklarini ajrating."
+        },
+        {
+          "id": "30b",
+          "prompt": "Vaznli baholar vazni yig‘indisi?",
+          "options": [
+            "100%",
+            "Har doim 300%",
+            "Istalgan qiymat"
+          ],
+          "correct": "100%",
+          "explain": "Vaznlar yakuniy bahoning ulushlari; jami bir butun bo‘lishi kerak."
+        }
+      ]
+    },
+    {
+      "id": 31,
+      "module": 5,
+      "title": "Flowgorithm: birinchi algoritm",
+      "body": "Flowgorithm algoritmni shakllar orqali ko‘rsatadi. Start va End oralig‘ida amallar bajariladi. Input foydalanuvchidan oladi, Output chiqaradi. Dastlab oqimni qo‘lda kuzating, so‘ng Run bilan tekshiring.",
+      "example": "Declare ism As String\nInput ism\nOutput \"Salom, \" & ism",
+      "task": "Ism oladigan va salom beradigan blok-sxema tuzing.",
+      "criterion": "Input va Output yo‘nalishini tushuntiraman.",
+      "minutes": 45,
+      "questions": [
+        {
+          "id": "31a",
+          "prompt": "Foydalanuvchidan qiymat qaysi shakl oladi?",
+          "options": [
+            "Input",
+            "Output",
+            "End"
+          ],
+          "correct": "Input",
+          "explain": "Flowgorithm algoritmni shakllar orqali ko‘rsatadi. Start va End oralig‘ida amallar bajariladi. Input foydalanuvchidan oladi, Output chiqaradi. Dastlab oqimni qo‘lda kuzating, so‘ng Run bilan tekshiring."
+        },
+        {
+          "id": "31b",
+          "prompt": "Algoritmni tekshirishning foydali yo‘li?",
+          "options": [
+            "Har qadamdagi qiymatni kuzatish",
+            "Faqat rang tanlash",
+            "Natijani taxmin qilib saqlash"
+          ],
+          "correct": "Har qadamdagi qiymatni kuzatish",
+          "explain": "Trace mantiqiy xatolarni ko‘rinadigan qiladi."
+        }
+      ]
+    },
+    {
+      "id": 32,
+      "module": 5,
+      "title": "Flowgorithm: o‘zgaruvchi va turlar",
+      "body": "Declare bilan tur va nom aniqlanadi. Integer butun son, Real kasr, String matn, Boolean rost/yolg‘on. Assignment qiymatni o‘zgartiradi. Tur tanlovi saqlanadigan ma’lumotga mos bo‘lsin.",
+      "example": "Declare yosh As Integer\nAssign yosh = 15\nOutput yosh",
+      "task": "Ism, yosh, bo‘y va a’zolik uchun to‘rt turli o‘zgaruvchi tuzing.",
+      "criterion": "Har o‘zgaruvchining turi va sababi aytilgan.",
+      "minutes": 45,
+      "questions": [
+        {
+          "id": "32a",
+          "prompt": "Kasr qiymat uchun mos tur?",
+          "options": [
+            "Real",
+            "Boolean",
+            "Integer"
+          ],
+          "correct": "Real",
+          "explain": "Declare bilan tur va nom aniqlanadi. Integer butun son, Real kasr, String matn, Boolean rost/yolg‘on. Assignment qiymatni o‘zgartiradi. Tur tanlovi saqlanadigan ma’lumotga mos bo‘lsin."
+        },
+        {
+          "id": "32b",
+          "prompt": "Boolean qanday qiymat saqlaydi?",
+          "options": [
+            "Rost yoki yolg‘on",
+            "Istalgan rasm",
+            "Faqat kasr son"
+          ],
+          "correct": "Rost yoki yolg‘on",
+          "explain": "Boolean shart natijalarini ifodalaydi."
+        }
+      ]
+    },
+    {
+      "id": 33,
+      "module": 5,
+      "title": "Flowgorithm: hisoblash",
+      "body": "Ifodalar operator ustuvorligiga ko‘ra hisoblanadi; qavslar tartibni o‘zgartiradi. Bo‘lishdan oldin maxraj nol emasligini tekshiring. Kasr natijasi kerak bo‘lsa Real tanlang.",
+      "example": "Declare a, b, yuz As Real\nInput a\nInput b\nAssign yuz = a * b\nOutput yuz",
+      "task": "To‘g‘ri to‘rtburchak yuzi va perimetrini hisoblang.",
+      "criterion": "a=3, b=4 uchun yuz 12, perimetr 14; manfiy o‘lcham rad etiladi.",
+      "minutes": 45,
+      "questions": [
+        {
+          "id": "33a",
+          "prompt": "(2+3)*4 natijasi?",
+          "options": [
+            "20",
+            "14",
+            "9"
+          ],
+          "correct": "20",
+          "explain": "Ifodalar operator ustuvorligiga ko‘ra hisoblanadi; qavslar tartibni o‘zgartiradi. Bo‘lishdan oldin maxraj nol emasligini tekshiring. Kasr natijasi kerak bo‘lsa Real tanlang."
+        },
+        {
+          "id": "33b",
+          "prompt": "Bo‘lishdan avval qaysi holat tekshiriladi?",
+          "options": [
+            "Maxraj nol emasligi",
+            "Surat har doim 1 ligi",
+            "Matn rangi"
+          ],
+          "correct": "Maxraj nol emasligi",
+          "explain": "Nolga bo‘lish aniqlanmagan va xato keltiradi."
+        }
+      ]
+    },
+    {
+      "id": 34,
+      "module": 5,
+      "title": "Flowgorithm: If / Else",
+      "body": "If Boolean shartni tekshiradi. Rost va yolg‘on tarmoqlari qayta qo‘shiladi; har kirishga kerakli natija chiqishi lozim. Chegara qiymatini alohida sinang.",
+      "example": "Input ball\nIf ball >= 60\n  Output \"O‘tdi\"\nElse\n  Output \"Qayta\"",
+      "task": "60 dan boshlab o‘tish shartini blok-sxemada yozing.",
+      "criterion": "59, 60, 61 tekshirildi.",
+      "minutes": 45,
+      "questions": [
+        {
+          "id": "34a",
+          "prompt": "ball=60 va ball>=60 sharti?",
+          "options": [
+            "Rost",
+            "Yolg‘on",
+            "Noma’lum"
+          ],
+          "correct": "Rost",
+          "explain": "If Boolean shartni tekshiradi. Rost va yolg‘on tarmoqlari qayta qo‘shiladi; har kirishga kerakli natija chiqishi lozim. Chegara qiymatini alohida sinang."
+        },
+        {
+          "id": "34b",
+          "prompt": "Nega chegarani sinaymiz?",
+          "options": [
+            "> va >= farqidagi xatoni topish uchun",
+            "Faqat tezlikni oshirish uchun",
+            "Rasmni kattalashtirish uchun"
+          ],
+          "correct": "> va >= farqidagi xatoni topish uchun",
+          "explain": "Chegara sinovlari bir birlikka xatolarni aniqlaydi."
+        }
+      ]
+    },
+    {
+      "id": 35,
+      "module": 5,
+      "title": "Flowgorithm: murakkab shartlar",
+      "body": "And ikkala shart rost bo‘lsa, Or kamida biri rost bo‘lsa rost. Ichma-ich If murakkab qarorni bosqichlarga ajratadi. Qavslar bilan maqsadni aniq qiling; bir-birini qoplaydigan tarmoqlar tartibini tekshiring.",
+      "example": "If ball >= 0 and ball <= 100\n  Output \"Yaroqli\"\nElse\n  Output \"Xato\"",
+      "task": "Ball diapazonini va 90/70/60 baho chegaralarini tekshiring.",
+      "criterion": "-1, 0, 59, 60, 70, 90, 100, 101 sinovlari bor.",
+      "minutes": 45,
+      "questions": [
+        {
+          "id": "35a",
+          "prompt": "0–100 oralig‘ini tekshirish uchun?",
+          "options": [
+            "ball>=0 and ball<=100",
+            "ball>=0 or ball<=100",
+            "ball<0 and ball>100"
+          ],
+          "correct": "ball>=0 and ball<=100",
+          "explain": "And ikkala shart rost bo‘lsa, Or kamida biri rost bo‘lsa rost. Ichma-ich If murakkab qarorni bosqichlarga ajratadi. Qavslar bilan maqsadni aniq qiling; bir-birini qoplaydigan tarmoqlar tartibini tekshiring."
+        },
+        {
+          "id": "35b",
+          "prompt": "Or qachon rost?",
+          "options": [
+            "Kamida bir shart rost bo‘lsa",
+            "Faqat ikkalasi yolg‘on bo‘lsa",
+            "Hech qachon"
+          ],
+          "correct": "Kamida bir shart rost bo‘lsa",
+          "explain": "And va Or ni almashtirish diapazon tekshiruvini buzishi mumkin."
+        }
+      ]
+    },
+    {
+      "id": 36,
+      "module": 5,
+      "title": "Flowgorithm: While",
+      "body": "While shartni aylanish boshida tekshiradi; shart avval yolg‘on bo‘lsa tana ishlamaydi. Hisoblagichni yangilamaslik cheksiz siklga olib keladi. Jadvalga har aylanishdagi qiymatni yozing.",
+      "example": "Assign i = 1\nWhile i <= 3\n  Output i\n  Assign i = i + 1",
+      "task": "1 dan n gacha yig‘indi hisoblang; n=0 holatini ham ko‘ring.",
+      "criterion": "n=3 uchun 6, n=0 uchun 0.",
+      "minutes": 45,
+      "questions": [
+        {
+          "id": "36a",
+          "prompt": "While sharti avval yolg‘on bo‘lsa necha marta ishlaydi?",
+          "options": [
+            "0",
+            "1",
+            "Har doim 10"
+          ],
+          "correct": "0",
+          "explain": "While shartni aylanish boshida tekshiradi; shart avval yolg‘on bo‘lsa tana ishlamaydi. Hisoblagichni yangilamaslik cheksiz siklga olib keladi. Jadvalga har aylanishdagi qiymatni yozing."
+        },
+        {
+          "id": "36b",
+          "prompt": "Hisoblagich oshirilmasa xavf?",
+          "options": [
+            "Cheksiz sikl",
+            "Avtomatik tezlashish",
+            "Fayl saqlanishi"
+          ],
+          "correct": "Cheksiz sikl",
+          "explain": "Sikl sharti oxir-oqibat o‘zgarishi kerak."
+        }
+      ]
+    },
+    {
+      "id": 37,
+      "module": 5,
+      "title": "Flowgorithm: Do-While",
+      "body": "Do-While avval tanani, keyin davom etish shartini tekshiradi: kamida bir marta ishlaydi. Bu qayta kiritish va menyu uchun qulay. Flowgorithm Do siklidagi shart rost bo‘lsa takrorlanishini tekshirib tuzing.",
+      "example": "Do\n  Input son\nWhile son < 0\nOutput son",
+      "task": "Manfiy bo‘lmagan son kiritilmaguncha so‘raydigan algoritm yarating.",
+      "criterion": "-3, -1, 0 ketma-ketligida 0 bilan tugaydi.",
+      "minutes": 45,
+      "questions": [
+        {
+          "id": "37a",
+          "prompt": "Do-While kamida necha marta ishlaydi?",
+          "options": [
+            "1",
+            "0",
+            "Cheksiz"
+          ],
+          "correct": "1",
+          "explain": "Do-While avval tanani, keyin davom etish shartini tekshiradi: kamida bir marta ishlaydi. Bu qayta kiritish va menyu uchun qulay. Flowgorithm Do siklidagi shart rost bo‘lsa takrorlanishini tekshirib tuzing."
+        },
+        {
+          "id": "37b",
+          "prompt": "son<0 davom sharti, son=0 bo‘lsa?",
+          "options": [
+            "Sikl tugaydi",
+            "Yana majburiy ishlaydi",
+            "Son manfiyga aylanadi"
+          ],
+          "correct": "Sikl tugaydi",
+          "explain": "0 manfiy emas, shuning uchun takrorlash sharti yolg‘on."
+        }
+      ]
+    },
+    {
+      "id": 38,
+      "module": 5,
+      "title": "Flowgorithm: For",
+      "body": "For ma’lum diapazon bo‘ylab hisoblaydi. Boshlanish, tugash va qadamni tekshiring. Flowgorithm da odatiy For yakuniy chegarani ham oladi; bu Python range dan farq qiladi.",
+      "example": "For i = 1 To 5 Step 1\n  Output i",
+      "task": "1–5 sonlari va yig‘indisini chiqaring.",
+      "criterion": "5 marta aylanish va 15 yig‘indi.",
+      "minutes": 45,
+      "questions": [
+        {
+          "id": "38a",
+          "prompt": "Flowgorithm For 1 To 5 Step 1 necha aylanish?",
+          "options": [
+            "5",
+            "4",
+            "6"
+          ],
+          "correct": "5",
+          "explain": "For ma’lum diapazon bo‘ylab hisoblaydi. Boshlanish, tugash va qadamni tekshiring. Flowgorithm da odatiy For yakuniy chegarani ham oladi; bu Python range dan farq qiladi."
+        },
+        {
+          "id": "38b",
+          "prompt": "Qadamning vazifasi?",
+          "options": [
+            "Hisoblagich o‘zgarish miqdorini belgilash",
+            "Matn rangini belgilash",
+            "Kiritishni o‘chirish"
+          ],
+          "correct": "Hisoblagich o‘zgarish miqdorini belgilash",
+          "explain": "Qadam yo‘nalish va aylanishlar soniga ta’sir qiladi."
+        }
+      ]
+    },
+    {
+      "id": 39,
+      "module": 5,
+      "title": "Flowgorithm: ichma-ich sikl va massiv",
+      "body": "Massiv bir turdagi bir nechta qiymatni indeks bilan saqlaydi; indeks 0 dan boshlanadi. n element uchun oxirgi indeks n−1. Ichma-ich siklda ichki tana tashqi har aylanishda qayta ishlaydi.",
+      "example": "Declare ballar[3] As Integer\nFor i = 0 To 2\n  Input ballar[i]\nFor i = 0 To 2\n  Output ballar[i]",
+      "task": "Uch ballni massivga oling; keyin 2×3 belgili jadvalni ichma-ich sikl bilan chizing.",
+      "criterion": "Indekslar 0,1,2; ichki tana jami 6 marta.",
+      "minutes": 45,
+      "questions": [
+        {
+          "id": "39a",
+          "prompt": "3 elementli massiv oxirgi indeksi?",
+          "options": [
+            "2",
+            "3",
+            "4"
+          ],
+          "correct": "2",
+          "explain": "Massiv bir turdagi bir nechta qiymatni indeks bilan saqlaydi; indeks 0 dan boshlanadi. n element uchun oxirgi indeks n−1. Ichma-ich siklda ichki tana tashqi har aylanishda qayta ishlaydi."
+        },
+        {
+          "id": "39b",
+          "prompt": "2 tashqi va 3 ichki aylanish jami?",
+          "options": [
+            "6",
+            "5",
+            "3"
+          ],
+          "correct": "6",
+          "explain": "Har tashqi aylanish uchun ichki sikl uch marta ishlaydi: 2×3."
+        }
+      ]
+    },
+    {
+      "id": 40,
+      "module": 5,
+      "title": "Flowgorithm loyiha: menyu va o‘yin",
+      "body": "Bitta kichik loyiha tanlang: kalkulyator, son topish, menyu yoki naqsh. Kirish → qayta ishlash → chiqish yo‘lini yozing. Kalkulyatorda nolga bo‘lish, menyuda noma’lum tanlov, o‘yinda urinish chegarasini tekshiring.",
+      "example": "Input tanlov\nIf tanlov = 0\n  Output \"Xayr\"\nElse\n  Output \"Tanlovni tekshiring\"",
+      "task": "Bitta loyiha yarating va kamida besh sinov jadvali tuzing.",
+      "criterion": "Oddiy, chegara va noto‘g‘ri kirishlar qamralgan.",
+      "minutes": 60,
+      "questions": [
+        {
+          "id": "40a",
+          "prompt": "Kalkulyatorda majburiy tekshiruv?",
+          "options": [
+            "Nolga bo‘lish",
+            "Faqat fon rangi",
+            "Faqat oynaning nomi"
+          ],
+          "correct": "Nolga bo‘lish",
+          "explain": "Bitta kichik loyiha tanlang: kalkulyator, son topish, menyu yoki naqsh. Kirish → qayta ishlash → chiqish yo‘lini yozing. Kalkulyatorda nolga bo‘lish, menyuda noma’lum tanlov, o‘yinda urinish chegarasini tekshiring."
+        },
+        {
+          "id": "40b",
+          "prompt": "Noma’lum menyu tanlovi kelganda?",
+          "options": [
+            "Xabar berib qayta so‘rash",
+            "Tasodifiy amal bajarish",
+            "Dastur har doim qulashi"
+          ],
+          "correct": "Xabar berib qayta so‘rash",
+          "explain": "Kutilmagan kirish boshqariladigan yo‘lga ega bo‘lishi kerak."
+        }
+      ]
+    },
+    {
+      "id": 41,
+      "module": 6,
+      "title": "Vibe coding: maqsadli ishlash",
+      "body": "AI yordamida tez yozish tushunish va tekshirishni almashtirmaydi. Avval maqsad, kirish, chiqish va cheklovlarni yozing. Kichik o‘zgarish qiling, natijani sinang, keyin davom eting. Tushunmagan kodni muhim qurilmada ishga tushirmang.",
+      "example": "Maqsad: ikki ball o‘rtachasi\nKirish: 0–100 oralig‘idagi sonlar\nChiqish: o‘rtacha\nSinov: 60 va 80 → 70",
+      "task": "Uch gapli dastur talabi va uch qabul mezoni yozing.",
+      "criterion": "Nima muvaffaqiyat sanalishi oldindan aniq.",
+      "minutes": 45,
+      "questions": [
+        {
+          "id": "41a",
+          "prompt": "AI kodini qabul qilishdan oldin?",
+          "options": [
+            "Tushunish va sinash",
+            "Faqat chiroyli ko‘rinishini tekshirish",
+            "Tekshirmasdan ishga tushirish"
+          ],
+          "correct": "Tushunish va sinash",
+          "explain": "AI yordamida tez yozish tushunish va tekshirishni almashtirmaydi. Avval maqsad, kirish, chiqish va cheklovlarni yozing. Kichik o‘zgarish qiling, natijani sinang, keyin davom eting. Tushunmagan kodni muhim qurilmada ishga tushirmang."
+        },
+        {
+          "id": "41b",
+          "prompt": "Yaxshi talab nimani belgilaydi?",
+          "options": [
+            "Kirish, chiqish va cheklovlarni",
+            "Faqat dasturchi kayfiyatini",
+            "Faqat fon rangini"
+          ],
+          "correct": "Kirish, chiqish va cheklovlarni",
+          "explain": "Aniq talab tekshiriladigan natijani beradi."
+        }
+      ]
+    },
+    {
+      "id": 42,
+      "module": 6,
+      "title": "Python muhitini tayyorlash",
+      "body": "Muharrir kod yozadi, Python interpretatori bajaradi. VS Code, Cursor yoki onlayn muharrir tanlash mumkin. Faylni alohida loyiha papkasida saqlang. Terminal interpretatori bilan muharrir tanlagani mosligini tekshiring.",
+      "example": "python --version\n# Windows da py --version ham ishlatilishi mumkin\n# hello.py ichida:\nprint(\"Salom, Mirae!\")",
+      "task": "hello.py ni muharrir va terminaldan ishga tushiring.",
+      "criterion": "Bir xil Python versiyasi va bir xil natija.",
+      "minutes": 45,
+      "questions": [
+        {
+          "id": "42a",
+          "prompt": "Python kodini kim bajaradi?",
+          "options": [
+            "Python interpretatori",
+            "Faqat matn shrifti",
+            "PNG ko‘ruvchi"
+          ],
+          "correct": "Python interpretatori",
+          "explain": "Muharrir kod yozadi, Python interpretatori bajaradi. VS Code, Cursor yoki onlayn muharrir tanlash mumkin. Faylni alohida loyiha papkasida saqlang. Terminal interpretatori bilan muharrir tanlagani mosligini tekshiring."
+        },
+        {
+          "id": "42b",
+          "prompt": "Terminalda python topilmasa?",
+          "options": [
+            "O‘rnatish va PATH/py ishga tushirgichini tekshirish",
+            "Kodga ko‘proq print qo‘shish",
+            "Faylni .jpg qilish"
+          ],
+          "correct": "O‘rnatish va PATH/py ishga tushirgichini tekshirish",
+          "explain": "Muhit muammosi kod sintaksisidan alohida tekshiriladi."
+        }
+      ]
+    },
+    {
+      "id": 43,
+      "module": 6,
+      "title": "Python: variables, input va print",
+      "body": "O‘zgaruvchiga = bilan qiymat beriladi. input har doim satr qaytaradi; son kerak bo‘lsa int yoki float bilan aylantiriladi. # izohni boshlaydi. Mazmunli nom tanlang.",
+      "example": "name = input(\"Ism: \")\nprint(\"Salom,\", name)\nage = int(input(\"Yosh: \"))\nprint(age + 1)",
+      "task": "Ism va yosh so‘rab, kelasi yilgi yoshni chiqaring.",
+      "criterion": "15 → 16; matn kirishi hozircha ValueError bo‘lishini tushuntiraman.",
+      "minutes": 45,
+      "questions": [
+        {
+          "id": "43a",
+          "prompt": "input qaytaradigan tur?",
+          "options": [
+            "str",
+            "int har doim",
+            "bool har doim"
+          ],
+          "correct": "str",
+          "explain": "O‘zgaruvchiga = bilan qiymat beriladi. input har doim satr qaytaradi; son kerak bo‘lsa int yoki float bilan aylantiriladi. # izohni boshlaydi. Mazmunli nom tanlang."
+        },
+        {
+          "id": "43b",
+          "prompt": "\"2\" + \"3\" natijasi?",
+          "options": [
+            "\"23\"",
+            "5",
+            "6"
+          ],
+          "correct": "\"23\"",
+          "explain": "Satrlar + bilan birlashtiriladi; sonli hisob uchun aylantirish zarur."
+        }
+      ]
+    },
+    {
+      "id": 44,
+      "module": 6,
+      "title": "Python: turlar va f-string",
+      "body": "int butun, float kasr, str matn, bool mantiqiy tur. f-string ichida {ifoda} qiymat chiqaradi. Float o‘nli kasrlarni doim aniq saqlamaydi; ko‘rsatish formatini haqiqiy qiymat bilan aralashtirmang.",
+      "example": "price = 12.5\ncount = 3\nprint(f\"Jami: {price * count:.2f}\")",
+      "task": "Ism va jami narx bilan chek chiqaring.",
+      "criterion": "37.50 chiqadi va qiymat sonligicha qoladi.",
+      "minutes": 45,
+      "questions": [
+        {
+          "id": "44a",
+          "prompt": "f-string da qiymat qayerda yoziladi?",
+          "options": [
+            "{ } ichida",
+            "Faqat [ ] ichida",
+            "Faqat # dan keyin"
+          ],
+          "correct": "{ } ichida",
+          "explain": "int butun, float kasr, str matn, bool mantiqiy tur. f-string ichida {ifoda} qiymat chiqaradi. Float o‘nli kasrlarni doim aniq saqlamaydi; ko‘rsatish formatini haqiqiy qiymat bilan aralashtirmang."
+        },
+        {
+          "id": "44b",
+          "prompt": ":.2f nimani belgilaydi?",
+          "options": [
+            "Ko‘rinishda ikki kasr xona",
+            "Qiymatni doim int qiladi",
+            "Ikki marta ko‘paytiradi"
+          ],
+          "correct": "Ko‘rinishda ikki kasr xona",
+          "explain": "Format ko‘rsatishni boshqaradi; hisobdagi suzuvchi nuqta xususiyatini o‘zgartirmaydi."
+        }
+      ]
+    },
+    {
+      "id": 45,
+      "module": 6,
+      "title": "Python: kolleksiyalar",
+      "body": "List tartibli va o‘zgartiriladi; tuple tartibli, lekin element biriktirish bilan o‘zgartirilmaydi; dict kalit–qiymat juftliklarini saqlaydi. Indeks 0 dan boshlanadi. Mavjud bo‘lmagan dict kaliti uchun get bilan standart qiymat berish mumkin.",
+      "example": "names = [\"Ali\", \"Lola\"]\npoint = (2, 3)\nstudent = {\"name\": \"Ali\", \"score\": 80}\nprint(names[0], student.get(\"score\", 0))",
+      "task": "Uch talaba lug‘atini ro‘yxatda saqlang va birinchisining ballini oling.",
+      "criterion": "List indeksi bilan dict kalitini farqlayman.",
+      "minutes": 45,
+      "questions": [
+        {
+          "id": "45a",
+          "prompt": "Kalit–qiymat juftliklari qaysi turda?",
+          "options": [
+            "dict",
+            "tuple faqat",
+            "float"
+          ],
+          "correct": "dict",
+          "explain": "List tartibli va o‘zgartiriladi; tuple tartibli, lekin element biriktirish bilan o‘zgartirilmaydi; dict kalit–qiymat juftliklarini saqlaydi. Indeks 0 dan boshlanadi. Mavjud bo‘lmagan dict kaliti uchun get bilan standart qiymat berish mumkin."
+        },
+        {
+          "id": "45b",
+          "prompt": "Ikki elementli list birinchi indeksi?",
+          "options": [
+            "0",
+            "1",
+            "2"
+          ],
+          "correct": "0",
+          "explain": "Python indekslari 0 dan boshlanadi."
+        }
+      ]
+    },
+    {
+      "id": 46,
+      "module": 6,
+      "title": "Python: if / elif / else",
+      "body": "Shartdan keyin : va bir xil indentatsiya kerak. == solishtiradi, = qiymat beradi. elif avvalgi shartlar yolg‘on bo‘lgandagina tekshiriladi. and/or/not mantiqiy operatorlar.",
+      "example": "score = 70\nif score >= 90:\n    print(\"A’lo\")\nelif score >= 60:\n    print(\"O‘tdi\")\nelse:\n    print(\"Qayta\")",
+      "task": "Ball uchun to‘rtta baho va 0–100 validatsiya qo‘shing.",
+      "criterion": "Chegaralar va noto‘g‘ri qiymatlar tekshirildi.",
+      "minutes": 45,
+      "questions": [
+        {
+          "id": "46a",
+          "prompt": "Tenglikni tekshiruvchi operator?",
+          "options": [
+            "==",
+            "=",
+            "+="
+          ],
+          "correct": "==",
+          "explain": "Shartdan keyin : va bir xil indentatsiya kerak. == solishtiradi, = qiymat beradi. elif avvalgi shartlar yolg‘on bo‘lgandagina tekshiriladi. and/or/not mantiqiy operatorlar."
+        },
+        {
+          "id": "46b",
+          "prompt": "if dan keyingi blokni nima belgilaydi?",
+          "options": [
+            "Indentatsiya",
+            "Faqat qavs rangi",
+            "Fayl hajmi"
+          ],
+          "correct": "Indentatsiya",
+          "explain": "Python blok tuzilishi boshidagi bo‘sh joylarga bog‘liq."
+        }
+      ]
+    },
+    {
+      "id": 47,
+      "module": 6,
+      "title": "Python: for va while",
+      "body": "for ketma-ketlik bo‘ylab, while shart rost bo‘lguncha ishlaydi. range oxirgi chegarani kiritmaydi. break siklni tugatadi, continue keyingi aylanishga o‘tadi. While da tugash yo‘lini tekshiring.",
+      "example": "total = 0\nfor n in range(1, 6):\n    total += n\nprint(total)",
+      "task": "1–5 yig‘indisini for bilan, takroriy kirishni while bilan yozing.",
+      "criterion": "15 natija, while dan chiqish yo‘li bor.",
+      "minutes": 45,
+      "questions": [
+        {
+          "id": "47a",
+          "prompt": "range(1, 6) oxirgi qiymati?",
+          "options": [
+            "5",
+            "6",
+            "7"
+          ],
+          "correct": "5",
+          "explain": "for ketma-ketlik bo‘ylab, while shart rost bo‘lguncha ishlaydi. range oxirgi chegarani kiritmaydi. break siklni tugatadi, continue keyingi aylanishga o‘tadi. While da tugash yo‘lini tekshiring."
+        },
+        {
+          "id": "47b",
+          "prompt": "break nima qiladi?",
+          "options": [
+            "Eng ichki siklni tugatadi",
+            "Har doim butun kompyuterni o‘chiradi",
+            "Faqat izoh yozadi"
+          ],
+          "correct": "Eng ichki siklni tugatadi",
+          "explain": "break o‘zi joylashgan sikldan chiqadi."
+        }
+      ]
+    },
+    {
+      "id": 48,
+      "module": 6,
+      "title": "Python: funksiyalar",
+      "body": "def funksiya yaratadi; parametr kirish, return natijadir. print ekranga yozadi, return chaqiruvchiga qiymat beradi. Bitta aniq ish bajaradigan kichik funksiyalarni alohida tekshirish oson.",
+      "example": "def average(a, b):\n    return (a + b) / 2\n\nprint(average(60, 80))",
+      "task": "average funksiyasini 0/0, 60/80 va 100/100 bilan tekshiring.",
+      "criterion": "Natijalar 0,70,100; hisob va chiqarish ajratilgan.",
+      "minutes": 45,
+      "questions": [
+        {
+          "id": "48a",
+          "prompt": "Chaqiruvchiga qiymatni nima qaytaradi?",
+          "options": [
+            "return",
+            "Faqat print",
+            "#"
+          ],
+          "correct": "return",
+          "explain": "def funksiya yaratadi; parametr kirish, return natijadir. print ekranga yozadi, return chaqiruvchiga qiymat beradi. Bitta aniq ish bajaradigan kichik funksiyalarni alohida tekshirish oson."
+        },
+        {
+          "id": "48b",
+          "prompt": "return bo‘lmagan funksiya odatda nima qaytaradi?",
+          "options": [
+            "None",
+            "Har doim 0",
+            "Har doim True"
+          ],
+          "correct": "None",
+          "explain": "Python funksiyasi aniq return bermasa None qaytaradi."
+        }
+      ]
+    },
+    {
+      "id": 49,
+      "module": 6,
+      "title": "Python: fayllar",
+      "body": "with open faylni oxirida yopadi. r o‘qiydi; w mavjud faylni qisqartirib qayta yozadi; a qo‘shadi. encoding=\"utf-8\" belgilarni aniq qiladi. Yo‘lni foydalanuvchi ma’lumotidan ko‘r-ko‘rona yasamang.",
+      "example": "with open(\"notes.txt\", \"w\", encoding=\"utf-8\") as f:\n    f.write(\"Salom\\n\")\nwith open(\"notes.txt\", encoding=\"utf-8\") as f:\n    print(f.read())",
+      "task": "Alohida mashq papkasida qayd yozing va qayta o‘qing.",
+      "criterion": "O‘zbekcha belgilar to‘g‘ri; w almashtirishini bilaman.",
+      "minutes": 45,
+      "questions": [
+        {
+          "id": "49a",
+          "prompt": "Mavjud faylga qo‘shish rejimi?",
+          "options": [
+            "a",
+            "w",
+            "r"
+          ],
+          "correct": "a",
+          "explain": "with open faylni oxirida yopadi. r o‘qiydi; w mavjud faylni qisqartirib qayta yozadi; a qo‘shadi. encoding=\"utf-8\" belgilarni aniq qiladi. Yo‘lni foydalanuvchi ma’lumotidan ko‘r-ko‘rona yasamang."
+        },
+        {
+          "id": "49b",
+          "prompt": "with nima uchun foydali?",
+          "options": [
+            "Faylni xato bo‘lsa ham yopadi",
+            "Barcha faylni shifrlaydi",
+            "Internetni tezlashtiradi"
+          ],
+          "correct": "Faylni xato bo‘lsa ham yopadi",
+          "explain": "Kontekst menejeri resursni blok tugaganda bo‘shatadi."
+        }
+      ]
+    },
+    {
+      "id": 50,
+      "module": 6,
+      "title": "Python: xato va debugging",
+      "body": "Traceback xato turi va joyini ko‘rsatadi. try/except kutilgan xatoni boshqaradi; barcha xatolarni yashirish tuzatishni qiyinlashtiradi. Avval xatoni kichik misolda takrorlang. except ValueError son aylantirish uchun mos.",
+      "example": "try:\n    age = int(input(\"Yosh: \"))\nexcept ValueError:\n    print(\"Butun son kiriting\")",
+      "task": "Son o‘rniga matn, bo‘sh satr va to‘g‘ri son bilan sinang.",
+      "criterion": "Dastur tushunarli xabar beradi; xatoni jim yashirmaydi.",
+      "minutes": 45,
+      "questions": [
+        {
+          "id": "50a",
+          "prompt": "int(\"salom\") qaysi xatoga olib keladi?",
+          "options": [
+            "ValueError",
+            "Faqat SyntaxError",
+            "Hech qanday xato yo‘q"
+          ],
+          "correct": "ValueError",
+          "explain": "Traceback xato turi va joyini ko‘rsatadi. try/except kutilgan xatoni boshqaradi; barcha xatolarni yashirish tuzatishni qiyinlashtiradi. Avval xatoni kichik misolda takrorlang. except ValueError son aylantirish uchun mos."
+        },
+        {
+          "id": "50b",
+          "prompt": "except: pass ni hamma joyda ishlatish muammosi?",
+          "options": [
+            "Haqiqiy xatolarni yashiradi",
+            "Har doim tezlashtiradi",
+            "Testlarni almashtiradi"
+          ],
+          "correct": "Haqiqiy xatolarni yashiradi",
+          "explain": "Faqat kutilgan xatoni ushlang, boshqasini tahlil qiling."
+        }
+      ]
+    },
+    {
+      "id": 51,
+      "module": 6,
+      "title": "Python: modullar",
+      "body": "import modul imkoniyatlarini ulaydi. Standart kutubxona bilan tashqi paket farqlanadi. math.py yoki random.py deb o‘z faylingizni nomlash standart modulni soyada qoldirishi mumkin. Faqat kerakli, ishonchli paketlardan foydalaning.",
+      "example": "import math\nprint(math.sqrt(81))\nfrom pathlib import Path\nprint(Path.cwd())",
+      "task": "math bilan ildiz va pathlib bilan joriy yo‘lni chiqaring.",
+      "criterion": "9.0 natija va haqiqiy loyiha manzili.",
+      "minutes": 45,
+      "questions": [
+        {
+          "id": "51a",
+          "prompt": "math.sqrt(81) natijasi?",
+          "options": [
+            "9.0",
+            "81",
+            "6561"
+          ],
+          "correct": "9.0",
+          "explain": "import modul imkoniyatlarini ulaydi. Standart kutubxona bilan tashqi paket farqlanadi. math.py yoki random.py deb o‘z faylingizni nomlash standart modulni soyada qoldirishi mumkin. Faqat kerakli, ishonchli paketlardan foydalaning."
+        },
+        {
+          "id": "51b",
+          "prompt": "O‘z faylini random.py nomlash nimaga olib kelishi mumkin?",
+          "options": [
+            "Standart random modulini soyada qoldirishga",
+            "Internetni o‘chirishga",
+            "Har doim tezlashishga"
+          ],
+          "correct": "Standart random modulini soyada qoldirishga",
+          "explain": "Python import qidiruvida mahalliy fayl nomi to‘qnashishi mumkin."
+        }
+      ]
+    },
+    {
+      "id": 52,
+      "module": 6,
+      "title": "AI bilan oqilona kodlash",
+      "body": "Promptda maqsad, mavjud kod, xato matni va kutilgan natijani bering. Shaxsiy ma’lumot, token va parollarni olib tashlang. AI taklifini diff orqali ko‘ring, kichik sinovlar bilan tekshiring. AI javobi manba yoki testning o‘rnini bosmaydi.",
+      "example": "«Python 3. Ikki son o‘rtachasi. Bo‘sh kirishda qulay xabar kerak. Mana minimal kod va xato. Tuzatishni izohlab, uch sinov bering.»",
+      "task": "Bir xatoni avval o‘zingiz tahlil qiling; so‘ng AI taklifini sinov bilan solishtiring.",
+      "criterion": "Qaysi satr nega o‘zgarganini tushuntira olaman.",
+      "minutes": 45,
+      "questions": [
+        {
+          "id": "52a",
+          "prompt": "Promptga nimani yubormaslik kerak?",
+          "options": [
+            "Maxfiy token va parolni",
+            "Xatodan tozalangan minimal kodni",
+            "Kutilgan natijani"
+          ],
+          "correct": "Maxfiy token va parolni",
+          "explain": "Promptda maqsad, mavjud kod, xato matni va kutilgan natijani bering. Shaxsiy ma’lumot, token va parollarni olib tashlang. AI taklifini diff orqali ko‘ring, kichik sinovlar bilan tekshiring. AI javobi manba yoki testning o‘rnini bosmaydi."
+        },
+        {
+          "id": "52b",
+          "prompt": "AI «ishlaydi» dedi. Keyingi qadam?",
+          "options": [
+            "Mahalliy sinov va kodni ko‘rib chiqish",
+            "Darhol ommaga chiqarish",
+            "Barcha testlarni o‘chirish"
+          ],
+          "correct": "Mahalliy sinov va kodni ko‘rib chiqish",
+          "explain": "Ishonchli natija mustaqil tekshiruv bilan tasdiqlanadi."
+        }
+      ]
+    },
+    {
+      "id": 53,
+      "module": 6,
+      "title": "Python: uslub va nomlash",
+      "body": "PEP 8 da odatiy funksiya/o‘zgaruvchi nomlari snake_case. Nom maqsadni bildirishi kerak; izoh nima uchun ekanini tushuntirsin. Katta funksiyani ajrating, lekin ortiqcha murakkablik kiritmang. Refaktorda xatti-harakatni saqlang.",
+      "example": "def calculate_total(price, count):\n    return price * count",
+      "task": "x, y, z nomli eski hisobni mazmunli nomlar bilan qayta yozing.",
+      "criterion": "Oldingi uch sinovning barchasi bir xil natija beradi.",
+      "minutes": 45,
+      "questions": [
+        {
+          "id": "53a",
+          "prompt": "Mazmunli funksiya nomi?",
+          "options": [
+            "calculate_total",
+            "aaaa",
+            "thing2"
+          ],
+          "correct": "calculate_total",
+          "explain": "PEP 8 da odatiy funksiya/o‘zgaruvchi nomlari snake_case. Nom maqsadni bildirishi kerak; izoh nima uchun ekanini tushuntirsin. Katta funksiyani ajrating, lekin ortiqcha murakkablik kiritmang. Refaktorda xatti-harakatni saqlang."
+        },
+        {
+          "id": "53b",
+          "prompt": "Refaktor paytida nimani saqlash kerak?",
+          "options": [
+            "Kutilgan xatti-harakatni",
+            "Har doim satr sonini",
+            "Barcha xatolarni"
+          ],
+          "correct": "Kutilgan xatti-harakatni",
+          "explain": "Refaktor tuzilmani yaxshilaydi; testlar xatti-harakatni kuzatadi."
+        }
+      ]
+    },
+    {
+      "id": 54,
+      "module": 6,
+      "title": "Python mini-loyiha",
+      "body": "To-do, quiz yoki matnli sarguzasht tanlang. Amallarni funksiyalarga bo‘ling, kirishni tekshiring, chiqish yo‘lini qo‘shing. To-do da bo‘sh ro‘yxat va noto‘g‘ri indeks; quiz da aniq javob kaliti; o‘yinda barcha yo‘llar tekshirilsin.",
+      "example": "tasks = []\ntasks.append(\"Python mashqi\")\nfor i, task in enumerate(tasks, start=1):\n    print(i, task)",
+      "task": "Bitta loyihaning minimal ishlaydigan versiyasini yarating; kamida besh sinov yozing.",
+      "criterion": "Bo‘sh, normal, noto‘g‘ri va chiqish yo‘llari ishlaydi.",
+      "minutes": 60,
+      "questions": [
+        {
+          "id": "54a",
+          "prompt": "To-do da bo‘sh ro‘yxat bo‘lsa?",
+          "options": [
+            "Tushunarli bo‘sh holat ko‘rsatish",
+            "Dastur qulashi",
+            "Birinchi elementni majburan o‘qish"
+          ],
+          "correct": "Tushunarli bo‘sh holat ko‘rsatish",
+          "explain": "To-do, quiz yoki matnli sarguzasht tanlang. Amallarni funksiyalarga bo‘ling, kirishni tekshiring, chiqish yo‘lini qo‘shing. To-do da bo‘sh ro‘yxat va noto‘g‘ri indeks; quiz da aniq javob kaliti; o‘yinda barcha yo‘llar tekshirilsin."
+        },
+        {
+          "id": "54b",
+          "prompt": "Menyu loyihasida zarur yo‘l?",
+          "options": [
+            "Aniq chiqish amali",
+            "Faqat yashirin tugma",
+            "Cheksiz majburiy aylanish"
+          ],
+          "correct": "Aniq chiqish amali",
+          "explain": "Foydalanuvchi ishni boshqarib tugata olishi kerak."
+        }
+      ]
+    },
+    {
+      "id": 55,
+      "module": 6,
+      "title": "Git: birinchi tarix",
+      "body": "git init lokal repository yaratadi. status holatni, add staging ni, commit lokal tarixga yozishni bajaradi. Commit avtomatik GitHub ga yubormaydi. .gitignore bilan maxfiy va generatsiya fayllarini chiqarib tashlang; allaqachon kuzatilgan sirni ignore qilish yetarli emas.",
+      "example": "git init\ngit status\ngit add main.py\ngit commit -m \"Add first calculator\"",
+      "task": "Sinov loyihada ikki mazmunli commit yarating va status ni tekshiring.",
+      "criterion": "Parol yoki token tarixga tushmagan.",
+      "minutes": 45,
+      "questions": [
+        {
+          "id": "55a",
+          "prompt": "git commit nimani qiladi?",
+          "options": [
+            "Lokal tarixga snapshot yozadi",
+            "Har doim internetga joylaydi",
+            "Fayllarni o‘chiradi"
+          ],
+          "correct": "Lokal tarixga snapshot yozadi",
+          "explain": "git init lokal repository yaratadi. status holatni, add staging ni, commit lokal tarixga yozishni bajaradi. Commit avtomatik GitHub ga yubormaydi. .gitignore bilan maxfiy va generatsiya fayllarini chiqarib tashlang; allaqachon kuzatilgan sirni ignore qilish yetarli emas."
+        },
+        {
+          "id": "55b",
+          "prompt": "Token tarixga tushsa faqat .gitignore yetarlimi?",
+          "options": [
+            "Yo‘q, tokenni bekor qilish/almashtirish ham kerak",
+            "Ha, tarixdan avtomatik yo‘qoladi",
+            "Ha, hech kim ko‘rmaydi"
+          ],
+          "correct": "Yo‘q, tokenni bekor qilish/almashtirish ham kerak",
+          "explain": "Ignore oldingi commitlardan sirni olib tashlamaydi."
+        }
+      ]
+    },
+    {
+      "id": 56,
+      "module": 7,
+      "title": "Loyiha g‘oyasini tanlash",
+      "body": "Muammo va foydalanuvchini aniq ayting. Birinchi versiyani bitta asosiy vazifaga qisqartiring. Portfolio, talaba vositasi, o‘yin yoki avtomatlashtirishdan mavjud ko‘nikmaga mosini tanlang. Ta’sir va bajarish xarajatini solishtiring.",
+      "example": "Foydalanuvchi: talaba\nMuammo: ballarni hisoblash qiyin\nMVP: uch ball o‘rtachasini chiqarish",
+      "task": "Uch g‘oyadan bittasini mezonlar bilan tanlang.",
+      "criterion": "Bir haftada tekshiriladigan kichik natija belgilangan.",
+      "minutes": 60,
+      "questions": [
+        {
+          "id": "56a",
+          "prompt": "MVP nima?",
+          "options": [
+            "Asosiy qiymatni beradigan eng kichik ishlaydigan versiya",
+            "Barcha imkoniyatlar to‘plami",
+            "Faqat logotip"
+          ],
+          "correct": "Asosiy qiymatni beradigan eng kichik ishlaydigan versiya",
+          "explain": "Muammo va foydalanuvchini aniq ayting. Birinchi versiyani bitta asosiy vazifaga qisqartiring. Portfolio, talaba vositasi, o‘yin yoki avtomatlashtirishdan mavjud ko‘nikmaga mosini tanlang. Ta’sir va bajarish xarajatini solishtiring."
+        },
+        {
+          "id": "56b",
+          "prompt": "G‘oyani baholashda eng foydali savol?",
+          "options": [
+            "Kimning qaysi muammosini hal qiladi?",
+            "Nechta bezak bo‘ladi?",
+            "Kod qancha uzun bo‘ladi?"
+          ],
+          "correct": "Kimning qaysi muammosini hal qiladi?",
+          "explain": "Loyiha foydalanuvchi ehtiyojidan boshlanadi."
+        }
+      ]
+    },
+    {
+      "id": 57,
+      "module": 7,
+      "title": "Loyiha rejalash va wireframe",
+      "body": "Talabni tekshiriladigan jumla qiling. Wireframe ekran tuzilmasini ko‘rsatadi; ranglardan avval foydalanuvchi yo‘lini belgilang. Ishni kichik vazifalarga bo‘ling, tayyor bo‘lish mezonini yozing. Bo‘sh, xato va yuklanish holatlarini ham chizing.",
+      "example": "Talab: bo‘sh nom saqlanmaydi\nSinov: bo‘sh yuborish → «Nom kiriting»\nVazifa: forma validatsiyasi",
+      "task": "Ikki ekran wireframe va besh vazifali reja yarating.",
+      "criterion": "Har vazifa uchun kuzatiladigan qabul mezoni bor.",
+      "minutes": 60,
+      "questions": [
+        {
+          "id": "57a",
+          "prompt": "Tekshiriladigan talab qaysi?",
+          "options": [
+            "Bo‘sh nomda xabar chiqadi va yozuv saqlanmaydi",
+            "Ilova zo‘r bo‘lsin",
+            "Hammasi chiroyli bo‘lsin"
+          ],
+          "correct": "Bo‘sh nomda xabar chiqadi va yozuv saqlanmaydi",
+          "explain": "Talabni tekshiriladigan jumla qiling. Wireframe ekran tuzilmasini ko‘rsatadi; ranglardan avval foydalanuvchi yo‘lini belgilang. Ishni kichik vazifalarga bo‘ling, tayyor bo‘lish mezonini yozing. Bo‘sh, xato va yuklanish holatlarini ham chizing."
+        },
+        {
+          "id": "57b",
+          "prompt": "Wireframe nimaga yordam beradi?",
+          "options": [
+            "Tuzilma va foydalanuvchi yo‘lini tekshirishga",
+            "Parolni shifrlashga",
+            "Server xarajatini avtomatik to‘lashga"
+          ],
+          "correct": "Tuzilma va foydalanuvchi yo‘lini tekshirishga",
+          "explain": "Wireframe interfeys oqimini kod yozishdan oldin ko‘rsatadi."
+        }
+      ]
+    },
+    {
+      "id": 58,
+      "module": 7,
+      "title": "To‘liq Python console loyiha",
+      "body": "Kirish, biznes mantiq va chiqarishni ajrating. Menyuda noma’lum tanlov boshqarilsin; saqlash bo‘lsa fayl topilmagan va buzilgan holatni tekshiring. Birinchi ishlaydigan yo‘lni tugatib keyin imkoniyat qo‘shing.",
+      "example": "def calculate_total(values):\n    return sum(values)\n\nprint(calculate_total([10, 20, 30]))",
+      "task": "Menyu, kamida uch amal, saqlash/o‘qish va yordamga ega console loyiha tuzing.",
+      "criterion": "Dastur qayta ochilganda ma’lumot qaytadi; buzilgan fayl tushunarli xabar beradi.",
+      "minutes": 60,
+      "questions": [
+        {
+          "id": "58a",
+          "prompt": "Hisob mantiqini ajratish foydasi?",
+          "options": [
+            "Uni foydalanuvchi kiritishisiz testlash mumkin",
+            "Dastur avtomatik internetga chiqadi",
+            "Parol kerak bo‘lmaydi"
+          ],
+          "correct": "Uni foydalanuvchi kiritishisiz testlash mumkin",
+          "explain": "Kirish, biznes mantiq va chiqarishni ajrating. Menyuda noma’lum tanlov boshqarilsin; saqlash bo‘lsa fayl topilmagan va buzilgan holatni tekshiring. Birinchi ishlaydigan yo‘lni tugatib keyin imkoniyat qo‘shing."
+        },
+        {
+          "id": "58b",
+          "prompt": "Saqlangan fayl buzilgan bo‘lsa?",
+          "options": [
+            "Aslini saqlab xabar berish va tiklash yo‘lini taklif qilish",
+            "Indamay ustiga bo‘sh yozish",
+            "Butun diskni tozalash"
+          ],
+          "correct": "Aslini saqlab xabar berish va tiklash yo‘lini taklif qilish",
+          "explain": "Tiklanishi mumkin bo‘lgan ma’lumotni yo‘qotmaslik kerak."
+        }
+      ]
+    },
+    {
+      "id": 59,
+      "module": 7,
+      "title": "GUI loyiha: Tkinter yoki web",
+      "body": "GUI hodisalarga javob beradi. Tugma callback chaqiradi; uzoq ish UI oqimini to‘smasin. Tkinter standart Python bilan ko‘p o‘rnatmalarda mavjud, lekin ayrim muhitlarda alohida o‘rnatish talab qilinadi. Klaviatura tartibi va xato xabarlarini rejalang.",
+      "example": "import tkinter as tk\nroot = tk.Tk()\nroot.title(\"Mirae\")\ntk.Button(root, text=\"Salom\", command=lambda: print(\"Salom\")).pack()\nroot.mainloop()",
+      "task": "Console hisobingizga input, tugma va natija maydoni qo‘shing.",
+      "criterion": "Tab orqali foydalaniladi; noto‘g‘ri kirish ilovani qulatmaydi.",
+      "minutes": 60,
+      "questions": [
+        {
+          "id": "59a",
+          "prompt": "GUI tugmasi odatda nimani chaqiradi?",
+          "options": [
+            "Hodisa callback ini",
+            "Faqat fayl kengaytmasini",
+            "Har doim operatsion tizimni"
+          ],
+          "correct": "Hodisa callback ini",
+          "explain": "GUI hodisalarga javob beradi. Tugma callback chaqiradi; uzoq ish UI oqimini to‘smasin. Tkinter standart Python bilan ko‘p o‘rnatmalarda mavjud, lekin ayrim muhitlarda alohida o‘rnatish talab qilinadi. Klaviatura tartibi va xato xabarlarini rejalang."
+        },
+        {
+          "id": "59b",
+          "prompt": "Uzoq ish UI oqimida bajarilsa?",
+          "options": [
+            "Oyna javobsiz qolishi mumkin",
+            "Har doim tezlashadi",
+            "Avtomatik test bo‘ladi"
+          ],
+          "correct": "Oyna javobsiz qolishi mumkin",
+          "explain": "Asosiy hodisa sikli band bo‘lsa chizish va kiritish kutadi."
+        }
+      ]
+    },
+    {
+      "id": 60,
+      "module": 7,
+      "title": "HTML va CSS asoslari",
+      "body": "HTML mazmun va semantik tuzilma, CSS ko‘rinish uchun. heading, main, label, button kabi elementlarni vazifasiga ko‘ra tanlang. Responsive dizayn kichik ekranga moslashadi. Tugma uchun bosiladigan div o‘rniga button ishlating.",
+      "example": "<main>\n  <h1>Mening loyiham</h1>\n  <p>Bu o‘quv portfolio.</p>\n  <button type=\"button\">Ko‘rish</button>\n</main>",
+      "task": "Sarlavha, matn, loyiha kartasi va kontakt bo‘limi yarating.",
+      "criterion": "Mobil kenglikda gorizontal chiqib ketish yo‘q; klaviatura fokus ko‘rinadi.",
+      "minutes": 45,
+      "questions": [
+        {
+          "id": "60a",
+          "prompt": "HTML asosiy vazifasi?",
+          "options": [
+            "Mazmun tuzilmasini belgilash",
+            "Server parolini saqlash",
+            "Har doim ma’lumot bazasi yaratish"
+          ],
+          "correct": "Mazmun tuzilmasini belgilash",
+          "explain": "HTML mazmun va semantik tuzilma, CSS ko‘rinish uchun. heading, main, label, button kabi elementlarni vazifasiga ko‘ra tanlang. Responsive dizayn kichik ekranga moslashadi. Tugma uchun bosiladigan div o‘rniga button ishlating."
+        },
+        {
+          "id": "60b",
+          "prompt": "Haqiqiy amal tugmasi uchun mos element?",
+          "options": [
+            "button",
+            "Faqat span",
+            "Faqat rasm"
+          ],
+          "correct": "button",
+          "explain": "Native button klaviatura va yordamchi texnologiyalarga mos semantikani beradi."
+        }
+      ]
+    },
+    {
+      "id": 61,
+      "module": 7,
+      "title": "GitHub Pages: statik sayt",
+      "body": "Statik hosting HTML, CSS va JavaScript fayllarini yetkazadi. GitHub Pages Python serverini ishga tushirmaydi. index.html va nisbiy asset yo‘llarini tekshiring; repository nomli pastki yo‘lda absolyut / yo‘llar buzilishi mumkin. Hech qanday sirni mijoz kodiga qo‘ymang.",
+      "example": "index.html\nassets/style.css\n<link rel=\"stylesheet\" href=\"assets/style.css\">",
+      "task": "Sinov repository da Pages sozlang, ochilgan URL va mobil ko‘rinishni tekshiring.",
+      "criterion": "Rasm va CSS havolalari joylashtirilgan yo‘lda ishlaydi.",
+      "minutes": 45,
+      "questions": [
+        {
+          "id": "61a",
+          "prompt": "GitHub Pages nima uchun mos?",
+          "options": [
+            "Statik HTML/CSS/JS sayt",
+            "Doimiy Python server jarayoni",
+            "Mahfiy parol ombori"
+          ],
+          "correct": "Statik HTML/CSS/JS sayt",
+          "explain": "Statik hosting HTML, CSS va JavaScript fayllarini yetkazadi. GitHub Pages Python serverini ishga tushirmaydi. index.html va nisbiy asset yo‘llarini tekshiring; repository nomli pastki yo‘lda absolyut / yo‘llar buzilishi mumkin. Hech qanday sirni mijoz kodiga qo‘ymang."
+        },
+        {
+          "id": "61b",
+          "prompt": "Saytda CSS yo‘qolsa avval nima tekshiriladi?",
+          "options": [
+            "Asset yo‘llari va harf registri",
+            "Kompyuter fon rasmi",
+            "Excel formulasi"
+          ],
+          "correct": "Asset yo‘llari va harf registri",
+          "explain": "Hosting yo‘li va fayl nomining registri mahalliy muhitdan farq qilishi mumkin."
+        }
+      ]
+    },
+    {
+      "id": 62,
+      "module": 7,
+      "title": "Python app joylashtirish",
+      "body": "Console skript avtomatik web app emas. Web ilova uchun framework, ishga tushirish buyrug‘i, dependencies va muhit sozlamalari kerak. Hosting limit, narx, uyqu va disk saqlash qoidalarini tanlash kuni rasmiy hujjatdan tekshiring; bepul bo‘lishini va’da qilmang.",
+      "example": "requirements.txt\nREADME: start command\nEnvironment: SECRET_KEY\nHealth check: /health",
+      "task": "Mahalliy web demo uchun deploy reja tuzing: start, env, log, storage, rollback.",
+      "criterion": "Sirlar kodda emas; qayta ishga tushishdagi ma’lumot saqlanishi tekshirilgan.",
+      "minutes": 45,
+      "questions": [
+        {
+          "id": "62a",
+          "prompt": "Maxfiy kalit qayerda saqlanishi kerak?",
+          "options": [
+            "Hosting muhit o‘zgaruvchisi yoki secret store da",
+            "Ommaviy HTML da",
+            "Git commit xabarida"
+          ],
+          "correct": "Hosting muhit o‘zgaruvchisi yoki secret store da",
+          "explain": "Console skript avtomatik web app emas. Web ilova uchun framework, ishga tushirish buyrug‘i, dependencies va muhit sozlamalari kerak. Hosting limit, narx, uyqu va disk saqlash qoidalarini tanlash kuni rasmiy hujjatdan tekshiring; bepul bo‘lishini va’da qilmang."
+        },
+        {
+          "id": "62b",
+          "prompt": "Vaqtinchalik hosting diskiga ishonishdan oldin?",
+          "options": [
+            "Qayta deploy/restart saqlash kafolatini tekshirish",
+            "Doimiy deb taxmin qilish",
+            "Zaxirani o‘chirish"
+          ],
+          "correct": "Qayta deploy/restart saqlash kafolatini tekshirish",
+          "explain": "Ayrim hosting fayl tizimlari vaqtinchalik; saqlash alohida rejalashtiriladi."
+        }
+      ]
+    },
+    {
+      "id": 63,
+      "module": 7,
+      "title": "Shaxsiy portfolio",
+      "body": "Portfolio kimligingiz, nima qilganingiz va loyiha dalilini ko‘rsatadi. Har kartada muammo, yechim, ekran va kod/demo havolasi bo‘lsin. Faqat ruxsatli shaxsiy ma’lumotni joylang. Soxta natija yoki begona ishni o‘zingizniki deb bermang.",
+      "example": "Loyiha: Baho hisoblagich\nMuammo: qo‘lda xato hisob\nYechim: validatsiya va o‘rtacha\nDalil: demo + README",
+      "task": "Ikki loyiha kartasi va qisqa tanishtirishli portfolio tuzing.",
+      "criterion": "Havolalar ishlaydi, tasvir alt matni bor, aloqa ma’lumoti ruxsatli.",
+      "minutes": 45,
+      "questions": [
+        {
+          "id": "63a",
+          "prompt": "Loyiha kartasida eng foydali dalil?",
+          "options": [
+            "Ishlaydigan demo va tushuntirilgan kod",
+            "Faqat «eng zo‘r» yozuvi",
+            "Faqat uzun texnologiya ro‘yxati"
+          ],
+          "correct": "Ishlaydigan demo va tushuntirilgan kod",
+          "explain": "Portfolio kimligingiz, nima qilganingiz va loyiha dalilini ko‘rsatadi. Har kartada muammo, yechim, ekran va kod/demo havolasi bo‘lsin. Faqat ruxsatli shaxsiy ma’lumotni joylang. Soxta natija yoki begona ishni o‘zingizniki deb bermang."
+        },
+        {
+          "id": "63b",
+          "prompt": "Boshqaning kodidan foydalansangiz?",
+          "options": [
+            "Litsenziya va mualliflikni tekshirib ko‘rsatish",
+            "O‘zingiz yozgan deb aytish",
+            "Barcha manbani yashirish"
+          ],
+          "correct": "Litsenziya va mualliflikni tekshirib ko‘rsatish",
+          "explain": "Litsenziya shartlari va hissa halol ko‘rsatiladi."
+        }
+      ]
+    },
+    {
+      "id": 64,
+      "module": 7,
+      "title": "Formalar va interaktivlik",
+      "body": "label input bilan bog‘lansin. required va type=email foydalanuvchiga yordam beradi, ammo server tekshiruvini almashtirmaydi. Statik forma backend bo‘lmasa xabarni hech qayerga yubormaydi. Holatni aniq bildiring: yuborilmoqda, qabul qilindi yoki xato.",
+      "example": "<label for=\"email\">Email</label>\n<input id=\"email\" type=\"email\" required>\n<button type=\"submit\">Yuborish</button>",
+      "task": "Mahalliy forma validatsiyasi yarating; backend bo‘lmasa «Demo — yuborilmadi» deb ko‘rsating.",
+      "criterion": "Bo‘sh, noto‘g‘ri email, takror bosish va xato holati tekshirilgan.",
+      "minutes": 45,
+      "questions": [
+        {
+          "id": "64a",
+          "prompt": "Brauzer validatsiyasi server tekshiruvini almashtiradimi?",
+          "options": [
+            "Yo‘q",
+            "Ha, har doim",
+            "Faqat rang bo‘lsa"
+          ],
+          "correct": "Yo‘q",
+          "explain": "label input bilan bog‘lansin. required va type=email foydalanuvchiga yordam beradi, ammo server tekshiruvini almashtirmaydi. Statik forma backend bo‘lmasa xabarni hech qayerga yubormaydi. Holatni aniq bildiring: yuborilmoqda, qabul qilindi yoki xato."
+        },
+        {
+          "id": "64b",
+          "prompt": "Backend yo‘q formadan keyin to‘g‘ri xabar?",
+          "options": [
+            "Demo — xabar yuborilmadi",
+            "Xabar serverga yetdi",
+            "Email albatta jo‘natildi"
+          ],
+          "correct": "Demo — xabar yuborilmadi",
+          "explain": "UI bajarilmagan amalni muvaffaqiyat deb ko‘rsatmasligi kerak."
+        }
+      ]
+    },
+    {
+      "id": 65,
+      "module": 7,
+      "title": "README va qo‘llanma",
+      "body": "README muammo, imkoniyat, o‘rnatish, ishga tushirish, sinash va cheklovlarni tushuntiradi. Buyruqlarni toza papkada sinang. Muhit versiyasini yozing. Kerakli sir nomini ko‘rsating, qiymatini emas.",
+      "example": "# Baho hisoblagich\n## Ishga tushirish\npython main.py\n## Sinov\n60, 80 → 70\n## Cheklov\nHozircha bitta foydalanuvchi",
+      "task": "Loyihaga README yozing va sinfdoshingizga undan foydalanib ishga tushirtiring.",
+      "criterion": "Og‘zaki yordamsiz ishlaydi yoki yetishmagan qadam tuzatiladi.",
+      "minutes": 45,
+      "questions": [
+        {
+          "id": "65a",
+          "prompt": "Yaxshi README nima imkon beradi?",
+          "options": [
+            "Loyihani takror ishga tushirish va sinash",
+            "Parolni ommaga oshkor qilish",
+            "Barcha kodni almashtirish"
+          ],
+          "correct": "Loyihani takror ishga tushirish va sinash",
+          "explain": "README muammo, imkoniyat, o‘rnatish, ishga tushirish, sinash va cheklovlarni tushuntiradi. Buyruqlarni toza papkada sinang. Muhit versiyasini yozing. Kerakli sir nomini ko‘rsating, qiymatini emas."
+        },
+        {
+          "id": "65b",
+          "prompt": "O‘rnatish qadamlarini qanday tekshiramiz?",
+          "options": [
+            "Toza muhitda takrorlab",
+            "Faqat yoddan o‘qib",
+            "Faqat logotip qo‘shib"
+          ],
+          "correct": "Toza muhitda takrorlab",
+          "explain": "Takrorlanadigan qadamlar qo‘llanmaning haqiqiy ishlashini ko‘rsatadi."
+        }
+      ]
+    },
+    {
+      "id": 66,
+      "module": 7,
+      "title": "GitHub profil va loyiha ulashish",
+      "body": "Repository tavsifi va README loyihani topish va tushunishga yordam beradi. Public bo‘lsa fayllar va tarix ko‘rinishini hisobga oling. Jonli sayt havolasi va kod havolasi farqlanadi. Tarqatishdan oldin sirlar, shaxsiy ma’lumot va litsenziyani tekshiring.",
+      "example": "Profil → tanlangan loyihalar\nRepository → kod va README\nDemo URL → ishlayotgan sahifa",
+      "task": "Bitta loyihani tartiblang va ikkita aniq nomlangan havola qo‘shing.",
+      "criterion": "Public fayllar va tarix tekshirilgan; havolalar boshqa brauzerda ochiladi.",
+      "minutes": 60,
+      "questions": [
+        {
+          "id": "66a",
+          "prompt": "Kod havolasi va demo havolasi?",
+          "options": [
+            "Turli maqsadga xizmat qiladi",
+            "Har doim bir xil sahifa",
+            "Ikkalasi ham faqat parol"
+          ],
+          "correct": "Turli maqsadga xizmat qiladi",
+          "explain": "Repository tavsifi va README loyihani topish va tushunishga yordam beradi. Public bo‘lsa fayllar va tarix ko‘rinishini hisobga oling. Jonli sayt havolasi va kod havolasi farqlanadi. Tarqatishdan oldin sirlar, shaxsiy ma’lumot va litsenziyani tekshiring."
+        },
+        {
+          "id": "66b",
+          "prompt": "Public qilishdan oldingi muhim tekshiruv?",
+          "options": [
+            "Sirlar va shaxsiy ma’lumotlar yo‘qligi",
+            "Faqat yulduzlar soni",
+            "Faqat fayl rangi"
+          ],
+          "correct": "Sirlar va shaxsiy ma’lumotlar yo‘qligi",
+          "explain": "Ommaviy ulashish ko‘rinadigan barcha fayl va tarixni qamraydi."
+        }
+      ]
+    },
+    {
+      "id": 67,
+      "module": 7,
+      "title": "Jamoa: fork va pull request",
+      "body": "Fork boshqa hisobdagi repository nusxasi, branch bir repository ichidagi ish tarmog‘i. Pull request o‘zgarishni ko‘rib qo‘shishni so‘raydi. Kichik diff, sabab va sinov yozing. Konfliktni ko‘r-ko‘rona o‘chirmang; ikki tomon maqsadini tushuning.",
+      "example": "git switch -c improve-readme\n# kichik o‘zgarish\ngit add README.md\ngit commit -m \"Clarify setup steps\"",
+      "task": "Sinov loyihada kichik branch va review uchun PR matni tayyorlang.",
+      "criterion": "Nima, nega, qanday sinalgani aniq.",
+      "minutes": 45,
+      "questions": [
+        {
+          "id": "67a",
+          "prompt": "Pull request maqsadi?",
+          "options": [
+            "O‘zgarishni ko‘rib birlashtirishni so‘rash",
+            "Barcha tarixni yashirish",
+            "Faqat faylni yuklab olish"
+          ],
+          "correct": "O‘zgarishni ko‘rib birlashtirishni so‘rash",
+          "explain": "Fork boshqa hisobdagi repository nusxasi, branch bir repository ichidagi ish tarmog‘i. Pull request o‘zgarishni ko‘rib qo‘shishni so‘raydi. Kichik diff, sabab va sinov yozing. Konfliktni ko‘r-ko‘rona o‘chirmang; ikki tomon maqsadini tushuning."
+        },
+        {
+          "id": "67b",
+          "prompt": "Merge konfliktida to‘g‘ri yondashuv?",
+          "options": [
+            "Ikkala o‘zgarish maqsadini tushunib sinash",
+            "Bir tomonni tasodifiy o‘chirish",
+            "Testlarni o‘chirib tashlash"
+          ],
+          "correct": "Ikkala o‘zgarish maqsadini tushunib sinash",
+          "explain": "Konflikt sintaksisdan tashqari mantiqiy muvofiqlikni ham talab qiladi."
+        }
+      ]
+    },
+    {
+      "id": 68,
+      "module": 7,
+      "title": "Yakuniy loyiha",
+      "body": "Baho+Excel eksport, moliya, quiz yoki klub saytidan bittasini tanlang. Talab, kirish tekshiruvi, ma’lumot saqlash, tushunarli UI va kamida besh sinov bo‘lsin. CSV fayl .xlsx emas; haqiqiy Excel eksport tanlansa mos kutubxona va qayta ochish tekshiruvi kerak.",
+      "example": "Qabul mezonlari:\n1. Asosiy yo‘l ishlaydi\n2. Noto‘g‘ri kirish boshqariladi\n3. Qayta ochish/saqlash tekshirilgan\n4. README va test dalili bor",
+      "task": "Ishlaydigan final loyiha, sinov jadvali va qisqa taqdimot tayyorlang.",
+      "criterion": "Talablar 30%, ishlash 30%, tekshiruv 20%, UI 10%, hujjat 10% rubrika bilan ko‘rib chiqildi.",
+      "minutes": 60,
+      "questions": [
+        {
+          "id": "68a",
+          "prompt": "Fayl nomini .xlsx qilish haqiqiy Excel eksportmi?",
+          "options": [
+            "Yo‘q, format ham mos bo‘lishi kerak",
+            "Ha, nomning o‘zi yetadi",
+            "Ha, barcha matn Excel"
+          ],
+          "correct": "Yo‘q, format ham mos bo‘lishi kerak",
+          "explain": "Baho+Excel eksport, moliya, quiz yoki klub saytidan bittasini tanlang. Talab, kirish tekshiruvi, ma’lumot saqlash, tushunarli UI va kamida besh sinov bo‘lsin. CSV fayl .xlsx emas; haqiqiy Excel eksport tanlansa mos kutubxona va qayta ochish tekshiruvi kerak."
+        },
+        {
+          "id": "68b",
+          "prompt": "Yakuniy loyiha qabulida nima tekshiriladi?",
+          "options": [
+            "Talablar va xato holatlarining ishlashi",
+            "Faqat logo",
+            "Faqat kod satrlari soni"
+          ],
+          "correct": "Talablar va xato holatlarining ishlashi",
+          "explain": "Haqiqiy foyda va barqarorlik ko‘rinish bilan birga baholanadi."
+        }
+      ]
+    },
+    {
+      "id": 69,
+      "module": 7,
+      "title": "Loyihani taqdim etish",
+      "body": "Qisqa demo: muammo → foydalanuvchi → yechim → jonli misol → sinov → cheklov. Internet ishlamasa mahalliy nusxa yoki yozib olingan demo tayyorlang. Demo ma’lumotlari sun’iy bo‘lsin; parollarni ekranga chiqarmang.",
+      "example": "0:00 Muammo\n0:30 Yechim\n1:00 Asosiy demo\n2:00 Xato holati va sinov\n2:40 Keyingi qadam",
+      "task": "Uch daqiqali taqdimotni vaqt bilan mashq qiling.",
+      "criterion": "Muammo, ishlaydigan dalil va bitta cheklov aytilgan.",
+      "minutes": 60,
+      "questions": [
+        {
+          "id": "69a",
+          "prompt": "Internetli demo uchun zaxira?",
+          "options": [
+            "Mahalliy nusxa yoki oldindan yozilgan demo",
+            "Hech qanday reja kerak emas",
+            "Haqiqiy parollar ro‘yxati"
+          ],
+          "correct": "Mahalliy nusxa yoki oldindan yozilgan demo",
+          "explain": "Qisqa demo: muammo → foydalanuvchi → yechim → jonli misol → sinov → cheklov. Internet ishlamasa mahalliy nusxa yoki yozib olingan demo tayyorlang. Demo ma’lumotlari sun’iy bo‘lsin; parollarni ekranga chiqarmang."
+        },
+        {
+          "id": "69b",
+          "prompt": "Demo uchun qaysi ma’lumot?",
+          "options": [
+            "Sun’iy yoki ruxsatli ma’lumot",
+            "Barcha sinfdoshlarning shaxsiy yozuvi",
+            "Ommaviy bo‘lmagan parollar"
+          ],
+          "correct": "Sun’iy yoki ruxsatli ma’lumot",
+          "explain": "Namoyish maxfiy ma’lumotni oshkor qilmasligi kerak."
+        }
+      ]
+    },
+    {
+      "id": 70,
+      "module": 7,
+      "title": "Showcase va keyingi qadam",
+      "body": "Refleksiya natijani dalil bilan tahlil qiladi: nima ishladi, nimasi qiyin, qanday tuzatildi. Fikrni shaxsga emas, ishga qarating. Keyingi maqsad kichik, o‘lchanadigan va muddatli bo‘lsin. Barcha ishni zaxira qiling.",
+      "example": "O‘rgandim: input validatsiyasi\nDalil: 5 xato holati sinaldi\nKeyingi qadam: 7 kunda CSV import\nBirinchi vazifa: fayl formatini yozish",
+      "task": "Loyihani ko‘rsating; ikki tengdosh fikri va bir haftalik reja yozing.",
+      "criterion": "Kamida bitta fikr asosida yaxshilash bajarilgan.",
+      "minutes": 45,
+      "questions": [
+        {
+          "id": "70a",
+          "prompt": "Foydali refleksiya qaysi?",
+          "options": [
+            "Muammo, dalil, yechim va keyingi qadam",
+            "Faqat «hammasi zo‘r»",
+            "Faqat baho talab qilish"
+          ],
+          "correct": "Muammo, dalil, yechim va keyingi qadam",
+          "explain": "Refleksiya natijani dalil bilan tahlil qiladi: nima ishladi, nimasi qiyin, qanday tuzatildi. Fikrni shaxsga emas, ishga qarating. Keyingi maqsad kichik, o‘lchanadigan va muddatli bo‘lsin. Barcha ishni zaxira qiling."
+        },
+        {
+          "id": "70b",
+          "prompt": "Keyingi maqsad qanday bo‘lsin?",
+          "options": [
+            "Aniq, o‘lchanadigan va muddatli",
+            "Cheksiz va noaniq",
+            "Faqat bezakka qaratilgan"
+          ],
+          "correct": "Aniq, o‘lchanadigan va muddatli",
+          "explain": "Kichik aniq maqsad taraqqiyotni tekshirish imkonini beradi."
+        }
+      ]
+    }
+  ]
+}

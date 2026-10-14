@@ -1,0 +1,248 @@
+<Window x:Class="ClassroomGuard.Admin.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="ClassroomGuard Master — O‘qituvchi"
+        Height="740" Width="1120"
+        MinHeight="460" MinWidth="740"
+        WindowStartupLocation="CenterScreen"
+        Icon="app.ico"
+        Background="{StaticResource BgApp}">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Sidebar -->
+        <Border Grid.Column="0" Background="{StaticResource BgSidebar}"
+                BorderBrush="{StaticResource Border}" BorderThickness="0,0,1,0">
+            <DockPanel>
+                <StackPanel DockPanel.Dock="Top" Margin="22,28,22,20">
+                    <StackPanel Orientation="Horizontal">
+                        <Border Width="36" Height="36" CornerRadius="10" Background="{StaticResource HeaderBg}" Margin="0,0,12,0">
+                            <ContentControl Template="{StaticResource SchoolMarkTemplate}" Width="19" Height="19"
+                                             Foreground="White" Tag="{StaticResource TassleAccent}"/>
+                        </Border>
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock Text="ClassroomGuard" FontSize="15" FontWeight="Bold"/>
+                            <TextBlock Text="Master" FontSize="11" Foreground="{StaticResource TextMuted}"/>
+                            <TextBlock x:Name="KeyStatus" Text="Kalit yuklanmagan" Style="{StaticResource Muted}"/>
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
+
+                <StackPanel DockPanel.Dock="Bottom" Margin="16,0,16,20">
+                    <TextBlock x:Name="DashStatus" Style="{StaticResource Muted}" TextWrapping="Wrap"/>
+                </StackPanel>
+
+                <StackPanel>
+                    <Button x:Name="NavDash" Style="{StaticResource NavBtnActive}" Click="OnNav">
+                        <StackPanel Orientation="Horizontal">
+                            <ContentControl Template="{StaticResource IconDashboard}" Width="16" Height="16"
+                                             Margin="0,0,10,0"/>
+                            <TextBlock Text="Boshqaruv" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                    <Button x:Name="NavPush" Style="{StaticResource NavBtn}" Click="OnNav">
+                        <StackPanel Orientation="Horizontal">
+                            <ContentControl Template="{StaticResource IconPush}" Width="16" Height="16"
+                                             Margin="0,0,10,0"/>
+                            <TextBlock Text="Push (yuborish)" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                    <Button x:Name="NavSettings" Style="{StaticResource NavBtn}" Click="OnNav">
+                        <StackPanel Orientation="Horizontal">
+                            <ContentControl Template="{StaticResource IconSettings}" Width="16" Height="16"
+                                             Margin="0,0,10,0"/>
+                            <TextBlock Text="Sozlamalar" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </DockPanel>
+        </Border>
+
+        <!-- Main -->
+        <Grid Grid.Column="1" Margin="28,24">
+
+            <!-- DASHBOARD -->
+            <DockPanel x:Name="PageDash" Visibility="Visible">
+                <DockPanel DockPanel.Dock="Top" Margin="0,0,0,18">
+                    <StackPanel Orientation="Horizontal" DockPanel.Dock="Left" VerticalAlignment="Center">
+                        <Border Width="34" Height="34" CornerRadius="9" Background="{StaticResource AccentSoft}" Margin="0,0,12,0">
+                            <ContentControl Template="{StaticResource IconDashboard}" Width="16" Height="16" Foreground="{StaticResource Accent}"/>
+                        </Border>
+                        <TextBlock Text="Kompyuterlar" Style="{StaticResource H1}" Margin="0,0,8,0"/>
+                        <Border Style="{StaticResource HelpIcon}" ToolTip="Tarmoqdagi agentlar. Yashil — ochiq, qizil — Student Mode, sariq — offline. Veyon Master dagi kabi barcha PC lar shu yerda.">
+                            <TextBlock Style="{StaticResource HelpIconText}"/>
+                        </Border>
+                        <TextBlock x:Name="MachineCount" Style="{StaticResource Muted}" VerticalAlignment="Center" Margin="12,0,0,0"/>
+                    </StackPanel>
+                    <WrapPanel HorizontalAlignment="Right">
+                        <Button Content="Yangilash" Style="{StaticResource BtnSecondary}" Click="OnRefresh"/>
+                        <Button Content="Hammasini qulflash" Style="{StaticResource BtnPrimary}" Click="OnLockAll"/>
+                        <Button Content="Hammasini ochish" Style="{StaticResource BtnSecondary}" Click="OnUnlockAll"/>
+                        <Button Content="Sinxronlash" Style="{StaticResource BtnSecondary}" Click="OnReconcile"/>
+                    </WrapPanel>
+                </DockPanel>
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel x:Name="MachinePanel"/>
+                </ScrollViewer>
+            </DockPanel>
+
+            <!-- PUSH — sites + policies in one place -->
+            <ScrollViewer x:Name="PagePush" Visibility="Collapsed" VerticalScrollBarVisibility="Auto">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,16">
+                        <Border Width="34" Height="34" CornerRadius="9" Background="{StaticResource AccentSoft}" Margin="0,0,12,0">
+                            <ContentControl Template="{StaticResource IconPush}" Width="16" Height="16" Foreground="{StaticResource Accent}"/>
+                        </Border>
+                        <TextBlock Text="Push — o‘zgarishlarni yuborish" Style="{StaticResource H1}"/>
+                        <Border Style="{StaticResource HelpIcon}"
+                                ToolTip="Saytlar va qoidalarni o‘zgartiring, keyin bitta tugma bilan barcha topilgan kompyuterlarga yuboring (Veyon uslubi).">
+                            <TextBlock Style="{StaticResource HelpIconText}"/>
+                        </Border>
+                    </StackPanel>
+
+                    <Border Style="{StaticResource Card}">
+                        <StackPanel>
+                            <TextBlock Text="1. Saytlar" FontWeight="SemiBold" FontSize="15" Margin="0,0,0,10"/>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
+                                <RadioButton x:Name="SiteOff" Content="O‘chiq" GroupName="SiteMode"/>
+                                <RadioButton x:Name="SiteBlack" Content="Qora ro‘yxat" GroupName="SiteMode" IsChecked="True"/>
+                                <RadioButton x:Name="SiteWhite" Content="Oq ro‘yxat (HOZIR ISHLAMAYDI — hosts)" GroupName="SiteMode" IsEnabled="False"/>
+                            </StackPanel>
+                            <TextBlock Text="Domenlar (har qatorda bittadan)" Style="{StaticResource Muted}" Margin="0,0,0,6"/>
+                            <TextBox x:Name="SitesBox" Height="160" AcceptsReturn="True"
+                                     VerticalScrollBarVisibility="Auto" FontFamily="Consolas"/>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Style="{StaticResource Card}">
+                        <StackPanel>
+                            <TextBlock Text="2. Qoidalar" FontWeight="SemiBold" FontSize="15" Margin="0,0,0,10"/>
+                            <CheckBox x:Name="StudentModeChk" Content="Baseline: Student Mode (temporary unlock is on Dashboard)" IsChecked="True" IsEnabled="False"/>
+                            <CheckBox x:Name="InstallChk" Content="Dastur o‘rnatishni bloklash (WMI + kod)" IsChecked="True"/>
+                            <CheckBox x:Name="DownloadChk" Content="Brauzerdan yuklab olishni bloklash (Chrome/Edge)" IsChecked="True"/>
+                            <TextBlock Style="{StaticResource Muted}" TextWrapping="Wrap" Margin="0,8,0,0"
+                                       Text="Downloads: Chrome/Edge only. Install/app filtering is reactive. SRP is unavailable. Students must use standard Windows accounts."/>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Style="{StaticResource Card}">
+                        <StackPanel>
+                            <TextBlock Text="3. Ruxsat etilgan dasturlar (Allow-list)" FontWeight="SemiBold" FontSize="15" Margin="0,0,0,10"/>
+                            <CheckBox x:Name="AppAllowChk" Content="Student process filter — reactive, Windows tools remain available"
+                                      IsChecked="False" Margin="0,0,0,10"/>
+                            <TextBlock Text="EXE in Windows/Program Files, or exact protected path. No wildcard/substrings." Style="{StaticResource Muted}" Margin="0,0,0,6"/>
+                            <TextBox x:Name="AppsBox" Height="140" AcceptsReturn="True"
+                                     VerticalScrollBarVisibility="Auto" FontFamily="Consolas"
+                                     Text="WINWORD.EXE&#x0a;EXCEL.EXE&#x0a;POWERPNT.EXE&#x0a;chrome.exe&#x0a;msedge.exe&#x0a;notepad.exe&#x0a;calc.exe"/>
+                            <TextBlock Style="{StaticResource Muted}" TextWrapping="Wrap" Margin="0,8,0,0"
+                                       Text="Masalan: WINWORD.EXE, EXCEL.EXE, CapCut.exe. Bo‘sh qatorlar e’tiborsiz. Tizim dasturlari (explorer va h.k.) avtomatik himoyalangan."/>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Style="{StaticResource Card}">
+                        <StackPanel>
+                            <TextBlock Text="4. Kutubxona (PDF + online)" FontWeight="SemiBold" FontSize="15" Margin="0,0,0,10"/>
+                            <TextBlock Style="{StaticResource Muted}" TextWrapping="Wrap" Margin="0,0,0,6"
+                                       Text="Har qator: kind|sarlavha|yo‘l-yoki-url|kategoriya  (kind = offline yoki online)"/>
+                            <TextBox x:Name="LibraryBox" Height="120" AcceptsReturn="True"
+                                     VerticalScrollBarVisibility="Auto" FontFamily="Consolas"
+                                     Text="online|Khan Academy|https://www.khanacademy.org|Matematika"/>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Style="{StaticResource Card}">
+                        <StackPanel>
+                            <TextBlock Text="5. Testlar (JSON)" FontWeight="SemiBold" FontSize="15" Margin="0,0,0,10"/>
+                            <TextBlock Style="{StaticResource Muted}" TextWrapping="Wrap" Margin="0,0,0,6"
+                                       Text="JSON massiv: [{ title, className, subject, timeLimitMinutes, questions:[{ text, options:[], correctIndex }] }]"/>
+                            <TextBox x:Name="TestsJsonBox" Height="140" AcceptsReturn="True"
+                                     VerticalScrollBarVisibility="Auto" FontFamily="Consolas" FontSize="12"
+                                     Text="[&#x0a;  {&#x0a;    &quot;title&quot;: &quot;Matematika nazorat&quot;,&#x0a;    &quot;className&quot;: &quot;7-A&quot;,&#x0a;    &quot;subject&quot;: &quot;Matematika&quot;,&#x0a;    &quot;timeLimitMinutes&quot;: 15,&#x0a;    &quot;questions&quot;: [&#x0a;      {&#x0a;        &quot;text&quot;: &quot;2 + 2 = ?&quot;,&#x0a;        &quot;options&quot;: [&quot;3&quot;, &quot;4&quot;, &quot;5&quot;],&#x0a;        &quot;correctIndex&quot;: 1&#x0a;      },&#x0a;      {&#x0a;        &quot;text&quot;: &quot;5 × 3 = ?&quot;,&#x0a;        &quot;options&quot;: [&quot;15&quot;, &quot;8&quot;, &quot;10&quot;],&#x0a;        &quot;correctIndex&quot;: 0&#x0a;      }&#x0a;    ]&#x0a;  }&#x0a;]"/>
+                            <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                                <Button Content="JSON fayldan yuklash…" Style="{StaticResource BtnSecondary}" Click="OnLoadTestsJson"/>
+                                <TextBlock x:Name="TestsJsonStatus" Style="{StaticResource Muted}" VerticalAlignment="Center" Margin="12,0,0,0"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Style="{StaticResource Card}" BorderBrush="{StaticResource Accent}" BorderThickness="1.5">
+                        <StackPanel>
+                            <TextBlock Text="6. Yuborish" FontWeight="SemiBold" FontSize="15" Margin="0,0,0,8"/>
+                            <TextBlock Style="{StaticResource Muted}" Margin="0,0,0,12"
+                                       Text="Saytlar + qoidalar + dasturlar + kutubxona + testlar barcha online agentlarga yuboriladi."/>
+                            <StackPanel Orientation="Horizontal">
+                                <Button Content="Barcha kompyuterlarga Push" Style="{StaticResource BtnPrimary}"
+                                        FontSize="14" Padding="20,12" Click="OnPushAll"/>
+                                <TextBlock x:Name="PushStatus" VerticalAlignment="Center" Margin="14,0,0,0"
+                                           Foreground="{StaticResource Success}"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </ScrollViewer>
+
+            <!-- SETTINGS -->
+            <ScrollViewer x:Name="PageSettings" Visibility="Collapsed" VerticalScrollBarVisibility="Auto">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,16">
+                        <Border Width="34" Height="34" CornerRadius="9" Background="{StaticResource AccentSoft}" Margin="0,0,12,0">
+                            <ContentControl Template="{StaticResource IconSettings}" Width="16" Height="16" Foreground="{StaticResource Accent}"/>
+                        </Border>
+                        <TextBlock Text="Sozlamalar" Style="{StaticResource H1}"/>
+                        <Border Style="{StaticResource HelpIcon}"
+                                ToolTip="Sinf kaliti, offline kod va Telegram.">
+                            <TextBlock Style="{StaticResource HelpIconText}"/>
+                        </Border>
+                    </StackPanel>
+
+                    <Border Style="{StaticResource Card}">
+                        <StackPanel>
+                            <TextBlock Text="Sinf kaliti" FontWeight="SemiBold" Margin="0,0,0,8"/>
+                            <TextBlock Style="{StaticResource Muted}" TextWrapping="Wrap" Margin="0,0,0,12"
+                                       Text="Agentdagi classroom.key ni yuklang yoki yangi yarating."/>
+                            <StackPanel Orientation="Horizontal">
+                                <Button Content="Kalit faylini yuklash…" Style="{StaticResource BtnSecondary}" Click="OnLoadKey"/>
+                                <Button Content="Device sertifikatini yuklash…" Style="{StaticResource BtnSecondary}" Click="OnEnrollDevice"/>
+                                <Button Content="Yangi kalit yaratish" Style="{StaticResource BtnSecondary}" Click="OnGenerateKey"/>
+                                <TextBlock x:Name="KeyPreview" Style="{StaticResource Muted}" VerticalAlignment="Center" Margin="12,0,0,0"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Style="{StaticResource Card}">
+                        <StackPanel>
+                            <TextBlock Text="Offline ochish kodi (TOTP)" FontWeight="SemiBold" Margin="0,0,0,8"/>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBox x:Name="UnlockMachineId" Width="220"/>
+                                <Button Content="Kodni ko‘rsatish" Style="{StaticResource BtnPrimary}" Click="OnShowCode"/>
+                                <TextBlock x:Name="UnlockCode" FontSize="22" FontWeight="Bold"
+                                           Foreground="{StaticResource Accent}" VerticalAlignment="Center" Margin="14,0,0,0"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Style="{StaticResource Card}">
+                        <StackPanel>
+                            <TextBlock Text="Admin Telegram test only — configure result delivery on each Agent" FontWeight="SemiBold" Margin="0,0,0,8"/>
+                            <TextBlock Text="Bot token" Style="{StaticResource Muted}"/>
+                            <TextBox x:Name="TgToken"/>
+                            <TextBlock Text="Chat ID" Style="{StaticResource Muted}" Margin="0,8,0,0"/>
+                            <TextBox x:Name="TgChat"/>
+                            <TextBlock Text="UDP port" Style="{StaticResource Muted}" Margin="0,8,0,0"/>
+                            <TextBox x:Name="PortBox" Width="120" HorizontalAlignment="Left"/>
+                            <StackPanel Orientation="Horizontal" Margin="0,14,0,0">
+                                <Button Content="Saqlash" Style="{StaticResource BtnPrimary}" Click="OnSaveSettings"/>
+                                <TextBlock x:Name="SettingsStatus" Foreground="{StaticResource Success}"
+                                           VerticalAlignment="Center" Margin="12,0,0,0"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+    </Grid>
+</Window>

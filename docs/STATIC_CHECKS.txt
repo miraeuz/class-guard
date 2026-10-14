@@ -1,0 +1,12 @@
+XML OK: src/ClassroomGuard.StudentShell/App.xaml
+XML OK: src/ClassroomGuard.StudentShell/MainWindow.xaml
+XML OK: src/ClassroomGuard.Admin/App.xaml
+XML OK: src/ClassroomGuard.Admin/MainWindow.xaml
+XML OK: src/ClassroomGuard.Ctl/ClassroomGuard.Ctl.csproj
+XML OK: src/ClassroomGuard.StudentShell/ClassroomGuard.StudentShell.csproj
+XML OK: src/ClassroomGuard.Admin/ClassroomGuard.Admin.csproj
+XML OK: src/ClassroomGuard.Agent/ClassroomGuard.Agent.csproj
+XML OK: src/ClassroomGuard.Core/ClassroomGuard.Core.csproj
+Admin: resource/event references OK
+StudentShell: resource/event references OK
+StudentShell: all DynamicResource UI IDs within 81-string tables

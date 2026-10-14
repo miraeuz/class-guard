@@ -1,0 +1,1649 @@
+[
+  {
+    "Id": "mirae-it-v1-module-1",
+    "Title": "CMD — o‘quv imtihoni",
+    "ClassName": "IT To‘garak",
+    "Subject": "CMD",
+    "TimeLimitMinutes": 30,
+    "Questions": [
+      {
+        "Text": "CMD nima qiladi?",
+        "Options": [
+          "Har doim administrator bo‘lib ishlaydi",
+          "Faqat rasmlarni tahrirlaydi",
+          "Matnli buyruqlarni bajaradi"
+        ],
+        "CorrectIndex": 2
+      },
+      {
+        "Text": "Oddiy mashqni qaysi huquqda boshlaysiz?",
+        "Options": [
+          "Oddiy foydalanuvchi",
+          "Har doim administrator",
+          "SYSTEM"
+        ],
+        "CorrectIndex": 0
+      },
+      {
+        "Text": "D diskdagi papkaga o‘tishning to‘g‘ri usuli?",
+        "Options": [
+          "cls D:\\",
+          "cd /d \"D:\\Mening ishlarim\"",
+          "dir /d D:\\"
+        ],
+        "CorrectIndex": 1
+      },
+      {
+        "Text": "cls nimani o‘chiradi?",
+        "Options": [
+          "Diskdagi fayllarni",
+          "Oynadagi ko‘rinadigan matnni",
+          "Joriy papkani"
+        ],
+        "CorrectIndex": 1
+      },
+      {
+        "Text": "Bo‘sh papka yaratish buyrug‘i?",
+        "Options": [
+          "mkdir",
+          "del",
+          "type"
+        ],
+        "CorrectIndex": 0
+      },
+      {
+        "Text": "del ishlatishdan oldin nima qilasiz?",
+        "Options": [
+          "Har doim /s /q qo‘shaman",
+          "Butun diskni tanlayman",
+          "Joriy manzil va fayl nomini tekshiraman"
+        ],
+        "CorrectIndex": 2
+      },
+      {
+        "Text": "Mavjud fayl oxiriga qator qo‘shish belgisi?",
+        "Options": [
+          "<",
+          ">>",
+          ">"
+        ],
+        "CorrectIndex": 1
+      },
+      {
+        "Text": "Nega > bilan ikkinchi yozuv birinchini yo‘qotdi?",
+        "Options": [
+          "> fayl tarkibini almashtiradi",
+          "type faylni o‘chiradi",
+          "CMD ikki qator saqlamaydi"
+        ],
+        "CorrectIndex": 0
+      },
+      {
+        "Text": "Joriy foydalanuvchini ko‘rsatadigan buyruq?",
+        "Options": [
+          "cls",
+          "whoami",
+          "hostname"
+        ],
+        "CorrectIndex": 1
+      },
+      {
+        "Text": "ipconfig ko‘rsatgan IP nimaga tegishli?",
+        "Options": [
+          "Har doim ommaviy internet IP ga",
+          "Har doim sayt serveriga",
+          "Mahalliy adapter konfiguratsiyasiga"
+        ],
+        "CorrectIndex": 2
+      },
+      {
+        "Text": "*.txt nimaga mos keladi?",
+        "Options": [
+          ".txt bilan tugagan nomlarga",
+          "Barcha .png rasmlarga",
+          "Faqat bitta harfli nomga"
+        ],
+        "CorrectIndex": 0
+      },
+      {
+        "Text": "O‘chirishga wildcard berishdan oldin nima kerak?",
+        "Options": [
+          "Yashirin atributni yoqish",
+          "Tizim papkasiga o‘tish",
+          "dir bilan mos fayllarni ko‘rish"
+        ],
+        "CorrectIndex": 2
+      },
+      {
+        "Text": "Domenning IP manzilini DNS orqali tekshiradigan buyruq?",
+        "Options": [
+          "nslookup",
+          "tasklist",
+          "ren"
+        ],
+        "CorrectIndex": 0
+      },
+      {
+        "Text": "Ping javobi yo‘q. To‘g‘ri xulosa?",
+        "Options": [
+          "ICMP bloklanishi ham mumkin",
+          "DNS har doim buzilgan",
+          "Sayt aniq o‘chirilgan"
+        ],
+        "CorrectIndex": 0
+      },
+      {
+        "Text": "PID nimani bildiradi?",
+        "Options": [
+          "Fayl kengaytmasini",
+          "Jarayon identifikatorini",
+          "Internet parolini"
+        ],
+        "CorrectIndex": 1
+      },
+      {
+        "Text": "taskkill /F xavfi?",
+        "Options": [
+          "Faqat shrift o‘zgarishi",
+          "Saqlanmagan ma’lumot yo‘qolishi",
+          "Avtomatik zaxira yaratilishi"
+        ],
+        "CorrectIndex": 1
+      },
+      {
+        "Text": "Batch skript kengaytmasi?",
+        "Options": [
+          ".jpg",
+          ".docx",
+          ".bat"
+        ],
+        "CorrectIndex": 2
+      },
+      {
+        "Text": "pause nima uchun qo‘yiladi?",
+        "Options": [
+          "Faylni shifrlash uchun",
+          "Natijani ko‘rib tugma bosishni kutish uchun",
+          "Kompyuterni o‘chirish uchun"
+        ],
+        "CorrectIndex": 1
+      },
+      {
+        "Text": "if errorlevel 2 qachon rost?",
+        "Options": [
+          "Faqat matn bo‘lsa",
+          "Qiymat 2 yoki undan katta bo‘lsa",
+          "Faqat 0 bo‘lsa"
+        ],
+        "CorrectIndex": 1
+      },
+      {
+        "Text": "Nega errorlevel katta qiymatdan tekshiriladi?",
+        "Options": [
+          "choice faqat teskari ishlaydi",
+          "Kichik chegara kattalarni ham qamraydi",
+          "CMD kichik sonni tushunmaydi"
+        ],
+        "CorrectIndex": 1
+      }
+    ]
+  },
+  {
+    "Id": "mirae-it-v1-module-2",
+    "Title": "PowerShell — o‘quv imtihoni",
+    "ClassName": "IT To‘garak",
+    "Subject": "PowerShell",
+    "TimeLimitMinutes": 30,
+    "Questions": [
+      {
+        "Text": "PowerShell pipeline odatda nima uzatadi?",
+        "Options": [
+          "Faqat rasmlar",
+          "Faqat oddiy matn",
+          "Obyektlar"
+        ],
+        "CorrectIndex": 2
+      },
+      {
+        "Text": "Versiyani tekshirish uchun?",
+        "Options": [
+          "$PSVersionTable.PSVersion",
+          "hostname /version",
+          "cls"
+        ],
+        "CorrectIndex": 0
+      },
+      {
+        "Text": "Joriy manzilni ko‘rsatadigan cmdlet?",
+        "Options": [
+          "Get-Location",
+          "Stop-Process",
+          "Set-Content"
+        ],
+        "CorrectIndex": 0
+      },
+      {
+        "Text": "Get-ChildItem -File nimani cheklaydi?",
+        "Options": [
+          "Faqat papkalarga",
+          "Faqat administratorlarga",
+          "Natijani fayllarga"
+        ],
+        "CorrectIndex": 2
+      },
+      {
+        "Text": "Jarayon identifikatori xususiyati?",
+        "Options": [
+          "Color",
+          "Font",
+          "Id"
+        ],
+        "CorrectIndex": 2
+      },
+      {
+        "Text": "-WhatIf nima qiladi?",
+        "Options": [
+          "Tizimni qayta o‘rnatadi",
+          "Rejalangan amalni bajarishsiz ko‘rsatadi",
+          "Jarayonni majburiy o‘chiradi"
+        ],
+        "CorrectIndex": 1
+      },
+      {
+        "Text": "Qaysi cmdlet shart bo‘yicha obyektlarni tanlaydi?",
+        "Options": [
+          "Out-File",
+          "Set-Location",
+          "Where-Object"
+        ],
+        "CorrectIndex": 2
+      },
+      {
+        "Text": "$_ nimani bildiradi?",
+        "Options": [
+          "Faqat bo‘sh satrni",
+          "Barcha disklarni",
+          "Pipeline dagi joriy obyektni"
+        ],
+        "CorrectIndex": 2
+      },
+      {
+        "Text": "Fayl nusxalash cmdleti?",
+        "Options": [
+          "Remove-Item",
+          "Copy-Item",
+          "Stop-Service"
+        ],
+        "CorrectIndex": 1
+      },
+      {
+        "Text": "Nom ichidagi [ belgini oddiy belgi sifatida ishlatish uchun?",
+        "Options": [
+          "-LiteralPath",
+          "-Force",
+          "-Recurse"
+        ],
+        "CorrectIndex": 0
+      },
+      {
+        "Text": "PowerShell o‘zgaruvchi belgisi?",
+        "Options": [
+          "@",
+          "#",
+          "$"
+        ],
+        "CorrectIndex": 2
+      },
+      {
+        "Text": "\"$($price * $count)\" ichidagi $() vazifasi?",
+        "Options": [
+          "Faylni o‘chirish",
+          "Izoh boshlash",
+          "Ifodani hisoblab satrga kiritish"
+        ],
+        "CorrectIndex": 2
+      },
+      {
+        "Text": "Fayl oxiriga qo‘shish cmdleti?",
+        "Options": [
+          "Set-Content",
+          "Clear-Content",
+          "Add-Content"
+        ],
+        "CorrectIndex": 2
+      },
+      {
+        "Text": "Nega kodlashni qayta o‘qib tekshiramiz?",
+        "Options": [
+          "UTF-8 faqat son saqlaydi",
+          "Versiya va dasturlarda kodlash farq qilishi mumkin",
+          "Get-Content faylni buzadi"
+        ],
+        "CorrectIndex": 1
+      },
+      {
+        "Text": "Hodisalar jurnalini o‘qiydigan cmdlet?",
+        "Options": [
+          "Get-WinEvent",
+          "Stop-Process",
+          "Set-Content"
+        ],
+        "CorrectIndex": 0
+      },
+      {
+        "Text": "Access denied ko‘rinsa birinchi qadam?",
+        "Options": [
+          "Barcha himoyalarni o‘chirish",
+          "Talab qilinayotgan huquqni ustoz bilan tekshirish",
+          "Tasodifiy skript yuklash"
+        ],
+        "CorrectIndex": 1
+      },
+      {
+        "Text": "Funksiyaga qiymat uzatish nimadan foydalanadi?",
+        "Options": [
+          "Ekran o‘lchamidan",
+          "Parametrlardan",
+          "Faqat fayl nomidan"
+        ],
+        "CorrectIndex": 1
+      },
+      {
+        "Text": "Skript siyosat tufayli ochilmasa?",
+        "Options": [
+          "Faylni rasmga aylantiraman",
+          "Siyosatni ustoz bilan tekshiraman",
+          "Har doim global Unrestricted qilaman"
+        ],
+        "CorrectIndex": 1
+      },
+      {
+        "Text": "Birinchi tozalash bosqichi?",
+        "Options": [
+          "Windows papkasini tanlash",
+          "Butun diskni rekursiv o‘chirish",
+          "Nomzodlarni ko‘rish va -WhatIf"
+        ],
+        "CorrectIndex": 2
+      },
+      {
+        "Text": "Qulflangan fayl uchrasa?",
+        "Options": [
+          "Xatoni qayd etib xavfsiz to‘xtash yoki o‘tkazish",
+          "Hamma jarayonni o‘ldirish",
+          "Huquqlarni barcha uchun ochish"
+        ],
+        "CorrectIndex": 0
+      }
+    ]
+  },
+  {
+    "Id": "mirae-it-v1-module-3",
+    "Title": "Microsoft Word — o‘quv imtihoni",
+    "ClassName": "IT To‘garak",
+    "Subject": "Microsoft Word",
+    "TimeLimitMinutes": 15,
+    "Questions": [
+      {
+        "Text": "Avtomatik mundarijaga asos bo‘ladigan narsa?",
+        "Options": [
+          "Faqat qalin shrift",
+          "Heading uslublari",
+          "Ko‘p bo‘sh joy"
+        ],
+        "CorrectIndex": 1
+      },
+      {
+        "Text": "Matnni tekislashda bo‘sh joylarni takrorlash o‘rniga?",
+        "Options": [
+          "Yuzta probel",
+          "Paragraf tekislash sozlamasi",
+          "Rasmga aylantirish"
+        ],
+        "CorrectIndex": 1
+      },
+      {
+        "Text": "Avtomatik sahifa raqami vositasi?",
+        "Options": [
+          "Page Number",
+          "Font Color",
+          "Qo‘lda terilgan 1, 2, 3"
+        ],
+        "CorrectIndex": 0
+      },
+      {
+        "Text": "Faqat bir bo‘limni landscape qilish uchun?",
+        "Options": [
+          "Barcha matnni qalin qilish",
+          "Ko‘p Enter",
+          "Section break va bo‘lim sozlamasi"
+        ],
+        "CorrectIndex": 2
+      },
+      {
+        "Text": "Matnning rasm atrofidagi joylashuvini nima boshqaradi?",
+        "Options": [
+          "Wrap Text",
+          "Spell Check",
+          "Page Number"
+        ],
+        "CorrectIndex": 0
+      },
+      {
+        "Text": "Alt text kimga va nimaga yordam beradi?",
+        "Options": [
+          "Parolni yashirishga",
+          "Rasm mazmunini ko‘rmasdan tushunishga",
+          "Faqat faylni kattalashtirishga"
+        ],
+        "CorrectIndex": 1
+      },
+      {
+        "Text": "Rasm nomi va raqami uchun vosita?",
+        "Options": [
+          "WordArt",
+          "Margins",
+          "Caption"
+        ],
+        "CorrectIndex": 2
+      },
+      {
+        "Text": "Yangi bo‘lim mundarijada yo‘q bo‘lsa?",
+        "Options": [
+          "Heading uslubi va Update Table ni tekshirish",
+          "Rasm qo‘shish",
+          "Matn rangini o‘zgartirish"
+        ],
+        "CorrectIndex": 0
+      },
+      {
+        "Text": "Mail Merge nimani birlashtiradi?",
+        "Options": [
+          "Faqat shriftlarni",
+          "Faqat ikki rasmni",
+          "Shablon va ma’lumot qatorlarini"
+        ],
+        "CorrectIndex": 2
+      },
+      {
+        "Text": "Track Changes yoqilgan faylni yakunlashda?",
+        "Options": [
+          "Faqat matnni kichraytirish",
+          "O‘zgarishlarni ko‘rib qabul/rad etish",
+          "Barcha izohlarni e’tiborsiz qoldirish"
+        ],
+        "CorrectIndex": 1
+      }
+    ]
+  },
+  {
+    "Id": "mirae-it-v1-module-4",
+    "Title": "Microsoft Excel — o‘quv imtihoni",
+    "ClassName": "IT To‘garak",
+    "Subject": "Microsoft Excel",
+    "TimeLimitMinutes": 15,
+    "Questions": [
+      {
+        "Text": "COUNT nimani sanaydi?",
+        "Options": [
+          "Barcha formatlarni",
+          "Sonli kataklarni",
+          "Faqat rangli kataklarni"
+        ],
+        "CorrectIndex": 1
+      },
+      {
+        "Text": "Formula o‘rniga matn ko‘rinsa nima tekshiriladi?",
+        "Options": [
+          "= belgisi va katak formati",
+          "Sahifa hoshiyasi",
+          "Monitor yorqinligi"
+        ],
+        "CorrectIndex": 0
+      },
+      {
+        "Text": "Qaysi havola to‘liq absolyut?",
+        "Options": [
+          "A1",
+          "A$1",
+          "$A$1"
+        ],
+        "CorrectIndex": 2
+      },
+      {
+        "Text": "VLOOKUP da FALSE nima uchun?",
+        "Options": [
+          "Formula o‘chishi uchun",
+          "Aniq moslik uchun",
+          "Tasodifiy qator uchun"
+        ],
+        "CorrectIndex": 1
+      },
+      {
+        "Text": "Vaqt bo‘yicha trend uchun qulay diagramma?",
+        "Options": [
+          "Har doim doira",
+          "Faqat SmartArt",
+          "Chiziqli"
+        ],
+        "CorrectIndex": 2
+      },
+      {
+        "Text": "Conditional Formatting nima qiladi?",
+        "Options": [
+          "Qiymat yoki formula bo‘yicha formatlaydi",
+          "Asl qiymatni doim almashtiradi",
+          "Faylga parol beradi"
+        ],
+        "CorrectIndex": 0
+      },
+      {
+        "Text": "PivotTable asosiy vazifasi?",
+        "Options": [
+          "Ma’lumotni guruhlab jamlash",
+          "Faqat katak bo‘yash",
+          "Rasm siqish"
+        ],
+        "CorrectIndex": 0
+      },
+      {
+        "Text": "Yangi qator Pivot da ko‘rinmasa?",
+        "Options": [
+          "Shriftni qalin qilish",
+          "Manba diapazoni va Refresh ni tekshirish",
+          "Barcha sonlarni o‘chirish"
+        ],
+        "CorrectIndex": 1
+      },
+      {
+        "Text": "Bo‘sh ball har doim nolmi?",
+        "Options": [
+          "Ha, doim nol",
+          "Yo‘q, hali kiritilmagan bo‘lishi mumkin",
+          "Ha, doim yuz"
+        ],
+        "CorrectIndex": 1
+      },
+      {
+        "Text": "Vaznli baholar vazni yig‘indisi?",
+        "Options": [
+          "Istalgan qiymat",
+          "Har doim 300%",
+          "100%"
+        ],
+        "CorrectIndex": 2
+      }
+    ]
+  },
+  {
+    "Id": "mirae-it-v1-module-5",
+    "Title": "Flowgorithm — o‘quv imtihoni",
+    "ClassName": "IT To‘garak",
+    "Subject": "Flowgorithm",
+    "TimeLimitMinutes": 30,
+    "Questions": [
+      {
+        "Text": "Foydalanuvchidan qiymat qaysi shakl oladi?",
+        "Options": [
+          "Output",
+          "Input",
+          "End"
+        ],
+        "CorrectIndex": 1
+      },
+      {
+        "Text": "Algoritmni tekshirishning foydali yo‘li?",
+        "Options": [
+          "Har qadamdagi qiymatni kuzatish",
+          "Natijani taxmin qilib saqlash",
+          "Faqat rang tanlash"
+        ],
+        "CorrectIndex": 0
+      },
+      {
+        "Text": "Kasr qiymat uchun mos tur?",
+        "Options": [
+          "Real",
+          "Boolean",
+          "Integer"
+        ],
+        "CorrectIndex": 0
+      },
+      {
+        "Text": "Boolean qanday qiymat saqlaydi?",
+        "Options": [
+          "Rost yoki yolg‘on",
+          "Faqat kasr son",
+          "Istalgan rasm"
+        ],
+        "CorrectIndex": 0
+      },
+      {
+        "Text": "(2+3)*4 natijasi?",
+        "Options": [
+          "9",
+          "20",
+          "14"
+        ],
+        "CorrectIndex": 1
+      },
+      {
+        "Text": "Bo‘lishdan avval qaysi holat tekshiriladi?",
+        "Options": [
+          "Surat har doim 1 ligi",
+          "Maxraj nol emasligi",
+          "Matn rangi"
+        ],
+        "CorrectIndex": 1
+      },
+      {
+        "Text": "ball=60 va ball>=60 sharti?",
+        "Options": [
+          "Yolg‘on",
+          "Noma’lum",
+          "Rost"
+        ],
+        "CorrectIndex": 2
+      },
+      {
+        "Text": "Nega chegarani sinaymiz?",
+        "Options": [
+          "Faqat tezlikni oshirish uchun",
+          "Rasmni kattalashtirish uchun",
+          "> va >= farqidagi xatoni topish uchun"
+        ],
+        "CorrectIndex": 2
+      },
+      {
+        "Text": "0–100 oralig‘ini tekshirish uchun?",
+        "Options": [
+          "ball>=0 and ball<=100",
+          "ball<0 and ball>100",
+          "ball>=0 or ball<=100"
+        ],
+        "CorrectIndex": 0
+      },
+      {
+        "Text": "Or qachon rost?",
+        "Options": [
+          "Hech qachon",
+          "Kamida bir shart rost bo‘lsa",
+          "Faqat ikkalasi yolg‘on bo‘lsa"
+        ],
+        "CorrectIndex": 1
+      },
+      {
+        "Text": "While sharti avval yolg‘on bo‘lsa necha marta ishlaydi?",
+        "Options": [
+          "Har doim 10",
+          "1",
+          "0"
+        ],
+        "CorrectIndex": 2
+      },
+      {
+        "Text": "Hisoblagich oshirilmasa xavf?",
+        "Options": [
+          "Avtomatik tezlashish",
+          "Fayl saqlanishi",
+          "Cheksiz sikl"
+        ],
+        "CorrectIndex": 2
+      },
+      {
+        "Text": "Do-While kamida necha marta ishlaydi?",
+        "Options": [
+          "Cheksiz",
+          "0",
+          "1"
+        ],
+        "CorrectIndex": 2
+      },
+      {
+        "Text": "son<0 davom sharti, son=0 bo‘lsa?",
+        "Options": [
+          "Yana majburiy ishlaydi",
+          "Sikl tugaydi",
+          "Son manfiyga aylanadi"
+        ],
+        "CorrectIndex": 1
+      },
+      {
+        "Text": "Flowgorithm For 1 To 5 Step 1 necha aylanish?",
+        "Options": [
+          "5",
+          "4",
+          "6"
+        ],
+        "CorrectIndex": 0
+      },
+      {
+        "Text": "Qadamning vazifasi?",
+        "Options": [
+          "Kiritishni o‘chirish",
+          "Matn rangini belgilash",
+          "Hisoblagich o‘zgarish miqdorini belgilash"
+        ],
+        "CorrectIndex": 2
+      },
+      {
+        "Text": "3 elementli massiv oxirgi indeksi?",
+        "Options": [
+          "2",
+          "3",
+          "4"
+        ],
+        "CorrectIndex": 0
+      },
+      {
+        "Text": "2 tashqi va 3 ichki aylanish jami?",
+        "Options": [
+          "6",
+          "3",
+          "5"
+        ],
+        "CorrectIndex": 0
+      },
+      {
+        "Text": "Kalkulyatorda majburiy tekshiruv?",
+        "Options": [
+          "Nolga bo‘lish",
+          "Faqat fon rangi",
+          "Faqat oynaning nomi"
+        ],
+        "CorrectIndex": 0
+      },
+      {
+        "Text": "Noma’lum menyu tanlovi kelganda?",
+        "Options": [
+          "Tasodifiy amal bajarish",
+          "Dastur har doim qulashi",
+          "Xabar berib qayta so‘rash"
+        ],
+        "CorrectIndex": 2
+      }
+    ]
+  },
+  {
+    "Id": "mirae-it-v1-module-6",
+    "Title": "Vibe Coding · Python — o‘quv imtihoni",
+    "ClassName": "IT To‘garak",
+    "Subject": "Vibe Coding · Python",
+    "TimeLimitMinutes": 45,
+    "Questions": [
+      {
+        "Text": "AI kodini qabul qilishdan oldin?",
+        "Options": [
+          "Faqat chiroyli ko‘rinishini tekshirish",
+          "Tushunish va sinash",
+          "Tekshirmasdan ishga tushirish"
+        ],
+        "CorrectIndex": 1
+      },
+      {
+        "Text": "Yaxshi talab nimani belgilaydi?",
+        "Options": [
+          "Faqat fon rangini",
+          "Kirish, chiqish va cheklovlarni",
+          "Faqat dasturchi kayfiyatini"
+        ],
+        "CorrectIndex": 1
+      },
+      {
+        "Text": "Python kodini kim bajaradi?",
+        "Options": [
+          "PNG ko‘ruvchi",
+          "Python interpretatori",
+          "Faqat matn shrifti"
+        ],
+        "CorrectIndex": 1
+      },
+      {
+        "Text": "Terminalda python topilmasa?",
+        "Options": [
+          "Kodga ko‘proq print qo‘shish",
+          "Faylni .jpg qilish",
+          "O‘rnatish va PATH/py ishga tushirgichini tekshirish"
+        ],
+        "CorrectIndex": 2
+      },
+      {
+        "Text": "input qaytaradigan tur?",
+        "Options": [
+          "str",
+          "bool har doim",
+          "int har doim"
+        ],
+        "CorrectIndex": 0
+      },
+      {
+        "Text": "\"2\" + \"3\" natijasi?",
+        "Options": [
+          "\"23\"",
+          "5",
+          "6"
+        ],
+        "CorrectIndex": 0
+      },
+      {
+        "Text": "f-string da qiymat qayerda yoziladi?",
+        "Options": [
+          "Faqat [ ] ichida",
+          "Faqat # dan keyin",
+          "{ } ichida"
+        ],
+        "CorrectIndex": 2
+      },
+      {
+        "Text": ":.2f nimani belgilaydi?",
+        "Options": [
+          "Ko‘rinishda ikki kasr xona",
+          "Qiymatni doim int qiladi",
+          "Ikki marta ko‘paytiradi"
+        ],
+        "CorrectIndex": 0
+      },
+      {
+        "Text": "Kalit–qiymat juftliklari qaysi turda?",
+        "Options": [
+          "float",
+          "tuple faqat",
+          "dict"
+        ],
+        "CorrectIndex": 2
+      },
+      {
+        "Text": "Ikki elementli list birinchi indeksi?",
+        "Options": [
+          "0",
+          "1",
+          "2"
+        ],
+        "CorrectIndex": 0
+      },
+      {
+        "Text": "Tenglikni tekshiruvchi operator?",
+        "Options": [
+          "=",
+          "==",
+          "+="
+        ],
+        "CorrectIndex": 1
+      },
+      {
+        "Text": "if dan keyingi blokni nima belgilaydi?",
+        "Options": [
+          "Faqat qavs rangi",
+          "Fayl hajmi",
+          "Indentatsiya"
+        ],
+        "CorrectIndex": 2
+      },
+      {
+        "Text": "range(1, 6) oxirgi qiymati?",
+        "Options": [
+          "6",
+          "5",
+          "7"
+        ],
+        "CorrectIndex": 1
+      },
+      {
+        "Text": "break nima qiladi?",
+        "Options": [
+          "Eng ichki siklni tugatadi",
+          "Faqat izoh yozadi",
+          "Har doim butun kompyuterni o‘chiradi"
+        ],
+        "CorrectIndex": 0
+      },
+      {
+        "Text": "Chaqiruvchiga qiymatni nima qaytaradi?",
+        "Options": [
+          "return",
+          "Faqat print",
+          "#"
+        ],
+        "CorrectIndex": 0
+      },
+      {
+        "Text": "return bo‘lmagan funksiya odatda nima qaytaradi?",
+        "Options": [
+          "None",
+          "Har doim True",
+          "Har doim 0"
+        ],
+        "CorrectIndex": 0
+      },
+      {
+        "Text": "Mavjud faylga qo‘shish rejimi?",
+        "Options": [
+          "a",
+          "r",
+          "w"
+        ],
+        "CorrectIndex": 0
+      },
+      {
+        "Text": "with nima uchun foydali?",
+        "Options": [
+          "Faylni xato bo‘lsa ham yopadi",
+          "Barcha faylni shifrlaydi",
+          "Internetni tezlashtiradi"
+        ],
+        "CorrectIndex": 0
+      },
+      {
+        "Text": "int(\"salom\") qaysi xatoga olib keladi?",
+        "Options": [
+          "Hech qanday xato yo‘q",
+          "ValueError",
+          "Faqat SyntaxError"
+        ],
+        "CorrectIndex": 1
+      },
+      {
+        "Text": "except: pass ni hamma joyda ishlatish muammosi?",
+        "Options": [
+          "Har doim tezlashtiradi",
+          "Haqiqiy xatolarni yashiradi",
+          "Testlarni almashtiradi"
+        ],
+        "CorrectIndex": 1
+      },
+      {
+        "Text": "math.sqrt(81) natijasi?",
+        "Options": [
+          "9.0",
+          "6561",
+          "81"
+        ],
+        "CorrectIndex": 0
+      },
+      {
+        "Text": "O‘z faylini random.py nomlash nimaga olib kelishi mumkin?",
+        "Options": [
+          "Har doim tezlashishga",
+          "Internetni o‘chirishga",
+          "Standart random modulini soyada qoldirishga"
+        ],
+        "CorrectIndex": 2
+      },
+      {
+        "Text": "Promptga nimani yubormaslik kerak?",
+        "Options": [
+          "Maxfiy token va parolni",
+          "Xatodan tozalangan minimal kodni",
+          "Kutilgan natijani"
+        ],
+        "CorrectIndex": 0
+      },
+      {
+        "Text": "AI «ishlaydi» dedi. Keyingi qadam?",
+        "Options": [
+          "Darhol ommaga chiqarish",
+          "Mahalliy sinov va kodni ko‘rib chiqish",
+          "Barcha testlarni o‘chirish"
+        ],
+        "CorrectIndex": 1
+      },
+      {
+        "Text": "Mazmunli funksiya nomi?",
+        "Options": [
+          "aaaa",
+          "thing2",
+          "calculate_total"
+        ],
+        "CorrectIndex": 2
+      },
+      {
+        "Text": "Refaktor paytida nimani saqlash kerak?",
+        "Options": [
+          "Barcha xatolarni",
+          "Kutilgan xatti-harakatni",
+          "Har doim satr sonini"
+        ],
+        "CorrectIndex": 1
+      },
+      {
+        "Text": "To-do da bo‘sh ro‘yxat bo‘lsa?",
+        "Options": [
+          "Dastur qulashi",
+          "Tushunarli bo‘sh holat ko‘rsatish",
+          "Birinchi elementni majburan o‘qish"
+        ],
+        "CorrectIndex": 1
+      },
+      {
+        "Text": "Menyu loyihasida zarur yo‘l?",
+        "Options": [
+          "Aniq chiqish amali",
+          "Cheksiz majburiy aylanish",
+          "Faqat yashirin tugma"
+        ],
+        "CorrectIndex": 0
+      },
+      {
+        "Text": "git commit nimani qiladi?",
+        "Options": [
+          "Har doim internetga joylaydi",
+          "Lokal tarixga snapshot yozadi",
+          "Fayllarni o‘chiradi"
+        ],
+        "CorrectIndex": 1
+      },
+      {
+        "Text": "Token tarixga tushsa faqat .gitignore yetarlimi?",
+        "Options": [
+          "Ha, hech kim ko‘rmaydi",
+          "Yo‘q, tokenni bekor qilish/almashtirish ham kerak",
+          "Ha, tarixdan avtomatik yo‘qoladi"
+        ],
+        "CorrectIndex": 1
+      }
+    ]
+  },
+  {
+    "Id": "mirae-it-v1-module-7",
+    "Title": "Loyihalar va deploy — o‘quv imtihoni",
+    "ClassName": "IT To‘garak",
+    "Subject": "Loyihalar va deploy",
+    "TimeLimitMinutes": 45,
+    "Questions": [
+      {
+        "Text": "MVP nima?",
+        "Options": [
+          "Asosiy qiymatni beradigan eng kichik ishlaydigan versiya",
+          "Faqat logotip",
+          "Barcha imkoniyatlar to‘plami"
+        ],
+        "CorrectIndex": 0
+      },
+      {
+        "Text": "G‘oyani baholashda eng foydali savol?",
+        "Options": [
+          "Nechta bezak bo‘ladi?",
+          "Kimning qaysi muammosini hal qiladi?",
+          "Kod qancha uzun bo‘ladi?"
+        ],
+        "CorrectIndex": 1
+      },
+      {
+        "Text": "Tekshiriladigan talab qaysi?",
+        "Options": [
+          "Bo‘sh nomda xabar chiqadi va yozuv saqlanmaydi",
+          "Ilova zo‘r bo‘lsin",
+          "Hammasi chiroyli bo‘lsin"
+        ],
+        "CorrectIndex": 0
+      },
+      {
+        "Text": "Wireframe nimaga yordam beradi?",
+        "Options": [
+          "Server xarajatini avtomatik to‘lashga",
+          "Tuzilma va foydalanuvchi yo‘lini tekshirishga",
+          "Parolni shifrlashga"
+        ],
+        "CorrectIndex": 1
+      },
+      {
+        "Text": "Hisob mantiqini ajratish foydasi?",
+        "Options": [
+          "Parol kerak bo‘lmaydi",
+          "Dastur avtomatik internetga chiqadi",
+          "Uni foydalanuvchi kiritishisiz testlash mumkin"
+        ],
+        "CorrectIndex": 2
+      },
+      {
+        "Text": "Saqlangan fayl buzilgan bo‘lsa?",
+        "Options": [
+          "Aslini saqlab xabar berish va tiklash yo‘lini taklif qilish",
+          "Indamay ustiga bo‘sh yozish",
+          "Butun diskni tozalash"
+        ],
+        "CorrectIndex": 0
+      },
+      {
+        "Text": "GUI tugmasi odatda nimani chaqiradi?",
+        "Options": [
+          "Har doim operatsion tizimni",
+          "Hodisa callback ini",
+          "Faqat fayl kengaytmasini"
+        ],
+        "CorrectIndex": 1
+      },
+      {
+        "Text": "Uzoq ish UI oqimida bajarilsa?",
+        "Options": [
+          "Oyna javobsiz qolishi mumkin",
+          "Avtomatik test bo‘ladi",
+          "Har doim tezlashadi"
+        ],
+        "CorrectIndex": 0
+      },
+      {
+        "Text": "HTML asosiy vazifasi?",
+        "Options": [
+          "Har doim ma’lumot bazasi yaratish",
+          "Mazmun tuzilmasini belgilash",
+          "Server parolini saqlash"
+        ],
+        "CorrectIndex": 1
+      },
+      {
+        "Text": "Haqiqiy amal tugmasi uchun mos element?",
+        "Options": [
+          "button",
+          "Faqat span",
+          "Faqat rasm"
+        ],
+        "CorrectIndex": 0
+      },
+      {
+        "Text": "GitHub Pages nima uchun mos?",
+        "Options": [
+          "Mahfiy parol ombori",
+          "Doimiy Python server jarayoni",
+          "Statik HTML/CSS/JS sayt"
+        ],
+        "CorrectIndex": 2
+      },
+      {
+        "Text": "Saytda CSS yo‘qolsa avval nima tekshiriladi?",
+        "Options": [
+          "Kompyuter fon rasmi",
+          "Asset yo‘llari va harf registri",
+          "Excel formulasi"
+        ],
+        "CorrectIndex": 1
+      },
+      {
+        "Text": "Maxfiy kalit qayerda saqlanishi kerak?",
+        "Options": [
+          "Hosting muhit o‘zgaruvchisi yoki secret store da",
+          "Git commit xabarida",
+          "Ommaviy HTML da"
+        ],
+        "CorrectIndex": 0
+      },
+      {
+        "Text": "Vaqtinchalik hosting diskiga ishonishdan oldin?",
+        "Options": [
+          "Qayta deploy/restart saqlash kafolatini tekshirish",
+          "Doimiy deb taxmin qilish",
+          "Zaxirani o‘chirish"
+        ],
+        "CorrectIndex": 0
+      },
+      {
+        "Text": "Loyiha kartasida eng foydali dalil?",
+        "Options": [
+          "Faqat uzun texnologiya ro‘yxati",
+          "Ishlaydigan demo va tushuntirilgan kod",
+          "Faqat «eng zo‘r» yozuvi"
+        ],
+        "CorrectIndex": 1
+      },
+      {
+        "Text": "Boshqaning kodidan foydalansangiz?",
+        "Options": [
+          "Barcha manbani yashirish",
+          "O‘zingiz yozgan deb aytish",
+          "Litsenziya va mualliflikni tekshirib ko‘rsatish"
+        ],
+        "CorrectIndex": 2
+      },
+      {
+        "Text": "Brauzer validatsiyasi server tekshiruvini almashtiradimi?",
+        "Options": [
+          "Yo‘q",
+          "Faqat rang bo‘lsa",
+          "Ha, har doim"
+        ],
+        "CorrectIndex": 0
+      },
+      {
+        "Text": "Backend yo‘q formadan keyin to‘g‘ri xabar?",
+        "Options": [
+          "Demo — xabar yuborilmadi",
+          "Xabar serverga yetdi",
+          "Email albatta jo‘natildi"
+        ],
+        "CorrectIndex": 0
+      },
+      {
+        "Text": "Yaxshi README nima imkon beradi?",
+        "Options": [
+          "Barcha kodni almashtirish",
+          "Parolni ommaga oshkor qilish",
+          "Loyihani takror ishga tushirish va sinash"
+        ],
+        "CorrectIndex": 2
+      },
+      {
+        "Text": "O‘rnatish qadamlarini qanday tekshiramiz?",
+        "Options": [
+          "Faqat logotip qo‘shib",
+          "Toza muhitda takrorlab",
+          "Faqat yoddan o‘qib"
+        ],
+        "CorrectIndex": 1
+      },
+      {
+        "Text": "Kod havolasi va demo havolasi?",
+        "Options": [
+          "Har doim bir xil sahifa",
+          "Ikkalasi ham faqat parol",
+          "Turli maqsadga xizmat qiladi"
+        ],
+        "CorrectIndex": 2
+      },
+      {
+        "Text": "Public qilishdan oldingi muhim tekshiruv?",
+        "Options": [
+          "Sirlar va shaxsiy ma’lumotlar yo‘qligi",
+          "Faqat fayl rangi",
+          "Faqat yulduzlar soni"
+        ],
+        "CorrectIndex": 0
+      },
+      {
+        "Text": "Pull request maqsadi?",
+        "Options": [
+          "Barcha tarixni yashirish",
+          "O‘zgarishni ko‘rib birlashtirishni so‘rash",
+          "Faqat faylni yuklab olish"
+        ],
+        "CorrectIndex": 1
+      },
+      {
+        "Text": "Merge konfliktida to‘g‘ri yondashuv?",
+        "Options": [
+          "Bir tomonni tasodifiy o‘chirish",
+          "Ikkala o‘zgarish maqsadini tushunib sinash",
+          "Testlarni o‘chirib tashlash"
+        ],
+        "CorrectIndex": 1
+      },
+      {
+        "Text": "Fayl nomini .xlsx qilish haqiqiy Excel eksportmi?",
+        "Options": [
+          "Ha, barcha matn Excel",
+          "Ha, nomning o‘zi yetadi",
+          "Yo‘q, format ham mos bo‘lishi kerak"
+        ],
+        "CorrectIndex": 2
+      },
+      {
+        "Text": "Yakuniy loyiha qabulida nima tekshiriladi?",
+        "Options": [
+          "Faqat logo",
+          "Faqat kod satrlari soni",
+          "Talablar va xato holatlarining ishlashi"
+        ],
+        "CorrectIndex": 2
+      },
+      {
+        "Text": "Internetli demo uchun zaxira?",
+        "Options": [
+          "Hech qanday reja kerak emas",
+          "Haqiqiy parollar ro‘yxati",
+          "Mahalliy nusxa yoki oldindan yozilgan demo"
+        ],
+        "CorrectIndex": 2
+      },
+      {
+        "Text": "Demo uchun qaysi ma’lumot?",
+        "Options": [
+          "Sun’iy yoki ruxsatli ma’lumot",
+          "Barcha sinfdoshlarning shaxsiy yozuvi",
+          "Ommaviy bo‘lmagan parollar"
+        ],
+        "CorrectIndex": 0
+      },
+      {
+        "Text": "Foydali refleksiya qaysi?",
+        "Options": [
+          "Muammo, dalil, yechim va keyingi qadam",
+          "Faqat «hammasi zo‘r»",
+          "Faqat baho talab qilish"
+        ],
+        "CorrectIndex": 0
+      },
+      {
+        "Text": "Keyingi maqsad qanday bo‘lsin?",
+        "Options": [
+          "Aniq, o‘lchanadigan va muddatli",
+          "Cheksiz va noaniq",
+          "Faqat bezakka qaratilgan"
+        ],
+        "CorrectIndex": 0
+      }
+    ]
+  },
+  {
+    "Id": "mirae-it-v1-final",
+    "Title": "IT To‘garak — yakuniy nazariy sinov",
+    "ClassName": "IT To‘garak",
+    "Subject": "IT To‘garak",
+    "TimeLimitMinutes": 50,
+    "Questions": [
+      {
+        "Text": "Ping javobi yo‘q. To‘g‘ri xulosa?",
+        "Options": [
+          "ICMP bloklanishi ham mumkin",
+          "DNS har doim buzilgan",
+          "Sayt aniq o‘chirilgan"
+        ],
+        "CorrectIndex": 0
+      },
+      {
+        "Text": "pause nima uchun qo‘yiladi?",
+        "Options": [
+          "Faylni shifrlash uchun",
+          "Natijani ko‘rib tugma bosishni kutish uchun",
+          "Kompyuterni o‘chirish uchun"
+        ],
+        "CorrectIndex": 1
+      },
+      {
+        "Text": "Nega errorlevel katta qiymatdan tekshiriladi?",
+        "Options": [
+          "choice faqat teskari ishlaydi",
+          "Kichik chegara kattalarni ham qamraydi",
+          "CMD kichik sonni tushunmaydi"
+        ],
+        "CorrectIndex": 1
+      },
+      {
+        "Text": "taskkill /F xavfi?",
+        "Options": [
+          "Faqat shrift o‘zgarishi",
+          "Saqlanmagan ma’lumot yo‘qolishi",
+          "Avtomatik zaxira yaratilishi"
+        ],
+        "CorrectIndex": 1
+      },
+      {
+        "Text": "O‘chirishga wildcard berishdan oldin nima kerak?",
+        "Options": [
+          "Yashirin atributni yoqish",
+          "Tizim papkasiga o‘tish",
+          "dir bilan mos fayllarni ko‘rish"
+        ],
+        "CorrectIndex": 2
+      },
+      {
+        "Text": "\"$($price * $count)\" ichidagi $() vazifasi?",
+        "Options": [
+          "Faylni o‘chirish",
+          "Izoh boshlash",
+          "Ifodani hisoblab satrga kiritish"
+        ],
+        "CorrectIndex": 2
+      },
+      {
+        "Text": "Qulflangan fayl uchrasa?",
+        "Options": [
+          "Xatoni qayd etib xavfsiz to‘xtash yoki o‘tkazish",
+          "Hamma jarayonni o‘ldirish",
+          "Huquqlarni barcha uchun ochish"
+        ],
+        "CorrectIndex": 0
+      },
+      {
+        "Text": "$_ nimani bildiradi?",
+        "Options": [
+          "Faqat bo‘sh satrni",
+          "Barcha disklarni",
+          "Pipeline dagi joriy obyektni"
+        ],
+        "CorrectIndex": 2
+      },
+      {
+        "Text": "Nom ichidagi [ belgini oddiy belgi sifatida ishlatish uchun?",
+        "Options": [
+          "-LiteralPath",
+          "-Force",
+          "-Recurse"
+        ],
+        "CorrectIndex": 0
+      },
+      {
+        "Text": "Nega kodlashni qayta o‘qib tekshiramiz?",
+        "Options": [
+          "UTF-8 faqat son saqlaydi",
+          "Versiya va dasturlarda kodlash farq qilishi mumkin",
+          "Get-Content faylni buzadi"
+        ],
+        "CorrectIndex": 1
+      },
+      {
+        "Text": "Matnni tekislashda bo‘sh joylarni takrorlash o‘rniga?",
+        "Options": [
+          "Yuzta probel",
+          "Paragraf tekislash sozlamasi",
+          "Rasmga aylantirish"
+        ],
+        "CorrectIndex": 1
+      },
+      {
+        "Text": "Alt text kimga va nimaga yordam beradi?",
+        "Options": [
+          "Parolni yashirishga",
+          "Rasm mazmunini ko‘rmasdan tushunishga",
+          "Faqat faylni kattalashtirishga"
+        ],
+        "CorrectIndex": 1
+      },
+      {
+        "Text": "Yangi bo‘lim mundarijada yo‘q bo‘lsa?",
+        "Options": [
+          "Heading uslubi va Update Table ni tekshirish",
+          "Rasm qo‘shish",
+          "Matn rangini o‘zgartirish"
+        ],
+        "CorrectIndex": 0
+      },
+      {
+        "Text": "Track Changes yoqilgan faylni yakunlashda?",
+        "Options": [
+          "Faqat matnni kichraytirish",
+          "O‘zgarishlarni ko‘rib qabul/rad etish",
+          "Barcha izohlarni e’tiborsiz qoldirish"
+        ],
+        "CorrectIndex": 1
+      },
+      {
+        "Text": "Faqat bir bo‘limni landscape qilish uchun?",
+        "Options": [
+          "Barcha matnni qalin qilish",
+          "Ko‘p Enter",
+          "Section break va bo‘lim sozlamasi"
+        ],
+        "CorrectIndex": 2
+      },
+      {
+        "Text": "Yangi qator Pivot da ko‘rinmasa?",
+        "Options": [
+          "Shriftni qalin qilish",
+          "Manba diapazoni va Refresh ni tekshirish",
+          "Barcha sonlarni o‘chirish"
+        ],
+        "CorrectIndex": 1
+      },
+      {
+        "Text": "Vaznli baholar vazni yig‘indisi?",
+        "Options": [
+          "Istalgan qiymat",
+          "Har doim 300%",
+          "100%"
+        ],
+        "CorrectIndex": 2
+      },
+      {
+        "Text": "Formula o‘rniga matn ko‘rinsa nima tekshiriladi?",
+        "Options": [
+          "= belgisi va katak formati",
+          "Sahifa hoshiyasi",
+          "Monitor yorqinligi"
+        ],
+        "CorrectIndex": 0
+      },
+      {
+        "Text": "Conditional Formatting nima qiladi?",
+        "Options": [
+          "Qiymat yoki formula bo‘yicha formatlaydi",
+          "Asl qiymatni doim almashtiradi",
+          "Faylga parol beradi"
+        ],
+        "CorrectIndex": 0
+      },
+      {
+        "Text": "VLOOKUP da FALSE nima uchun?",
+        "Options": [
+          "Formula o‘chishi uchun",
+          "Aniq moslik uchun",
+          "Tasodifiy qator uchun"
+        ],
+        "CorrectIndex": 1
+      },
+      {
+        "Text": "Bo‘lishdan avval qaysi holat tekshiriladi?",
+        "Options": [
+          "Surat har doim 1 ligi",
+          "Maxraj nol emasligi",
+          "Matn rangi"
+        ],
+        "CorrectIndex": 1
+      },
+      {
+        "Text": "Nega chegarani sinaymiz?",
+        "Options": [
+          "Faqat tezlikni oshirish uchun",
+          "Rasmni kattalashtirish uchun",
+          "> va >= farqidagi xatoni topish uchun"
+        ],
+        "CorrectIndex": 2
+      },
+      {
+        "Text": "Boolean qanday qiymat saqlaydi?",
+        "Options": [
+          "Rost yoki yolg‘on",
+          "Faqat kasr son",
+          "Istalgan rasm"
+        ],
+        "CorrectIndex": 0
+      },
+      {
+        "Text": "Algoritmni tekshirishning foydali yo‘li?",
+        "Options": [
+          "Har qadamdagi qiymatni kuzatish",
+          "Natijani taxmin qilib saqlash",
+          "Faqat rang tanlash"
+        ],
+        "CorrectIndex": 0
+      },
+      {
+        "Text": "2 tashqi va 3 ichki aylanish jami?",
+        "Options": [
+          "6",
+          "3",
+          "5"
+        ],
+        "CorrectIndex": 0
+      },
+      {
+        "Text": "break nima qiladi?",
+        "Options": [
+          "Eng ichki siklni tugatadi",
+          "Faqat izoh yozadi",
+          "Har doim butun kompyuterni o‘chiradi"
+        ],
+        "CorrectIndex": 0
+      },
+      {
+        "Text": "with nima uchun foydali?",
+        "Options": [
+          "Faylni xato bo‘lsa ham yopadi",
+          "Barcha faylni shifrlaydi",
+          "Internetni tezlashtiradi"
+        ],
+        "CorrectIndex": 0
+      },
+      {
+        "Text": "Token tarixga tushsa faqat .gitignore yetarlimi?",
+        "Options": [
+          "Ha, hech kim ko‘rmaydi",
+          "Yo‘q, tokenni bekor qilish/almashtirish ham kerak",
+          "Ha, tarixdan avtomatik yo‘qoladi"
+        ],
+        "CorrectIndex": 1
+      },
+      {
+        "Text": "AI «ishlaydi» dedi. Keyingi qadam?",
+        "Options": [
+          "Darhol ommaga chiqarish",
+          "Mahalliy sinov va kodni ko‘rib chiqish",
+          "Barcha testlarni o‘chirish"
+        ],
+        "CorrectIndex": 1
+      },
+      {
+        "Text": ":.2f nimani belgilaydi?",
+        "Options": [
+          "Ko‘rinishda ikki kasr xona",
+          "Qiymatni doim int qiladi",
+          "Ikki marta ko‘paytiradi"
+        ],
+        "CorrectIndex": 0
+      },
+      {
+        "Text": "Uzoq ish UI oqimida bajarilsa?",
+        "Options": [
+          "Oyna javobsiz qolishi mumkin",
+          "Avtomatik test bo‘ladi",
+          "Har doim tezlashadi"
+        ],
+        "CorrectIndex": 0
+      },
+      {
+        "Text": "Yakuniy loyiha qabulida nima tekshiriladi?",
+        "Options": [
+          "Faqat logo",
+          "Faqat kod satrlari soni",
+          "Talablar va xato holatlarining ishlashi"
+        ],
+        "CorrectIndex": 2
+      },
+      {
+        "Text": "Keyingi maqsad qanday bo‘lsin?",
+        "Options": [
+          "Aniq, o‘lchanadigan va muddatli",
+          "Cheksiz va noaniq",
+          "Faqat bezakka qaratilgan"
+        ],
+        "CorrectIndex": 0
+      },
+      {
+        "Text": "Boshqaning kodidan foydalansangiz?",
+        "Options": [
+          "Barcha manbani yashirish",
+          "O‘zingiz yozgan deb aytish",
+          "Litsenziya va mualliflikni tekshirib ko‘rsatish"
+        ],
+        "CorrectIndex": 2
+      },
+      {
+        "Text": "Merge konfliktida to‘g‘ri yondashuv?",
+        "Options": [
+          "Bir tomonni tasodifiy o‘chirish",
+          "Ikkala o‘zgarish maqsadini tushunib sinash",
+          "Testlarni o‘chirib tashlash"
+        ],
+        "CorrectIndex": 1
+      }
+    ]
+  }
+]

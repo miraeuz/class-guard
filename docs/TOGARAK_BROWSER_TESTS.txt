@@ -1,0 +1,104 @@
+PASS 70 lessons
+PASS 140 unique questions
+PASS stable unique question IDs
+PASS lesson 1 complete and valid
+PASS lesson 2 complete and valid
+PASS lesson 3 complete and valid
+PASS lesson 4 complete and valid
+PASS lesson 5 complete and valid
+PASS lesson 6 complete and valid
+PASS lesson 7 complete and valid
+PASS lesson 8 complete and valid
+PASS lesson 9 complete and valid
+PASS lesson 10 complete and valid
+PASS lesson 11 complete and valid
+PASS lesson 12 complete and valid
+PASS lesson 13 complete and valid
+PASS lesson 14 complete and valid
+PASS lesson 15 complete and valid
+PASS lesson 16 complete and valid
+PASS lesson 17 complete and valid
+PASS lesson 18 complete and valid
+PASS lesson 19 complete and valid
+PASS lesson 20 complete and valid
+PASS lesson 21 complete and valid
+PASS lesson 22 complete and valid
+PASS lesson 23 complete and valid
+PASS lesson 24 complete and valid
+PASS lesson 25 complete and valid
+PASS lesson 26 complete and valid
+PASS lesson 27 complete and valid
+PASS lesson 28 complete and valid
+PASS lesson 29 complete and valid
+PASS lesson 30 complete and valid
+PASS lesson 31 complete and valid
+PASS lesson 32 complete and valid
+PASS lesson 33 complete and valid
+PASS lesson 34 complete and valid
+PASS lesson 35 complete and valid
+PASS lesson 36 complete and valid
+PASS lesson 37 complete and valid
+PASS lesson 38 complete and valid
+PASS lesson 39 complete and valid
+PASS lesson 40 complete and valid
+PASS lesson 41 complete and valid
+PASS lesson 42 complete and valid
+PASS lesson 43 complete and valid
+PASS lesson 44 complete and valid
+PASS lesson 45 complete and valid
+PASS lesson 46 complete and valid
+PASS lesson 47 complete and valid
+PASS lesson 48 complete and valid
+PASS lesson 49 complete and valid
+PASS lesson 50 complete and valid
+PASS lesson 51 complete and valid
+PASS lesson 52 complete and valid
+PASS lesson 53 complete and valid
+PASS lesson 54 complete and valid
+PASS lesson 55 complete and valid
+PASS lesson 56 complete and valid
+PASS lesson 57 complete and valid
+PASS lesson 58 complete and valid
+PASS lesson 59 complete and valid
+PASS lesson 60 complete and valid
+PASS lesson 61 complete and valid
+PASS lesson 62 complete and valid
+PASS lesson 63 complete and valid
+PASS lesson 64 complete and valid
+PASS lesson 65 complete and valid
+PASS lesson 66 complete and valid
+PASS lesson 67 complete and valid
+PASS lesson 68 complete and valid
+PASS lesson 69 complete and valid
+PASS lesson 70 complete and valid
+PASS search returns matching topics
+PASS search empty state
+PASS task persists
+PASS notes preserved as text
+PASS notes not HTML executed
+PASS practice two questions
+PASS no answers revealed before submission
+PASS correct scoring
+PASS mastery requires task and test
+PASS Word exam covers 5 lessons with 10 questions
+PASS reload retains deadline
+PASS reload retains answer and shuffle
+PASS expired exam auto submits after reload
+PASS no duplicate result after reload
+PASS final exam 35 questions
+PASS final balanced module 1
+PASS final balanced module 2
+PASS final balanced module 3
+PASS final balanced module 4
+PASS final balanced module 5
+PASS final balanced module 6
+PASS final balanced module 7
+PASS unanswered scores zero
+PASS original math immediate feedback preserved
+PASS math group escaped
+PASS no automatic or duplicate submission
+PASS math wrong key 34 fixed
+PASS only one manual send control
+PASS mobile no horizontal overflow
+PASS no JavaScript errors
+{"passed":103,"errors":[],"externalRequests":[]}

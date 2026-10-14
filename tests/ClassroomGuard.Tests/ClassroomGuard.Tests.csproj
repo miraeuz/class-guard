@@ -1,0 +1,7 @@
+<Project Sdk="Microsoft.NET.Sdk">
+<PropertyGroup><OutputType>Exe</OutputType><TargetFramework>net8.0-windows</TargetFramework><ImplicitUsings>enable</ImplicitUsings><Nullable>enable</Nullable></PropertyGroup>
+<ItemGroup><ProjectReference Include="../../src/ClassroomGuard.Core/ClassroomGuard.Core.csproj"/>
+<Compile Include="../../src/ClassroomGuard.Agent/AttemptStore.cs" Link="AttemptStore.cs"/>
+<Compile Include="../../src/ClassroomGuard.Admin/Services/SyncEngine.cs" Link="SyncEngine.cs"/>
+<Compile Include="../../src/ClassroomGuard.Admin/Services/AdminClient.cs" Link="AdminClient.cs"/>
+</ItemGroup></Project>

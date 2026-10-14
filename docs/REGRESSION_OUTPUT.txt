@@ -1,0 +1,36 @@
+PASS: valid policy accepted
+PASS: negative correct index rejected
+PASS: duplicate options rejected
+PASS: null tests rejected
+PASS: unsupported whitelist rejected
+PASS: hosts newline injection rejected
+PASS: unrestricted baseline rejected
+PASS: student view hides key without mutating baseline
+PASS: library file URI rejected for online item
+PASS: credential-bearing URL rejected
+PASS: weak classroom key rejected
+PASS: RFC TOTP vector (six digits)
+PASS: password change requires current password
+PASS: bootstrap enrollment authenticated
+PASS: bootstrap secret deleted
+PASS: new credential usable
+PASS: incomplete primary policy recovers known-good baseline
+PASS: persisted teacher mode never resumes
+PASS: attempt response excludes keys
+PASS: attempt bound to account SID
+PASS: out-of-range submitted answer rejected
+PASS: answers durable across service object restart
+PASS: service computes score
+PASS: finished attempt immutable and submit idempotent
+PASS: answers after deadline cannot change score
+PASS: install approval code consumed once
+PASS: enforcer failure is surfaced
+PASS: no reconciliation before baseline initialized
+PASS: different policy ID reconciles despite higher agent version
+PASS: identical policy does not re-lock or repush
+PASS: Admin baseline survives recreation
+PASS: bounded framing preserves consecutive messages
+PASS: oversized frame rejected
+PASS: unenrolled device rejected before connecting
+PASS: real TLS connection rejects mismatched certificate
+ALL 35 REGRESSION CHECKS PASSED
