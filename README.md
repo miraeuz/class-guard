@@ -1,3 +1,14 @@
+# Easy setup (Oson o‘rnatish)
+
+Download **ClassroomGuard-Setup.exe** from [Releases](https://github.com/miraeuz/class-guard/releases/latest) and run it on every computer:
+
+- **Teacher computer** — choose *Teacher computer*, enter the classroom password. Opens the teacher console.
+- **Student computer** — choose *Student computer*, enter the **same** classroom password, a teacher password for that PC, and the student account name (created automatically).
+
+No key files, certificates or scripts to copy: computers with the same classroom password find and trust each other. Remove it from *Settings → Apps*.
+
+Silent install: `ClassroomGuard-Setup.exe /VERYSILENT /TYPE=student /CLASSPASS="..." /TEACHERPASS="..." /STUDENTUSER="student"` (teacher: `/TYPE=teacher /CLASSPASS="..."`).
+
 # To‘garak update — 14 October 2026
 
 Start with **[TOGARAK.md](TOGARAK.md)** for the new 70-topic learning section, teacher exam imports and emergency removal. The emergency default is `123mirae321`; Windows administrator approval is also required. This is source, not a ready-made installer.
