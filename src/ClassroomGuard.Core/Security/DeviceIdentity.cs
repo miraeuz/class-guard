@@ -15,7 +15,7 @@ public static class DeviceIdentity
         dataDir??=AppPaths.DataDir;
         var path=Path.Combine(dataDir,"device.pfx");
         X509Certificate2 cert;
-        if(File.Exists(path))cert=new X509Certificate2(File.ReadAllBytes(path),(string?)null,X509KeyStorageFlags.EphemeralKeySet);
+        if(File.Exists(path))cert=new X509Certificate2(File.ReadAllBytes(path),(string?)null,X509KeyStorageFlags.DefaultKeySet);
         else
         {
             using var rsa=RSA.Create(3072);
@@ -23,7 +23,7 @@ public static class DeviceIdentity
             using var generated=request.CreateSelfSigned(DateTimeOffset.UtcNow.AddDays(-1),DateTimeOffset.UtcNow.AddYears(3));
             var bytes=generated.Export(X509ContentType.Pfx);
             File.WriteAllBytes(path,bytes);
-            cert=new X509Certificate2(bytes,(string?)null,X509KeyStorageFlags.EphemeralKeySet);
+            cert=new X509Certificate2(bytes,(string?)null,X509KeyStorageFlags.DefaultKeySet);
         }
         File.WriteAllText(Path.Combine(dataDir,"device-enrollment.json"),JsonSerializer.Serialize(new DeviceEnrollment{MachineId=MachineIdentity.MachineId,Name=MachineIdentity.Name,CertificateSha256=Fingerprint(cert)},new JsonSerializerOptions{WriteIndented=true}));
         return cert;

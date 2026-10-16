@@ -11,8 +11,10 @@ permissions:
 
 jobs:
   windows:
-    name: Build, regression tests, publish (win-x64)
+    name: Build, test, make Setup.exe (win-x64)
     runs-on: windows-latest
+    env:
+      VERSION: 1.1.${{ github.run_number }}
     steps:
       - uses: actions/checkout@v4
 
@@ -22,22 +24,74 @@ jobs:
 
       - name: Build + regression checks + self-contained publish
         shell: pwsh
-        run: ./scripts/build.ps1 -Out "${{ github.workspace }}/artifacts"
+        run: |
+          ./scripts/build.ps1 -Out "${{ github.workspace }}/artifacts" *>&1 | Tee-Object -FilePath build.log
+          if (-not $?) {
+            Select-String -Path build.log -Pattern 'FAIL|error|Exception|failed' | Select-Object -First 30 | ForEach-Object { Write-Host "::error::$($_.Line)" }
+            exit 1
+          }
 
-      - name: Bundle deployment package
+      - name: Get WebView2 bootstrapper and Inno Setup
         shell: pwsh
         run: |
-          $pkg = "${{ github.workspace }}/package"
-          New-Item -ItemType Directory -Force $pkg | Out-Null
-          Copy-Item artifacts -Destination "$pkg/artifacts" -Recurse
-          Copy-Item scripts -Destination "$pkg/scripts" -Recurse
-          Copy-Item README.md, DEPLOY.md, TOGARAK.md -Destination $pkg
+          New-Item -ItemType Directory -Force installer/redist | Out-Null
+          Invoke-WebRequest 'https://go.microsoft.com/fwlink/p/?LinkId=2124703' -OutFile installer/redist/MicrosoftEdgeWebview2Setup.exe
+          if (!(Test-Path 'C:\Program Files (x86)\Inno Setup 6\ISCC.exe')) { choco install innosetup -y --no-progress }
+
+      - name: Compile ClassroomGuard-Setup.exe
+        shell: pwsh
+        run: |
+          & 'C:\Program Files (x86)\Inno Setup 6\ISCC.exe' "/DMyVersion=$env:VERSION" installer/ClassroomGuard.iss
+          if ($LASTEXITCODE -ne 0) { throw "ISCC failed: $LASTEXITCODE" }
+          Get-Item dist/ClassroomGuard-Setup.exe | Format-List Name, Length
+
+      - name: Smoke test - silent STUDENT install, status, uninstall
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $p = Start-Process dist/ClassroomGuard-Setup.exe -Wait -PassThru -ArgumentList '/VERYSILENT','/SUPPRESSMSGBOXES','/NORESTART','/TYPE=student','/CLASSPASS=ci-classroom-pass','/TEACHERPASS=ci-teacher-pass','/STUDENTUSER=cgstudent','/LOG=setup-student.log'
+          Get-Content "$env:ProgramData\ClassroomGuard-setup-error.txt" -ErrorAction SilentlyContinue
+          if ($p.ExitCode -ne 0) { Get-Content setup-student.log -Tail 60; Get-Content "$env:ProgramData\ClassroomGuard-setup.log" -ErrorAction SilentlyContinue; throw "Student setup exit $($p.ExitCode)" }
+          if ((Get-Service ClassroomGuardAgent).Status -ne 'Running') { throw 'Agent service not running' }
+          if (!(Get-LocalUser cgstudent)) { throw 'Student account not created' }
+          if (Test-Path "$env:ProgramData\ClassroomGuard\bootstrap.txt") { throw 'Bootstrap password file should not exist' }
+          & "$env:ProgramFiles\ClassroomGuard\Ctl\cgctl.exe" status
+          if ($LASTEXITCODE -ne 0) { throw 'cgctl status failed' }
+          if (!(Get-NetTCPConnection -LocalPort 8787 -State Listen -ErrorAction SilentlyContinue)) { throw 'Agent TLS port not listening' }
+          $u = Start-Process "$env:ProgramFiles\ClassroomGuard\unins000.exe" -Wait -PassThru -ArgumentList '/VERYSILENT','/SUPPRESSMSGBOXES','/NORESTART'
+          Start-Sleep 5
+          if (Get-Service ClassroomGuardAgent -ErrorAction SilentlyContinue) { throw 'Service still present after uninstall' }
+          if (Test-Path "$env:ProgramFiles\ClassroomGuard\Agent") { throw 'Files left after uninstall' }
+          Write-Host 'Student install/uninstall OK'
+
+      - name: Smoke test - silent TEACHER install, uninstall
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $p = Start-Process dist/ClassroomGuard-Setup.exe -Wait -PassThru -ArgumentList '/VERYSILENT','/SUPPRESSMSGBOXES','/NORESTART','/TYPE=teacher','/CLASSPASS=ci-classroom-pass','/LOG=setup-teacher.log'
+          if ($p.ExitCode -ne 0) { Get-Content setup-teacher.log -Tail 60; throw "Teacher setup exit $($p.ExitCode)" }
+          if (!(Test-Path "$env:ProgramFiles\ClassroomGuard\Admin\ClassroomGuard.Admin.exe")) { throw 'Admin not installed' }
+          $k = (Get-Content "$env:ProgramData\ClassroomGuardTeacher\classroom.key" -Raw).Trim()
+          if ([Convert]::FromBase64String($k).Length -ne 32) { throw 'Bad teacher key' }
+          if (!(Get-NetFirewallRule -Name ClassroomGuard-AdminDiscovery -ErrorAction SilentlyContinue)) { throw 'Discovery firewall rule missing' }
+          $u = Start-Process "$env:ProgramFiles\ClassroomGuard\unins000.exe" -Wait -PassThru -ArgumentList '/VERYSILENT','/SUPPRESSMSGBOXES','/NORESTART'
+          Start-Sleep 3
+          if (Test-Path "$env:ProgramFiles\ClassroomGuard\Admin") { throw 'Admin left after uninstall' }
+          Write-Host 'Teacher install/uninstall OK'
 
       - uses: actions/upload-artifact@v4
         with:
-          name: ClassroomGuard-win-x64
-          path: package/
+          name: ClassroomGuard-Setup
+          path: dist/ClassroomGuard-Setup.exe
           retention-days: 30
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: setup-logs
+          path: |
+            setup-*.log
+          if-no-files-found: ignore
 
   learning:
     name: Student learning page (browser checks)
@@ -53,3 +107,28 @@ jobs:
           npx playwright install --with-deps chromium
       - name: Run browser checks
         run: node tests/learning/browser.cjs
+
+  release:
+    name: Publish Setup.exe (public download)
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: [windows, learning]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: ClassroomGuard-Setup
+      - uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v1.1.${{ github.run_number }}
+          name: ClassroomGuard 1.1.${{ github.run_number }}
+          make_latest: true
+          files: ClassroomGuard-Setup.exe
+          body: |
+            **Download `ClassroomGuard-Setup.exe` below** and run it on every computer.
+
+            - Teacher PC: choose **Teacher computer**, enter the classroom password.
+            - Student PCs: choose **Student computer**, enter the same classroom password, a teacher password and the student account name.
+
+            Silent install: `ClassroomGuard-Setup.exe /VERYSILENT /TYPE=student /CLASSPASS="..." /TEACHERPASS="..." /STUDENTUSER="student"`
