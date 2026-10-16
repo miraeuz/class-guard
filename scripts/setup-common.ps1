@@ -1,5 +1,11 @@
 # Shared by Setup.exe-driven installs. Never sourced from a user-writable path.
 
+# Windows PowerShell 5.1 started from PowerShell 7 inherits PS7 module paths and then loads
+# incompatible Security/LocalAccounts modules (Get-Acl, Set-Acl break). Keep only 5.1 paths.
+if ($PSVersionTable.PSEdition -eq 'Desktop') {
+ $env:PSModulePath = (($env:PSModulePath -split ';') | Where-Object { $_ -and $_ -notmatch '\\PowerShell\\7|\\Documents\\PowerShell\\|\\Program Files\\PowerShell\\' }) -join ';'
+}
+
 # The classroom key is derived from the classroom password, so the teacher PC and every
 # student PC end up with the same 32-byte key without copying any key file.
 # The salt is fixed on purpose (all PCs must derive the same key); the iteration count

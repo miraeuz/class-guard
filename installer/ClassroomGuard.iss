@@ -188,6 +188,10 @@ begin
     Log('WebView2 Runtime install failed or needs internet (code ' + IntToStr(Code) + '). Lessons page will ask for it.');
 end;
 
+// Removes an inherited PowerShell 7 PSModulePath so Windows PowerShell 5.1 uses its own modules.
+function SetEnvironmentVariable(lpName: String; lpValue: Cardinal): BOOL;
+  external 'SetEnvironmentVariableW@kernel32.dll stdcall';
+
 function RunScript(const Script, Args: String): String;
 var
   Code: Integer;
@@ -204,6 +208,7 @@ begin
     Result := 'Could not write temporary setup answers.';
     exit;
   end;
+  SetEnvironmentVariable('PSModulePath', 0);
   if not Exec(ExpandConstant('{sys}\WindowsPowerShell\v1.0\powershell.exe'),
       '-NoProfile -ExecutionPolicy Bypass -File "' + ExpandConstant('{tmp}\pkg\scripts\') + Script + '" -SetupFile "' + ExpandConstant('{tmp}\answers.txt') + '"' + Args,
       ExpandConstant('{tmp}'), SW_HIDE, ewWaitUntilTerminated, Code) then
