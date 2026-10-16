@@ -49,6 +49,13 @@ jobs:
         shell: pwsh
         run: |
           $ErrorActionPreference = 'Stop'
+          function Report([string]$title) {
+            foreach ($f in @("$env:ProgramData\ClassroomGuard-setup-error.txt")) { if (Test-Path $f) { Write-Host "::error title=$title setup error::$((Get-Content $f -Raw) -replace "`r?`n",' | ')" } }
+            foreach ($f in @('setup-student.log','setup-teacher.log',"$env:ProgramData\ClassroomGuard-setup.log")) {
+              if (Test-Path $f) { $t = (Get-Content $f -Tail 25) -join ' | '; Write-Host "::error title=$title $(Split-Path $f -Leaf)::$t" }
+            }
+          }
+          trap { Write-Host "::error title=student::$($_.Exception.Message)"; Report 'student'; exit 1 }
           $p = Start-Process dist/ClassroomGuard-Setup.exe -Wait -PassThru -ArgumentList '/VERYSILENT','/SUPPRESSMSGBOXES','/NORESTART','/TYPE=student','/CLASSPASS=ci-classroom-pass','/TEACHERPASS=ci-teacher-pass','/STUDENTUSER=cgstudent','/LOG=setup-student.log'
           Get-Content "$env:ProgramData\ClassroomGuard-setup-error.txt" -ErrorAction SilentlyContinue
           if ($p.ExitCode -ne 0) { Get-Content setup-student.log -Tail 60; Get-Content "$env:ProgramData\ClassroomGuard-setup.log" -ErrorAction SilentlyContinue; throw "Student setup exit $($p.ExitCode)" }
@@ -68,6 +75,13 @@ jobs:
         shell: pwsh
         run: |
           $ErrorActionPreference = 'Stop'
+          function Report([string]$title) {
+            foreach ($f in @("$env:ProgramData\ClassroomGuard-setup-error.txt")) { if (Test-Path $f) { Write-Host "::error title=$title setup error::$((Get-Content $f -Raw) -replace "`r?`n",' | ')" } }
+            foreach ($f in @('setup-student.log','setup-teacher.log',"$env:ProgramData\ClassroomGuard-setup.log")) {
+              if (Test-Path $f) { $t = (Get-Content $f -Tail 25) -join ' | '; Write-Host "::error title=$title $(Split-Path $f -Leaf)::$t" }
+            }
+          }
+          trap { Write-Host "::error title=teacher::$($_.Exception.Message)"; Report 'teacher'; exit 1 }
           $p = Start-Process dist/ClassroomGuard-Setup.exe -Wait -PassThru -ArgumentList '/VERYSILENT','/SUPPRESSMSGBOXES','/NORESTART','/TYPE=teacher','/CLASSPASS=ci-classroom-pass','/LOG=setup-teacher.log'
           if ($p.ExitCode -ne 0) { Get-Content setup-teacher.log -Tail 60; throw "Teacher setup exit $($p.ExitCode)" }
           if (!(Test-Path "$env:ProgramFiles\ClassroomGuard\Admin\ClassroomGuard.Admin.exe")) { throw 'Admin not installed' }
