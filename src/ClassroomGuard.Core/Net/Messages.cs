@@ -40,6 +40,9 @@ public sealed class NetResponse
     public bool Ok { get; set; }
     public string Message { get; set; } = "";
     public string? Nonce { get; set; }
+    /// <summary>Hello only: HMAC(classroom key, "agent-cert:" + SHA-256 of the agent TLS certificate).
+    /// Proves the certificate belongs to a holder of the classroom key, so no manual pinning is needed.</summary>
+    public string? CertProof { get; set; }
     public EnforcementState? State { get; set; }
     public MachineInfo? Machine { get; set; }
     public AgentHealth? Health { get; set; }

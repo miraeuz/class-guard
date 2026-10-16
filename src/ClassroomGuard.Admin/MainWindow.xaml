@@ -203,10 +203,9 @@
                         <StackPanel>
                             <TextBlock Text="Sinf kaliti" FontWeight="SemiBold" Margin="0,0,0,8"/>
                             <TextBlock Style="{StaticResource Muted}" TextWrapping="Wrap" Margin="0,0,0,12"
-                                       Text="Agentdagi classroom.key ni yuklang yoki yangi yarating."/>
+                                       Text="Odatda Setup sinf parolidan kalitni avtomatik o‘rnatadi. Qo‘lda: classroom.key ni yuklang yoki yangi yarating."/>
                             <StackPanel Orientation="Horizontal">
                                 <Button Content="Kalit faylini yuklash…" Style="{StaticResource BtnSecondary}" Click="OnLoadKey"/>
-                                <Button Content="Device sertifikatini yuklash…" Style="{StaticResource BtnSecondary}" Click="OnEnrollDevice"/>
                                 <Button Content="Yangi kalit yaratish" Style="{StaticResource BtnSecondary}" Click="OnGenerateKey"/>
                                 <TextBlock x:Name="KeyPreview" Style="{StaticResource Muted}" VerticalAlignment="Center" Margin="12,0,0,0"/>
                             </StackPanel>

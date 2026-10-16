@@ -65,16 +65,43 @@ try
     {Check(await Wire.ReadAsync(reader,CancellationToken.None)=="one" && await Wire.ReadAsync(reader,CancellationToken.None)=="two","bounded framing preserves consecutive messages");}
     using(var stream=new MemoryStream(Encoding.UTF8.GetBytes(new string('x',Wire.MaxChars+1)+"\n")))using(var reader=new StreamReader(stream))
     {var rejected=false;try{await Wire.ReadAsync(reader,CancellationToken.None);}catch(IOException){rejected=true;}Check(rejected,"oversized frame rejected");}
-    var key=ClassroomKey.Generate();var missing=new AdminClient(key,new Dictionary<string,string>());
-    Check(!(await missing.SendAsync(machine,new(){Command=NetCommand.GetStatus})).Ok,"unenrolled device rejected before connecting");
-    // Real TLS test: valid-looking server with the wrong pinned certificate.
-    using var rsa=RSA.Create(2048);var request=new CertificateRequest("CN=ClassroomGuardAgent",rsa,HashAlgorithmName.SHA256,RSASignaturePadding.Pkcs1);
-    using var cert=request.CreateSelfSigned(DateTimeOffset.UtcNow.AddDays(-1),DateTimeOffset.UtcNow.AddDays(1));
-    var listener=new TcpListener(IPAddress.Loopback,0);listener.Start();machine.Ip="127.0.0.1";machine.Port=((IPEndPoint)listener.LocalEndpoint).Port;
-    using var timeout=new CancellationTokenSource(5000);
-    var server=Task.Run(async()=>{using var tcp=await listener.AcceptTcpClientAsync(timeout.Token);using var tls=new SslStream(tcp.GetStream());try{await tls.AuthenticateAsServerAsync(new SslServerAuthenticationOptions{ServerCertificate=cert},timeout.Token);}catch{} });
-    var pinned=new AdminClient(key,new Dictionary<string,string>{{"device",new string('0',64)}});
-    var rejectedCert=await pinned.SendAsync(machine,new(){Command=NetCommand.GetStatus},3000);await server;listener.Stop();Check(!rejectedCert.Ok,"real TLS connection rejects mismatched certificate");
+    var key=ClassroomKey.Generate();
+    // Same certificate code path the Agent service uses (create, then reload from disk).
+    DeviceIdentity.LoadOrCreate(root).Dispose();using var cert=DeviceIdentity.LoadOrCreate(root);
+    // Fake agent: real TLS, then a hello with the supplied certificate proof. Records whether the
+    // console ever sent its authentication (it must not, unless the proof is valid).
+    async Task<(NetResponse Result,bool SentAuth)> Agent(string? proof)
+    {
+        var listener=new TcpListener(IPAddress.Loopback,0);listener.Start();
+        var target=new MachineInfo{MachineId="device",Ip="127.0.0.1",Port=((IPEndPoint)listener.LocalEndpoint).Port};
+        using var timeout=new CancellationTokenSource(5000);var sentAuth=false;
+        var server=Task.Run(async()=>
+        {
+            try
+            {
+                using var tcp=await listener.AcceptTcpClientAsync(timeout.Token);using var tls=new SslStream(tcp.GetStream());
+                await tls.AuthenticateAsServerAsync(new SslServerAuthenticationOptions{ServerCertificate=cert},timeout.Token);
+                using var r=new StreamReader(tls,leaveOpen:true);using var w=new StreamWriter(tls,leaveOpen:true){AutoFlush=true};
+                await Wire.WriteAsync(w,JsonSerializer.Serialize(new NetResponse{Ok=true,Nonce="abc",CertProof=proof}),timeout.Token);
+                var auth=JsonSerializer.Deserialize<NetRequest>(await Wire.ReadAsync(r,timeout.Token)??"");
+                sentAuth=auth?.Command==NetCommand.Auth;
+                if(sentAuth && key.VerifyHmac("abc",auth!.AuthHmac??""))
+                {
+                    await Wire.WriteAsync(w,JsonSerializer.Serialize(NetResponse.Success()),timeout.Token);
+                    await Wire.ReadAsync(r,timeout.Token);
+                    await Wire.WriteAsync(w,JsonSerializer.Serialize(NetResponse.Success("pong")),timeout.Token);
+                }
+            }
+            catch{}
+        });
+        var result=await new AdminClient(key).SendAsync(target,new(){Command=NetCommand.Ping},3000);
+        await server;listener.Stop();return (result,sentAuth);
+    }
+    var fp=DeviceIdentity.Fingerprint(cert);
+    var noProof=await Agent(null);Check(!noProof.Result.Ok && !noProof.SentAuth,"agent without certificate proof rejected before console authenticates");
+    var foreign=await Agent(ClassroomKey.Generate().Hmac(DeviceIdentity.ProofInput(fp)));Check(!foreign.Result.Ok && !foreign.SentAuth,"agent from another classroom rejected before console authenticates");
+    var stolen=await Agent(key.Hmac(DeviceIdentity.ProofInput(new string('0',64))));Check(!stolen.Result.Ok && !stolen.SentAuth,"proof for a different certificate rejected");
+    var good=await Agent(key.Hmac(DeviceIdentity.ProofInput(fp)));Check(good.Result.Ok && good.Result.Message=="pong","agent with valid classroom proof trusted automatically (no enrollment)");
     Console.WriteLine($"ALL {passed} REGRESSION CHECKS PASSED");return 0;
 }
 finally{Directory.Delete(root,true);}

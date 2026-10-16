@@ -10,9 +10,10 @@ public sealed class DeviceEnrollment
 }
 public static class DeviceIdentity
 {
-    public static X509Certificate2 LoadOrCreate()
+    public static X509Certificate2 LoadOrCreate(string? dataDir=null)
     {
-        var path=Path.Combine(AppPaths.DataDir,"device.pfx");
+        dataDir??=AppPaths.DataDir;
+        var path=Path.Combine(dataDir,"device.pfx");
         X509Certificate2 cert;
         if(File.Exists(path))cert=new X509Certificate2(File.ReadAllBytes(path),(string?)null,X509KeyStorageFlags.EphemeralKeySet);
         else
@@ -24,8 +25,9 @@ public static class DeviceIdentity
             File.WriteAllBytes(path,bytes);
             cert=new X509Certificate2(bytes,(string?)null,X509KeyStorageFlags.EphemeralKeySet);
         }
-        File.WriteAllText(Path.Combine(AppPaths.DataDir,"device-enrollment.json"),JsonSerializer.Serialize(new DeviceEnrollment{MachineId=MachineIdentity.MachineId,Name=MachineIdentity.Name,CertificateSha256=Fingerprint(cert)},new JsonSerializerOptions{WriteIndented=true}));
+        File.WriteAllText(Path.Combine(dataDir,"device-enrollment.json"),JsonSerializer.Serialize(new DeviceEnrollment{MachineId=MachineIdentity.MachineId,Name=MachineIdentity.Name,CertificateSha256=Fingerprint(cert)},new JsonSerializerOptions{WriteIndented=true}));
         return cert;
     }
     public static string Fingerprint(X509Certificate certificate)=>Convert.ToHexString(SHA256.HashData(certificate.GetRawCertData()));
+    public static string ProofInput(string fingerprint)=>"agent-cert:"+fingerprint.ToUpperInvariant();
 }

@@ -17,15 +17,31 @@ public sealed class AdminConfig
         Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "ClassroomGuard");
     private static string File_ => Path.Combine(Dir, "admin.json");
 
+    /// <summary>Written by the teacher Setup (derived from the classroom password).</summary>
+    public static string MachineKeyFile =>
+        Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "ClassroomGuardTeacher", "classroom.key");
+
     public static AdminConfig Load()
     {
+        var config = new AdminConfig();
         try
         {
             if (File.Exists(File_))
-                return JsonSerializer.Deserialize<AdminConfig>(File.ReadAllText(File_)) ?? new AdminConfig();
+                config = JsonSerializer.Deserialize<AdminConfig>(File.ReadAllText(File_)) ?? new AdminConfig();
         }
         catch { /* ignore */ }
-        return new AdminConfig();
+        // The key installed by Setup wins, so re-running Setup with a new classroom password
+        // takes effect for every teacher account on this PC.
+        try
+        {
+            if (File.Exists(MachineKeyFile))
+            {
+                var machineKey = File.ReadAllText(MachineKeyFile).Trim();
+                if (Convert.FromBase64String(machineKey).Length == 32) config.ClassroomKeyBase64 = machineKey;
+            }
+        }
+        catch { /* fall back to the per-user key */ }
+        return config;
     }
 
     public void Save()

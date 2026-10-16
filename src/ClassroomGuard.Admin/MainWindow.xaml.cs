@@ -48,7 +48,7 @@ public partial class MainWindow : Window
         {
             KeyStatus.Text = "Kalit yuklangan";
             KeyStatus.Foreground = (Brush)FindResource("Success");
-            _client = new AdminClient(_key, _config.DevicePins);
+            _client = new AdminClient(_key);
             _sync = new SyncEngine(_client);
         }
         else
@@ -231,7 +231,7 @@ public partial class MainWindow : Window
         _polling=true;
         try
         {
-            await Task.WhenAll(_discovery.Machines.Where(m=>DateTimeOffset.UtcNow-m.LastSeen<OfflineAfter && _config.DevicePins.ContainsKey(m.MachineId)).Select(m=>_sync.ReconcileAsync(m)));
+            await Task.WhenAll(_discovery.Machines.Where(m=>DateTimeOffset.UtcNow-m.LastSeen<OfflineAfter).Select(m=>_sync.ReconcileAsync(m)));
             RefreshMachines();
         }
         catch(Exception ex){DashStatus.Text=ex.Message;}
@@ -242,8 +242,8 @@ public partial class MainWindow : Window
     private async Task BulkAsync(NetCommand command)
     {
         if(_busy || _polling || _client is null || _discovery is null)return;
-        var machines=_discovery.Machines.Where(m=>DateTimeOffset.UtcNow-m.LastSeen<OfflineAfter && _config.DevicePins.ContainsKey(m.MachineId)).ToList();
-        if(MessageBox.Show($"Apply {command} to {machines.Count} online enrolled PCs? Teacher unlock expires after 30 minutes or session end.","Confirm",MessageBoxButton.YesNo)!=MessageBoxResult.Yes)return;
+        var machines=_discovery.Machines.Where(m=>DateTimeOffset.UtcNow-m.LastSeen<OfflineAfter).ToList();
+        if(MessageBox.Show($"Apply {command} to {machines.Count} online classroom PCs? Teacher unlock expires after 30 minutes or session end.","Confirm",MessageBoxButton.YesNo)!=MessageBoxResult.Yes)return;
         _busy=true;RefreshMachines();
         try
         {
@@ -287,9 +287,9 @@ public partial class MainWindow : Window
         try
         {
             PolicyValidator.Validate(state);
-            if(MessageBox.Show("Save this baseline and apply it to enrolled online PCs? Offline PCs receive it when they return. This also activates student mode on updated PCs.","Apply policy",MessageBoxButton.YesNo)!=MessageBoxResult.Yes)return;
+            if(MessageBox.Show("Save this baseline and apply it to online classroom PCs? Offline PCs receive it when they return. This also activates student mode on updated PCs.","Apply policy",MessageBoxButton.YesNo)!=MessageBoxResult.Yes)return;
             _sync.SetIntended(state);_busy=true;
-            var results=await _sync.PushAllAsync(_discovery.Machines.Where(m=>DateTimeOffset.UtcNow-m.LastSeen<OfflineAfter && _config.DevicePins.ContainsKey(m.MachineId)));
+            var results=await _sync.PushAllAsync(_discovery.Machines.Where(m=>DateTimeOffset.UtcNow-m.LastSeen<OfflineAfter));
             PushStatus.Text=$"Saved. {results.Count(r=>r.Ok)}/{results.Count} online devices applied; offline devices pending.";
             ShowResults("Policy",results);
         }
@@ -427,26 +427,6 @@ public partial class MainWindow : Window
         KeyPreview.Text = "kalit: " + k.Base64[..8] + "…";
         MessageBox.Show("Yangi kalit saqlandi.\nHar bir agentning classroom.key fayliga nusxa ko‘chiring.",
             "Sinf kaliti");
-    }
-
-    private void OnEnrollDevice(object sender,RoutedEventArgs e)
-    {
-        var dialog=new OpenFileDialog{Filter="Device enrollment|*.json",Multiselect=true};
-        if(dialog.ShowDialog()!=true)return;
-        try
-        {
-            var additions=new List<DeviceEnrollment>();
-            foreach(var file in dialog.FileNames)
-            {
-                var device=System.Text.Json.JsonSerializer.Deserialize<DeviceEnrollment>(File.ReadAllText(file))??throw new InvalidDataException("Invalid enrollment file.");
-                if(string.IsNullOrWhiteSpace(device.MachineId) || device.CertificateSha256.Length!=64 || !device.CertificateSha256.All(Uri.IsHexDigit))throw new InvalidDataException("Invalid fingerprint.");
-                additions.Add(device);
-            }
-            if(MessageBox.Show(string.Join("\n",additions.Select(x=>$"{x.Name} · {x.MachineId}\nSHA256: {x.CertificateSha256}"))+"\n\nTrust these certificates? Obtain these files directly from your administrator, not UDP discovery.","Enroll devices",MessageBoxButton.YesNo)!=MessageBoxResult.Yes)return;
-            foreach(var d in additions)_config.DevicePins[d.MachineId]=d.CertificateSha256;
-            _config.Save();InitKeyAndServices();SettingsStatus.Text=$"{additions.Count} device certificates enrolled.";
-        }
-        catch(Exception ex){MessageBox.Show(ex.Message,"Enrollment failed");}
     }
 
     private void OnShowCode(object sender, RoutedEventArgs e)

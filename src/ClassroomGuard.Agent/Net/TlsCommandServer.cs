@@ -39,7 +39,7 @@ public sealed class TlsCommandServer
                 await ssl.AuthenticateAsServerAsync(new SslServerAuthenticationOptions{ServerCertificate=cert,ClientCertificateRequired=false,EnabledSslProtocols=SslProtocols.Tls12|SslProtocols.Tls13},ct);
                 using var reader=new StreamReader(ssl,leaveOpen:true);using var writer=new StreamWriter(ssl,leaveOpen:true){AutoFlush=true};
                 var nonce=Convert.ToHexString(RandomNumberGenerator.GetBytes(32));
-                await Wire.WriteAsync(writer,JsonSerializer.Serialize(new NetResponse{Ok=true,Nonce=nonce}),ct);
+                await Wire.WriteAsync(writer,JsonSerializer.Serialize(new NetResponse{Ok=true,Nonce=nonce,CertProof=_key.Hmac(DeviceIdentity.ProofInput(DeviceIdentity.Fingerprint(cert)))}),ct);
                 var auth=JsonSerializer.Deserialize<NetRequest>(await Wire.ReadAsync(reader,ct)??"");
                 if(auth?.Command!=NetCommand.Auth || auth.AuthHmac is null || !_key.VerifyHmac(nonce,auth.AuthHmac))throw new UnauthorizedAccessException("Authentication failed.");
                 await Wire.WriteAsync(writer,JsonSerializer.Serialize(NetResponse.Success()),ct);
