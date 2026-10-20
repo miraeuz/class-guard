@@ -1,0 +1,6 @@
+MSBuild version 17.11.41+18f1ecf82 for .NET
+  ClassroomGuard.Core -> /workspace/scratch/ff34b02b0a09/current/ClassroomGuard/src/ClassroomGuard.Core/bin/Release/net8.0-windows/ClassroomGuard.Core.dll
+  ClassroomGuard.Agent -> /workspace/scratch/ff34b02b0a09/current/ClassroomGuard/src/ClassroomGuard.Agent/bin/Release/net8.0-windows/ClassroomGuard.Agent.dll
+  ClassroomGuard.Ctl -> /workspace/scratch/ff34b02b0a09/current/ClassroomGuard/src/ClassroomGuard.Ctl/bin/Release/net8.0-windows/cgctl.dll
+  ClassroomGuard.Admin -> /workspace/scratch/ff34b02b0a09/current/ClassroomGuard/src/ClassroomGuard.Admin/bin/Release/net8.0-windows/ClassroomGuard.Admin.dll
+  ClassroomGuard.StudentShell -> /workspace/scratch/ff34b02b0a09/current/ClassroomGuard/src/ClassroomGuard.StudentShell/bin/Release/net8.0-windows/ClassroomGuard.StudentShell.dll

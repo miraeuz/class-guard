@@ -264,5 +264,8 @@
             <Setter Property="Padding" Value="18"/>
             <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
         </Style>
-    </Application.Resources>
+    <Style TargetType="RadioButton">
+<Setter Property="HorizontalContentAlignment" Value="Stretch"/><Setter Property="Padding" Value="16"/><Setter Property="Cursor" Value="Hand"/>
+<Setter Property="Template"><Setter.Value><ControlTemplate TargetType="RadioButton"><Border x:Name="OptionBorder" Background="#FAF8FE" BorderBrush="{StaticResource Border}" BorderThickness="1" CornerRadius="12" Padding="{TemplateBinding Padding}"><ContentPresenter/></Border><ControlTemplate.Triggers><Trigger Property="IsChecked" Value="True"><Setter TargetName="OptionBorder" Property="Background" Value="{StaticResource AccentSoft}"/><Setter TargetName="OptionBorder" Property="BorderBrush" Value="{StaticResource Accent}"/><Setter TargetName="OptionBorder" Property="BorderThickness" Value="2"/></Trigger><Trigger Property="IsKeyboardFocused" Value="True"><Setter TargetName="OptionBorder" Property="BorderBrush" Value="{StaticResource Accent}"/><Setter TargetName="OptionBorder" Property="BorderThickness" Value="2"/></Trigger><Trigger Property="IsMouseOver" Value="True"><Setter TargetName="OptionBorder" Property="Background" Value="{StaticResource AccentSoft}"/></Trigger></ControlTemplate.Triggers></ControlTemplate></Setter.Value></Setter>
+</Style></Application.Resources>
 </Application>

@@ -23,6 +23,8 @@ public enum NetCommand
     DisableStudent,  // requires teacher password OR a valid unlock code
     Uninstall,       // requires a valid unlock code (TOTP/Telegram)
     Ping,
+    LockScreen,
+    UnlockScreen,
 }
 
 public sealed class NetRequest
@@ -63,6 +65,7 @@ public sealed class MachineInfo
     public DateTimeOffset LastSeen { get; set; }
     public EnforcementState? ReportedState { get; set; }
     public bool Verified { get; set; }
+    public bool IdentityConflict { get; set; }
     public DateTimeOffset LastVerified { get; set; }
     public AgentHealth? Health { get; set; }
 

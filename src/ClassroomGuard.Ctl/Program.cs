@@ -6,10 +6,18 @@ using ClassroomGuard.Core.Enforcement;
 using ClassroomGuard.Core.Ipc;
 using ClassroomGuard.Core.Security;
 using Microsoft.Extensions.Logging.Abstractions;
-if(args.Length==0){Console.WriteLine("cgctl status | enable | disable [teacher] | passwd [teacher] | uninstall [teacher] | code | approveinstall CODE | emergency-restore");return 1;}
+if(args.Length==0){Console.WriteLine("cgctl screen-lock | screen-unlock [teacher] | status | enable | disable [teacher] | passwd [teacher] | uninstall [teacher] | code | approveinstall CODE | emergency-restore");return 1;}
 try
 {
     var action=args[0].ToLowerInvariant();
+    if(action=="emergency-screen-unlock")
+    {
+        using var identity=WindowsIdentity.GetCurrent();
+        if(!new WindowsPrincipal(identity).IsInRole(WindowsBuiltInRole.Administrator))throw new UnauthorizedAccessException("Run elevated.");
+        if(System.Diagnostics.Process.GetProcessesByName("ClassroomGuard.Agent").Length>0)throw new InvalidOperationException("Stop ClassroomGuardAgent first, then run emergency-screen-unlock and start it again.");
+        new ClassroomGuard.Core.Persistence.ScreenLockStore(Path.Combine(AppPaths.DataDir,"screen-lock.json"),NullLogger.Instance).Set(false);
+        Console.WriteLine("Durable screen lock cleared. Start ClassroomGuardAgent to release the student screen.");return 0;
+    }
     if(action=="emergency-restore")
     {
         using var identity=WindowsIdentity.GetCurrent();
@@ -29,6 +37,8 @@ try
     var req=new ControlRequest{Username=args.Length>1?args[1]:"teacher"};
     switch(action)
     {
+        case "screen-lock":req.Action=ControlAction.LockScreen;req.Password=Secret("Teacher password (blank when elevated): ");break;
+        case "screen-unlock":req.Action=ControlAction.UnlockScreen;req.Password=Secret("Teacher password / recovery code (blank when elevated): ");break;
         case "status":req.Action=ControlAction.GetStatus;break;
         case "enable":req.Action=ControlAction.EnableStudentMode;break;
         case "approveinstall":req.Action=ControlAction.ApproveInstall;req.Code=args.Length>1?args[1]:"";break;

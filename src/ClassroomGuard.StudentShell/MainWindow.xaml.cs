@@ -30,6 +30,7 @@ public partial class MainWindow : Window
         Loaded += (_, _) =>
         {
             _tray = new TrayIcon(this);
+            StartScreenLock();
             StartConnectionCheck();
             ApplyLanguage(ClassroomGuard.Core.I18n.Loc.Current);
         };
@@ -43,7 +44,7 @@ public partial class MainWindow : Window
     private void StartConnectionCheck()
     {
         _ = CheckConnectionOnceAsync();
-        _connectionTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(15) };
+        _connectionTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(2) };
         _connectionTimer.Tick += async (_, _) => await CheckConnectionOnceAsync();
         _connectionTimer.Start();
     }
@@ -55,6 +56,7 @@ public partial class MainWindow : Window
         try
         {
             var resp=await AgentPipeClient.SendAsync(new ControlRequest{Action=ControlAction.GetStatus},timeoutMs:3000);
+            if(resp.Ok && resp.Health is not null) ApplyScreenLock(resp.Health.ScreenLocked);
             ConnectionDot.Fill=(System.Windows.Media.Brush)FindResource(resp.Ok?"Success":"Danger");
             ConnectionText.Text=resp.Ok?"Agent bilan aloqa bor":"Agent topilmadi";
             StudentStatus.Text=resp.Ok?(resp.Health?.Summary??"Holat tekshirilmoqda") : "Aloqa yo‘q — holat noma’lum";
@@ -69,6 +71,7 @@ public partial class MainWindow : Window
     /// themselves live in the Agent service regardless of whether this UI is visible or hidden.</summary>
     private void OnWindowClosing(object? sender, CancelEventArgs e)
     {
+        if (_screenLocked) { e.Cancel=true; return; }
         if (_reallyExiting) return;
         e.Cancel = true;
         Hide();
@@ -113,13 +116,14 @@ public partial class MainWindow : Window
     private void OnGoToPc(object sender, RoutedEventArgs e)
     {
         StopAutoClose();
+        if (_screenLocked) return;
         // UI-only: never send Unlock or change service policy. Timer remains active.
         WindowState = WindowState.Minimized;
     }
     private void OnLayoutSizeChanged(object sender, SizeChangedEventArgs e)
     {
         if (SidebarColumn is null || QuickCards is null || RoleCards is null) return;
-        SidebarColumn.Width = new GridLength(ActualWidth < 1000 ? 190 : 230);
+        SidebarColumn.Width = new GridLength(_sidebarCollapsed ? 76 : (ActualWidth < 1000 ? 190 : 230));
         QuickCards.Columns = ActualWidth < 1120 ? 2 : 4;
         RoleCards.Columns = ActualWidth < 760 ? 1 : 2;
         HomeArtwork.Visibility = ActualWidth < 900 ? Visibility.Collapsed : Visibility.Visible;
@@ -329,6 +333,7 @@ public partial class MainWindow : Window
     private ClassroomGuard.Core.Models.AttemptView? _attempt;
     private int _qIndex;
     private int[] _answers=Array.Empty<int>();
+    private readonly HashSet<int> _flagged=new();
     private bool _rendering;
     private bool _finishing;
     private readonly SemaphoreSlim _attemptGate=new(1,1);
@@ -353,7 +358,7 @@ public partial class MainWindow : Window
     {
         var cls=TestClassBox.SelectedItem as string;var sub=TestSubjectBox.SelectedItem as string;
         var items=_allTests.Where(t=>(string.IsNullOrEmpty(cls)||cls=="—"||t.ClassName==cls)&&(string.IsNullOrEmpty(sub)||sub=="—"||t.Subject==sub)).ToList();
-        TestListBox.ItemsSource=items.Select(t=>$"{t.Title} ({t.Questions.Count})").ToList();TestListBox.Tag=items;
+        TestListBox.ItemsSource=items.Select(t=>$"{t.Title}  ·  {t.Questions.Count} savol  ·  {(t.TimeLimitMinutes>0?t.TimeLimitMinutes+" daqiqa":"vaqt cheklanmagan")}").ToList();TestListBox.Tag=items;
         TestsEmptyHint.Visibility=items.Count==0?Visibility.Visible:Visibility.Collapsed;
     }
     private async void OnStartTest(object sender,RoutedEventArgs e)
@@ -373,6 +378,7 @@ public partial class MainWindow : Window
     }
     private void LoadAttempt(ClassroomGuard.Core.Models.AttemptView view)
     {
+        if(_attempt?.Id!=view.Id)_flagged.Clear();
         _attempt=view;_currentTest=view.Test;_answers=(int[])view.Answers.Clone();_qIndex=0;
         ShowDashboardSection("Tests");TestTakingTitle.Text=view.Test.Title;TestTakingMeta.Text=$"{view.Test.ClassName} · {view.Test.Subject}";
         if(view.Finished){ShowResult(view);return;}
@@ -386,7 +392,9 @@ public partial class MainWindow : Window
         if(_attempt.Deadline is {} end)
         {
             var left=end-DateTimeOffset.UtcNow;
-            TestTimerText.Text=left>TimeSpan.Zero?$"Qolgan vaqt: {Math.Ceiling(left.TotalMinutes):0} daqiqa ({Math.Max(0,(int)left.TotalSeconds)} s)":"Vaqt tugadi";
+            var seconds=Math.Max(0,(int)Math.Ceiling(left.TotalSeconds));
+            TestTimerText.Text=seconds>0?$"Qolgan vaqt: {seconds/60:00}:{seconds%60:00}":"Vaqt tugadi";
+            TestTimerText.Foreground=(System.Windows.Media.Brush)FindResource(seconds<=60?"Danger":"Text");
             if(left<=TimeSpan.Zero && !_finishing)await FinishAsync(false);
         }
         else TestTimerText.Text="Vaqt chegarasi yo‘q";
@@ -401,10 +409,13 @@ public partial class MainWindow : Window
             for(var i=0;i<q.Options.Count;i++)
             {
                 var option=i;var question=_qIndex;
-                var rb=new System.Windows.Controls.RadioButton{Content=new System.Windows.Controls.TextBlock{Text=q.Options[i],TextWrapping=TextWrapping.Wrap,MaxWidth=650},GroupName="Answer",Margin=new Thickness(0,0,0,12),FontSize=15,IsChecked=_answers[question]==option};
-                rb.Checked+=async(_,_)=>{if(_rendering)return;_answers[question]=option;await SaveAnswersAsync();};
+                var rb=new System.Windows.Controls.RadioButton{Content=new System.Windows.Controls.TextBlock{Text=$"{(char)(65+i)}.  {q.Options[i]}",TextWrapping=TextWrapping.Wrap,MaxWidth=650},GroupName="Answer",Margin=new Thickness(0,0,0,12),FontSize=15,IsChecked=_answers[question]==option};
+                rb.Checked+=async(_,_)=>{if(_rendering)return;_answers[question]=option;UpdateQuestionPalette();await SaveAnswersAsync();};
                 TestOptionsPanel.Children.Add(rb);
             }
+            _ = ShowRichQuestionAsync();
+            UpdateQuestionPalette();
+            TestPreviousButton.IsEnabled=_qIndex>0;TestNextButton.IsEnabled=_qIndex<_currentTest.Questions.Count-1;
             TestProgressText.Text=$"Savol {_qIndex+1}/{_currentTest.Questions.Count} · Javob berilgan: {_answers.Count(x=>x>=0)}";
         }
         finally{_rendering=false;}
@@ -441,6 +452,7 @@ public partial class MainWindow : Window
         _attempt=view;_testTimer.Stop();
         var total=view.Test.Questions.Count;TestResultTitle.Text=view.Test.Title;TestResultScore.Text=$"{100.0*view.Correct/Math.Max(1,total):0.0}%";
         TestResultDetail.Text=$"To‘g‘ri: {view.Correct}/{total}\nAgentda saqlandi. Telegram: {view.Delivery}\nNatija ID: {view.Id}";
+        BuildTestReview(view);
         ShowTestPanel("result");
     }
     private async void OnTestBackToList(object sender,RoutedEventArgs e){_attempt=null;_currentTest=null;await RefreshTestsAsync();}

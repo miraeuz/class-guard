@@ -95,7 +95,7 @@
             <Border Grid.Column="0" Background="#FFFFFF" BorderBrush="{StaticResource Border}" BorderThickness="0,0,1,0">
                 <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled"><DockPanel LastChildFill="True">
                     
-                    <StackPanel DockPanel.Dock="Top" Margin="20,24,20,16">
+                    <Button DockPanel.Dock="Top" x:Name="StudentSidebarToggle" Content="" FontFamily="Segoe MDL2 Assets" Style="{StaticResource BtnGhost}" HorizontalAlignment="Left" Margin="14,12,0,0" ToolTip="Menyuni yig‘ish / yoyish" AutomationProperties.Name="Menyuni yig‘ish yoki yoyish" Click="OnToggleSidebar"/><Button DockPanel.Dock="Bottom" x:Name="CompactPcButton" Content="" FontFamily="Segoe MDL2 Assets" Style="{StaticResource BtnGhost}" Visibility="Collapsed" Margin="12" ToolTip="Kompyuterga o‘tish" AutomationProperties.Name="Kompyuterga o‘tish" Click="OnGoToPc"/><StackPanel DockPanel.Dock="Top" Margin="20,24,20,16" x:Name="StudentSidebarBrand">
                         <StackPanel Orientation="Horizontal">
                             <ContentControl Template="{StaticResource SchoolMarkTemplate}" Width="28" Height="28" Foreground="{StaticResource Accent}" Tag="{StaticResource TassleAccent}"/>
                             <StackPanel Margin="10,0,0,0" VerticalAlignment="Center">
@@ -147,7 +147,7 @@
                     </StackPanel>
 
                     
-                    <StackPanel DockPanel.Dock="Bottom" Margin="16,0,16,20">
+                    <StackPanel DockPanel.Dock="Bottom" Margin="16,0,16,20" x:Name="StudentSidebarFooter">
                         <Button Content="Kompyuterga o‘tish ↗" Style="{StaticResource BtnPrimary}" Click="OnGoToPc" Margin="0,0,0,10" ToolTip="Dashboard kichrayadi. Strict rejim va cheklovlar Agent xizmatida davom etadi."/><Border Background="{StaticResource DangerSoft}" CornerRadius="12" Padding="12" Margin="0,0,0,12">
                             <StackPanel>
                                 <TextBlock Text="{DynamicResource UI_21}" FontWeight="SemiBold" Foreground="{StaticResource Danger}" FontSize="12"/>
@@ -325,7 +325,7 @@
                                         <TextBlock Text="{DynamicResource UI_47}" FontSize="12" Foreground="{StaticResource TextMuted}" Margin="0,0,0,4"/>
                                         <ComboBox x:Name="TestSubjectBox" Margin="0,0,0,14" Padding="10,8" SelectionChanged="OnTestFilterChanged"/>
                                         <TextBlock Text="{DynamicResource UI_48}" FontSize="12" Foreground="{StaticResource TextMuted}" Margin="0,0,0,6"/>
-                                        <ListBox x:Name="TestListBox" Height="140" BorderThickness="1" BorderBrush="{StaticResource Border}"/>
+                                        <ListBox x:Name="TestListBox" BorderThickness="1" BorderBrush="{StaticResource Border}" MinHeight="180"/>
                                         <Button Content="{DynamicResource UI_49}" Style="{StaticResource BtnPrimary}" HorizontalAlignment="Left" Margin="0,14,0,0" Click="OnStartTest"/>
                                     </StackPanel>
                                 </Border>
@@ -336,15 +336,15 @@
                             <StackPanel x:Name="TestTakingPanel" Visibility="Collapsed">
                                 <TextBlock x:Name="TestTakingTitle" FontSize="20" FontWeight="Bold" Margin="0,0,0,6"/>
                                 <TextBlock x:Name="TestTakingMeta" Foreground="{StaticResource TextMuted}" Margin="0,0,0,16"/>
-                                <TextBlock x:Name="TestTimerText" FontWeight="Bold" Margin="0,0,0,8"/><TextBlock x:Name="TestSaveStatus" TextWrapping="Wrap" Margin="0,0,0,12"/><Border Style="{StaticResource ContentCard}" Margin="0,0,0,14">
+                                <Border Background="{StaticResource AccentSoft}" CornerRadius="14" Padding="16" Margin="0,0,0,16"><StackPanel><TextBlock Text="SAVOLLAR XARITASI" FontSize="11" FontWeight="Bold" Foreground="{StaticResource Accent}"/><TextBlock Text="Raqamni bosib savolga o‘ting · rangli: javob berilgan · ★: qaytish belgisi" TextWrapping="Wrap" FontSize="12" Margin="0,6,0,12"/><WrapPanel x:Name="TestPalette"/><ProgressBar x:Name="TestCompletion" Height="5" Margin="0,12,0,0" Foreground="{StaticResource Accent}"/></StackPanel></Border><TextBlock x:Name="TestTimerText" FontWeight="Bold" Margin="0,0,0,8"/><TextBlock x:Name="TestSaveStatus" TextWrapping="Wrap" Margin="0,0,0,12"/><Border Style="{StaticResource ContentCard}" Margin="0,0,0,14">
                                     <StackPanel>
                                         <TextBlock x:Name="TestQuestionText" FontSize="16" FontWeight="SemiBold" TextWrapping="Wrap" Margin="0,0,0,14"/>
-                                        <StackPanel x:Name="TestOptionsPanel"/>
-                                        <StackPanel Orientation="Horizontal" Margin="0,18,0,0">
-                                            <Button Content="{DynamicResource UI_51}" Style="{StaticResource BtnGhost}" Click="OnTestPrev" Margin="0,0,8,0"/>
-                                            <Button Content="{DynamicResource UI_52}" Style="{StaticResource BtnGhost}" Click="OnTestNext" Margin="0,0,8,0"/>
+                                        <wv2:WebView2 x:Name="QuestionRichView" Height="200" Visibility="Collapsed" Margin="0,0,0,16"/><StackPanel x:Name="TestOptionsPanel"/>
+                                        <WrapPanel Margin="0,18,0,0">
+                                            <Button Content="{DynamicResource UI_51}" Style="{StaticResource BtnGhost}" Click="OnTestPrev" Margin="0,0,8,0" x:Name="TestPreviousButton"/>
+                                            <Button Content="{DynamicResource UI_52}" Style="{StaticResource BtnGhost}" Click="OnTestNext" Margin="0,0,8,0" x:Name="TestNextButton"/>
                                             <Button Content="{DynamicResource UI_53}" Style="{StaticResource BtnPrimary}" Click="OnTestFinish"/>
-                                        </StackPanel>
+                                        <Button x:Name="TestFlagButton" Content="☆ Belgilash" Style="{StaticResource BtnGhost}" Click="OnFlagQuestion"/><Button Content="Javobni tozalash" Style="{StaticResource BtnGhost}" Click="OnClearAnswer"/></WrapPanel>
                                         <TextBlock x:Name="TestProgressText" Foreground="{StaticResource TextMuted}" Margin="0,12,0,0" FontSize="12"/>
                                     </StackPanel>
                                 </Border>
@@ -359,7 +359,7 @@
                                         <TextBlock x:Name="TestResultScore" FontSize="32" FontWeight="Bold" Foreground="{StaticResource Accent}" Margin="0,0,0,8"/>
                                         <TextBlock x:Name="TestResultDetail" Foreground="{StaticResource TextSecondary}" Margin="0,0,0,18"/>
                                         <Button Content="{DynamicResource UI_55}" Style="{StaticResource BtnPrimary}" HorizontalAlignment="Left" Click="OnTestBackToList"/>
-                                    </StackPanel>
+                                    <StackPanel x:Name="TestReviewPanel" Margin="0,20,0,0"/></StackPanel>
                                 </Border>
                             </StackPanel>
                         </StackPanel>

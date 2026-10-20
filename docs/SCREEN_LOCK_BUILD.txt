@@ -1,0 +1,1 @@
+Full five-project Release build completed successfully on .NET SDK 8.0.414. Native Windows interaction not executed.

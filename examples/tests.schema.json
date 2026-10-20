@@ -1,0 +1,105 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ClassGuard test package array",
+  "description": "The application additionally validates distinct IDs, case-insensitive distinct options, CorrectIndex < option count, total 1000 questions and policy byte size.",
+  "type": "array",
+  "maxItems": 100,
+  "items": {
+    "type": "object",
+    "required": [
+      "Id",
+      "Title",
+      "Questions"
+    ],
+    "properties": {
+      "Id": {
+        "type": "string",
+        "minLength": 1
+      },
+      "Title": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 200
+      },
+      "ClassName": {
+        "type": "string"
+      },
+      "Subject": {
+        "type": "string"
+      },
+      "TimeLimitMinutes": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 180
+      },
+      "ShowReviewAfterFinish": {
+        "type": "boolean",
+        "default": false
+      },
+      "Questions": {
+        "type": "array",
+        "minItems": 1,
+        "maxItems": 200,
+        "items": {
+          "type": "object",
+          "required": [
+            "Text",
+            "Options",
+            "CorrectIndex"
+          ],
+          "properties": {
+            "Text": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 4000
+            },
+            "Options": {
+              "type": "array",
+              "minItems": 2,
+              "maxItems": 8,
+              "uniqueItems": true,
+              "items": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 2000
+              }
+            },
+            "CorrectIndex": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 7
+            },
+            "TextHtml": {
+              "type": "string",
+              "maxLength": 12000
+            },
+            "Code": {
+              "type": "string",
+              "maxLength": 12000
+            },
+            "Language": {
+              "type": "string",
+              "maxLength": 40
+            },
+            "Latex": {
+              "type": "string",
+              "maxLength": 4000
+            },
+            "Topic": {
+              "type": "string",
+              "maxLength": 120
+            },
+            "Difficulty": {
+              "type": "string",
+              "maxLength": 40
+            },
+            "Explanation": {
+              "type": "string",
+              "maxLength": 8000
+            }
+          }
+        }
+      }
+    }
+  }
+}

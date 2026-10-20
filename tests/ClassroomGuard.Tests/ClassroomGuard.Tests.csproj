@@ -4,4 +4,6 @@
 <Compile Include="../../src/ClassroomGuard.Agent/AttemptStore.cs" Link="AttemptStore.cs"/>
 <Compile Include="../../src/ClassroomGuard.Admin/Services/SyncEngine.cs" Link="SyncEngine.cs"/>
 <Compile Include="../../src/ClassroomGuard.Admin/Services/AdminClient.cs" Link="AdminClient.cs"/>
+<Compile Include="../../src/ClassroomGuard.Admin/Services/DiscoveryCatalog.cs" Link="DiscoveryCatalog.cs"/>
+<Compile Include="../../src/ClassroomGuard.Admin/Services/Discovery.cs" Link="Discovery.cs"/>
 </ItemGroup></Project>

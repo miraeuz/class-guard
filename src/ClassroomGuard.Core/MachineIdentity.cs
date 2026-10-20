@@ -14,7 +14,14 @@ public static class MachineIdentity
 
     private static string ResolveId()
     {
-        // MachineGuid is stable across reboots and unique per install.
+        // A protected per-device override is used only after explicit clone repair.
+        try
+        {
+            var path=Path.Combine(AppPaths.DataDir,"device-id.txt");
+            if(File.Exists(path) && Guid.TryParse(File.ReadAllText(path).Trim(),out var id))return id.ToString("D");
+        }
+        catch { /* Standard students cannot read protected service identity data. */ }
+        // Windows images can duplicate MachineGuid; discovery must not assume uniqueness.
         try
         {
             using var key = Registry.LocalMachine.OpenSubKey(

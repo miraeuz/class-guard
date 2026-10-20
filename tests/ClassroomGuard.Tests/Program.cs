@@ -22,6 +22,59 @@ TestPackage Test()=>new(){Id="test",Title="Example",TimeLimitMinutes=5,Questions
 EnforcementState Policy(){var s=EnforcementState.FailClosedDefault();s.PolicyId=Guid.NewGuid().ToString("N");s.Tests.Add(Test());return s;}
 try
 {
+    var screenPath=Path.Combine(root,"screen-lock.json");
+    var screenStore=new ScreenLockStore(screenPath,log);
+    Check(!screenStore.Locked,"first installation starts screen unlocked");
+    screenStore.Set(true);
+    Check(new ScreenLockStore(screenPath,log).Locked,"screen lock survives service reconstruction / reboot");
+    screenStore.Set(true);
+    Check(new ScreenLockStore(screenPath,log).Locked,"repeat lock is idempotent");
+    screenStore.Set(false);
+    Check(!new ScreenLockStore(screenPath,log).Locked,"explicit release persists");
+    File.WriteAllText(screenPath,"invalid json");
+    Check(new ScreenLockStore(screenPath,log).Locked,"corrupted lock state fails closed");
+    File.WriteAllText(screenPath,"{}");
+    Check(new ScreenLockStore(screenPath,log).Locked,"missing lock property fails closed");
+    screenStore.Set(true);
+    File.Delete(screenPath);Directory.CreateDirectory(screenPath);
+    Check(Throws(()=>screenStore.Set(false)) && screenStore.Locked,"failed durable unlock does not change in-memory lock");
+    Directory.Delete(screenPath);
+    Check((int)NetCommand.Ping==7 && (int)NetCommand.LockScreen==8,"existing network command IDs preserved");
+    Check((int)ClassroomGuard.Core.Ipc.ControlAction.ReportTestResult==11 && (int)ClassroomGuard.Core.Ipc.ControlAction.UnlockScreen==13,"existing IPC command IDs preserved");
+    using(var discovery=new Discovery(0))
+    {
+        discovery.Start();
+        for(var i=1;i<=10;i++)
+        {
+            using var sender=new UdpClient(new IPEndPoint(IPAddress.Parse("127.0.0."+i),0));
+            var bytes=JsonSerializer.SerializeToUtf8Bytes(new AnnouncePacket{MachineId="udp-clone",Name="UDP-PC-"+i,Port=43210});
+            await sender.SendAsync(bytes,bytes.Length,new IPEndPoint(IPAddress.Loopback,discovery.BoundPort));
+        }
+        for(var i=0;i<100 && discovery.Machines.Count<10;i++)await Task.Delay(20);
+        Check(discovery.Machines.Count==10,"UDP listener retains all ten simultaneous cloned-ID endpoints");
+    }
+    var catalog=new DiscoveryCatalog();var now=DateTimeOffset.UtcNow;
+    for(var i=1;i<=10;i++)Check(catalog.Observe(new(){MachineId="cloned-windows-id",Name="PC-"+i,Port=43210},"192.168.1."+i,now),"discovery accepts endpoint "+i);
+    var found=catalog.Snapshot(now);Check(found.Count==10,"ten cloned IDs remain ten visible endpoints");
+    Check(found.All(m=>m.IdentityConflict),"duplicate live identities flagged before commands");
+    catalog.Observe(new(){MachineId="cloned-windows-id",Name="PC-1",Port=43210},"192.168.1.1",now.AddSeconds(50));
+    Check(catalog.Snapshot(now.AddSeconds(50)).Count==10,"offline endpoints stay visible");
+    Check(catalog.Snapshot(now.AddSeconds(50)).All(m=>!m.IdentityConflict),"expired endpoints do not permanently block a moved IP");
+    Check(!catalog.Observe(new(){MachineId="bad",Name=null!,Port=43210},"192.168.1.99",now),"malformed null announcement rejected");
+    Check(!catalog.Observe(new(){MachineId="bad",Name="PC",Port=1},"192.168.1.99",now),"invalid announcement port rejected");
+    catalog.Observe(new(){MachineId="repaired-id",Name="PC-1",Port=43210},"192.168.1.1",now.AddSeconds(51));
+    Check(catalog.Snapshot(now.AddSeconds(51)).Count==10 && catalog.Snapshot(now.AddSeconds(51)).Any(m=>m.MachineId=="repaired-id"),"re-enrollment replaces the same endpoint without a ghost row");
+    var independent=new DiscoveryCatalog();for(var i=1;i<=10;i++)independent.Observe(new(){MachineId="id"+i,Name="SAME-NAME",Port=43210},"192.168.2."+i,now);
+    Check(independent.Snapshot(now).Count==10 && independent.Snapshot(now).All(m=>!m.IdentityConflict),"same computer names do not merge distinct identities");
+    var rich=Policy();rich.Tests[0].ShowReviewAfterFinish=true;
+    var richQ=rich.Tests[0].Questions[0];richQ.TextHtml="<p><b>2+2?</b></p>";richQ.Code="print(2+2)";richQ.Latex="2+2";richQ.Explanation="Four";
+    PolicyValidator.Validate(rich);Check(rich.Clone().Tests[0].Questions[0].Code==richQ.Code,"rich fields survive policy cloning");
+    Check(rich.StudentView().Tests[0].Questions[0].Explanation=="","student policy hides explanations");
+    var richAttempt=new StoredAttempt{Test=rich.Tests[0],Answers=new[]{1}};
+    Check(richAttempt.View().Test.Questions[0].CorrectIndex==-1 && richAttempt.View().Test.Questions[0].Explanation=="","active rich attempts hide answers and explanations");
+    richAttempt.Finished=true;Check(richAttempt.View().Test.Questions[0].CorrectIndex==1 && richAttempt.View().Test.Questions[0].Explanation=="Four","opt-in finished review includes explanation");
+    richAttempt.Test.ShowReviewAfterFinish=false;Check(richAttempt.View().Test.Questions[0].CorrectIndex==-1,"review remains disabled by default");
+    richQ.TextHtml=new string('a',12001);Check(Throws(()=>PolicyValidator.Validate(rich)),"oversized rich content rejected");
     var policy=Policy();PolicyValidator.Validate(policy);Check(true,"valid policy accepted");
     var invalid=policy.Clone();invalid.Tests[0].Questions[0].CorrectIndex=-1;Check(Throws(()=>PolicyValidator.Validate(invalid)),"negative correct index rejected");
     invalid=policy.Clone();invalid.Tests[0].Questions[0].Options=new(){"A","a"};Check(Throws(()=>PolicyValidator.Validate(invalid)),"duplicate options rejected");

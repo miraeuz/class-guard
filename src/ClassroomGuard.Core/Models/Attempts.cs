@@ -23,7 +23,8 @@ public sealed class StoredAttempt
     public AttemptView View()
     {
         var test=new TestPackage{Id=Test.Id,Title=Test.Title,ClassName=Test.ClassName,Subject=Test.Subject,TimeLimitMinutes=Test.TimeLimitMinutes,
-            Questions=Test.Questions.Select(q=>new TestQuestion{Text=q.Text,Options=q.Options.ToList(),CorrectIndex=-1}).ToList()};
+            ShowReviewAfterFinish=Test.ShowReviewAfterFinish,
+            Questions=Test.Questions.Select(q=>q.Copy(Finished && Test.ShowReviewAfterFinish)).ToList()};
         return new(){Id=Id,Test=test,Answers=(int[])Answers.Clone(),Deadline=Deadline,Finished=Finished,Correct=Correct,Delivery=Delivery};
     }
 }

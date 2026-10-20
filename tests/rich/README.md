@@ -1,0 +1,1 @@
+Install Playwright in your development environment, install its Chromium browser, then run `node tests/rich/browser.cjs` from the project folder. Optional CHROMIUM_EXECUTABLE selects an existing Chromium executable. This tests the actual local rich-question assets, not a visual mockup. Native WPF acceptance remains separate.

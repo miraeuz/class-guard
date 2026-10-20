@@ -87,12 +87,8 @@ public sealed class EnforcementState
             ClassName = t.ClassName,
             Subject = t.Subject,
             TimeLimitMinutes = t.TimeLimitMinutes,
-            Questions = t.Questions.Select(q => new TestQuestion
-            {
-                Text = q.Text,
-                Options = new List<string>(q.Options),
-                CorrectIndex = q.CorrectIndex,
-            }).ToList(),
+            ShowReviewAfterFinish = t.ShowReviewAfterFinish,
+            Questions = t.Questions.Select(q => q.Copy()).ToList(),
         }).ToList(),
         StudentModeActive = StudentModeActive,
         Overrides = new Dictionary<string, bool>(Overrides),
@@ -102,7 +98,7 @@ public sealed class EnforcementState
     {
         var copy = Clone();
         foreach (var test in copy.Tests)
-            foreach (var q in test.Questions) q.CorrectIndex = -1;
+            foreach (var q in test.Questions) { q.CorrectIndex = -1; q.Explanation=""; }
         return copy;
     }
 

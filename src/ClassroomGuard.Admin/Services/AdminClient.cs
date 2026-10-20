@@ -21,6 +21,7 @@ public sealed class AdminClient : IAdminClient
     public AdminClient(ClassroomKey key){_key=key;}
     public async Task<NetResponse> SendAsync(MachineInfo machine,NetRequest request,int timeoutMs=10000)
     {
+        if(machine.IdentityConflict)return NetResponse.Fail("Duplicate identity: two PCs report the same ID. Run scripts\repair-device-identity.ps1 on the affected PCs before management.");
         try
         {
             using var timeout=new CancellationTokenSource(timeoutMs);var ct=timeout.Token;

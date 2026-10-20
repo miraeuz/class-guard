@@ -20,7 +20,8 @@ public enum ControlAction
     ChangePassword,
     ApproveInstall,      // redeem a Telegram-delivered one-time install code (no teacher auth needed locally — the code IS the auth)
     StartTest, SaveAnswers, FinishTest, ResumeTest,
-    ReportTestResult,    // student finished a test — Agent forwards summary to teacher Telegram
+    LockScreen = 12, UnlockScreen = 13,
+    ReportTestResult = 11,    // student finished a test — Agent forwards summary to teacher Telegram
 }
 
 public sealed class ControlRequest

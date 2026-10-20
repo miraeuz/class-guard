@@ -11,12 +11,25 @@ public sealed class TestPackage
     public string ClassName { get; set; } = "";   // e.g. "7-A"
     public string Subject { get; set; } = "";      // e.g. "Matematika"
     public int TimeLimitMinutes { get; set; }      // 0 = no limit
+    public bool ShowReviewAfterFinish { get; set; } = false;
     public List<TestQuestion> Questions { get; set; } = new();
 }
 
 public sealed class TestQuestion
 {
     public string Text { get; set; } = "";
+    public string TextHtml { get; set; } = "";
+    public string Code { get; set; } = "";
+    public string Language { get; set; } = "";
+    public string Latex { get; set; } = "";
+    public string Topic { get; set; } = "";
+    public string Difficulty { get; set; } = "";
+    public string Explanation { get; set; } = "";
+    public TestQuestion Copy(bool revealAnswer=true) => new()
+    {
+        Text=Text,TextHtml=TextHtml,Code=Code,Language=Language,Latex=Latex,Topic=Topic,Difficulty=Difficulty,
+        Options=Options.ToList(),CorrectIndex=revealAnswer?CorrectIndex:-1,Explanation=revealAnswer?Explanation:""
+    };
     /// <summary>Answer choices (A, B, C, …).</summary>
     public List<string> Options { get; set; } = new();
     /// <summary>0-based index of the correct option.</summary>

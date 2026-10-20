@@ -58,6 +58,6 @@ public sealed class SyncEngine
     public static void Update(MachineInfo m,NetResponse r)
     {
         m.Verified=r.State is not null && r.Machine?.MachineId==m.MachineId;
-        if(m.Verified){m.ReportedState=r.State;m.Health=r.Health;m.LastVerified=DateTimeOffset.UtcNow;}
+        if(m.Verified){m.ReportedState=r.State;m.Health=r.Health;m.LastVerified=DateTimeOffset.UtcNow;m.LastSeen=m.LastVerified;}
     }
 }

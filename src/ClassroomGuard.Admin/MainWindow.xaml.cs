@@ -20,6 +20,7 @@ public partial class MainWindow : Window
     private ClassroomKey? _key;
     private readonly TelegramClient _telegram = new();
     private readonly DispatcherTimer _timer = new() { Interval = TimeSpan.FromSeconds(3) };
+    private readonly DispatcherTimer _displayTimer = new() { Interval=TimeSpan.FromSeconds(3) };
     private bool _polling;
     private bool _busy;
     private static readonly TimeSpan OfflineAfter = TimeSpan.FromSeconds(45);
@@ -32,13 +33,16 @@ public partial class MainWindow : Window
 
         _timer.Interval=TimeSpan.FromSeconds(15);
         _timer.Tick += async (_, _) => await PollAsync();
-        Closed += (_, _) => { _timer.Stop(); _discovery?.Dispose(); };
+        Closed += (_, _) => { _timer.Stop(); _displayTimer.Stop(); _discovery?.Dispose(); };
         _timer.Start();
+        _displayTimer.Tick += (_,_) => RefreshMachines();
+        _displayTimer.Start();
         Loaded += async (_, _) => { RefreshMachines(); await PollAsync(); };
     }
 
     private void InitKeyAndServices()
     {
+        _key=null;_client=null;_sync=null;
         if (!string.IsNullOrEmpty(_config.ClassroomKeyBase64))
         {
             try { _key = ClassroomKey.FromBase64(_config.ClassroomKeyBase64); } catch { _key = null; }
@@ -59,7 +63,7 @@ public partial class MainWindow : Window
 
         _discovery?.Dispose();
         _discovery = new Discovery(_config.AnnouncePort);
-        try { _discovery.Start(); } catch(Exception ex) { SettingsStatus.Text="Discovery unavailable: "+ex.Message; }
+        try { _discovery.Start(); } catch(Exception ex) { SettingsStatus.Text=DashStatus.Text="Discovery unavailable: "+ex.Message; }
         if(_sync?.Intended is {} saved)
         {
             SitesBox.Text=string.Join("\n",saved.Sites);SiteOff.IsChecked=saved.SiteMode==SiteBlockingMode.Off;SiteBlack.IsChecked=saved.SiteMode==SiteBlockingMode.Blacklist;
@@ -92,28 +96,31 @@ public partial class MainWindow : Window
     }
 
     // ---- dashboard ---------------------------------------------------------
+    private void OnAdminResize(object sender, SizeChangedEventArgs e) { if(IsLoaded)RefreshMachines(); }
+    private void OnMachineSearch(object sender, TextChangedEventArgs e) { if(IsLoaded)RefreshMachines(); }
     private async void OnRefresh(object sender, RoutedEventArgs e) => await PollAsync();
 
     private void RefreshMachines()
     {
         if (_discovery is null) return;
-        var machines = _discovery.Machines.OrderBy(m => m.Name).ToList();
+        var all = _discovery.Machines.OrderBy(m => m.Name).ThenBy(m=>m.Ip).ToList();
+        var query=MachineSearch?.Text?.Trim()??"";
+        var machines=all.Where(m=>($"{m.Name} {m.Ip} {m.MachineId}").Contains(query,StringComparison.OrdinalIgnoreCase)).ToList();
         MachinePanel.Children.Clear();
 
         foreach (var m in machines)
             MachinePanel.Children.Add(BuildCard(m));
 
-        MachineCount.Text = machines.Count == 0
-            ? "Hali agent topilmadi"
-            : $@"{machines.Count} ta kompyuter";
-        if (string.IsNullOrEmpty(DashStatus.Text)) DashStatus.Text = "Devices require certificate enrollment before management.";
+        MachineCount.Text = $"{all.Count} ta PC · {all.Count(m=>DateTimeOffset.UtcNow-m.LastSeen<OfflineAfter)} tarmoqda · {all.Count(m=>m.IdentityConflict)} ID ziddiyat";
+        if(MachineEmpty is not null) MachineEmpty.Visibility=machines.Count==0?Visibility.Visible:Visibility.Collapsed;
+        if(!string.IsNullOrEmpty(_discovery.LastError))DashStatus.Text="Discovery: "+_discovery.LastError;
     }
 
     private Border BuildCard(MachineInfo m)
     {
         var status = m.StatusText(OfflineAfter);
         var online = status.StartsWith("online", StringComparison.OrdinalIgnoreCase);
-        var verified=m.Verified && DateTimeOffset.UtcNow-m.LastVerified<TimeSpan.FromSeconds(45);
+        var verified=!m.IdentityConflict && m.Verified && DateTimeOffset.UtcNow-m.LastVerified<TimeSpan.FromSeconds(45);
         var locked = m.ReportedState?.StudentModeActive ?? true;
 
         var statusBrush = online
@@ -123,13 +130,14 @@ public partial class MainWindow : Window
             ? (locked ? (Brush)FindResource("DangerSoft") : (Brush)FindResource("SuccessSoft"))
             : (Brush)FindResource("WarningSoft");
 
-        var statusLabel = !online ? "OFFLINE" : !verified ? "UNVERIFIED" : m.Health?.Healthy!=true ? "PARTIAL FAILURE" : locked ? "STUDENT MODE" : "TEACHER · 30 MIN";
+        var statusLabel = m.IdentityConflict ? "ID ZIDDIYATI" : !online ? "OFFLINE" : !verified ? "UNVERIFIED" : m.Health?.Healthy!=true ? "PARTIAL FAILURE" : locked ? "STUDENT MODE" : "TEACHER · 30 MIN";
 
         var root = new Grid { Margin = new Thickness(0) };
         root.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
-        root.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+        root.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+        root.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
 
-        var left = new StackPanel { Orientation = Orientation.Horizontal };
+        var left = new StackPanel { Orientation = Orientation.Vertical };
 
         var pillContent = new StackPanel { Orientation = Orientation.Horizontal };
         pillContent.Children.Add(new System.Windows.Shapes.Ellipse
@@ -161,7 +169,9 @@ public partial class MainWindow : Window
         });
         info.Children.Add(new TextBlock
         {
-            Text = $"{m.Ip}  ·  {m.MachineId}",
+            Text = $"{m.Ip}:{m.Port}  ·  {m.MachineId}" + (m.IdentityConflict?"\nBir ID bir nechta manzilda. Qo‘llanmadagi tiklash bosqichlarini bajaring.":""),
+            TextWrapping=TextWrapping.Wrap,
+            MaxWidth=450,
             Foreground = (Brush)FindResource("TextMuted"),
             FontSize = 12,
             Margin = new Thickness(0, 2, 0, 0),
@@ -170,7 +180,7 @@ public partial class MainWindow : Window
         Grid.SetColumn(left, 0);
         root.Children.Add(left);
 
-        var actions = new StackPanel
+        var actions = new WrapPanel
         {
             Orientation = Orientation.Horizontal,
             VerticalAlignment = VerticalAlignment.Center,
@@ -178,7 +188,7 @@ public partial class MainWindow : Window
 
         var lockBtn = new Button
         {
-            Content = "Qulflash",
+            Content = "Cheklash",
             Style = (Style)FindResource("BtnPrimary"),
             Padding = new Thickness(14, 8, 14, 8),
             MinWidth = 80,
@@ -189,7 +199,7 @@ public partial class MainWindow : Window
 
         var unlockBtn = new Button
         {
-            Content = "Ochish",
+            Content = "30 daq. ruxsat",
             Style = (Style)FindResource("BtnSecondary"),
             Padding = new Thickness(14, 8, 14, 8),
             MinWidth = 80,
@@ -198,14 +208,21 @@ public partial class MainWindow : Window
         unlockBtn.Click += async (_, _) =>
             await SendOne(m, new NetRequest { Command = NetCommand.DisableStudent });
 
+        var screenButton = new Button { Content = m.Health?.ScreenLocked==true ? "Ekranni ochish" : "Ekranni qulflash", Style=(Style)FindResource("BtnPrimary"), Padding=new Thickness(12,8,12,8), IsEnabled=online && verified && !_busy };
+        screenButton.Click += async (_,_) => await SendOne(m,new NetRequest { Command=m.Health?.ScreenLocked==true?NetCommand.UnlockScreen:NetCommand.LockScreen });
+        actions.Children.Add(screenButton);
         actions.Children.Add(lockBtn);
         actions.Children.Add(unlockBtn);
-        Grid.SetColumn(actions, 1);
+        Grid.SetColumn(actions, 0);
+        Grid.SetRow(actions, 1);
+        actions.Margin=new Thickness(0,12,0,0);
         root.Children.Add(actions);
 
         return new Border
         {
             Style = (Style)FindResource("MachineCard"),
+            Width = Math.Max(280,(Math.Max(300,MachinePanel.ActualWidth)-24)/(MachinePanel.ActualWidth>=1000?3:MachinePanel.ActualWidth>=680?2:1)-12),
+            Margin=new Thickness(0,0,12,12),
             Child = root,
         };
     }
@@ -227,23 +244,26 @@ public partial class MainWindow : Window
 
     private async Task PollAsync()
     {
+        RefreshMachines();
         if(_polling || _busy || _sync is null || _discovery is null)return;
         _polling=true;
         try
         {
-            await Task.WhenAll(_discovery.Machines.Where(m=>DateTimeOffset.UtcNow-m.LastSeen<OfflineAfter).Select(m=>_sync.ReconcileAsync(m)));
+            await Task.WhenAll(_discovery.Machines.Where(m=>!m.IdentityConflict && DateTimeOffset.UtcNow-m.LastSeen<OfflineAfter).Select(m=>_sync.ReconcileAsync(m)));
             RefreshMachines();
         }
         catch(Exception ex){DashStatus.Text=ex.Message;}
-        finally{_polling=false;}
+        finally{_polling=false;RefreshMachines();}
     }
+    private async void OnScreenLockAll(object sender,RoutedEventArgs e)=>await BulkAsync(NetCommand.LockScreen);
+    private async void OnScreenUnlockAll(object sender,RoutedEventArgs e)=>await BulkAsync(NetCommand.UnlockScreen);
     private async void OnLockAll(object sender,RoutedEventArgs e)=>await BulkAsync(NetCommand.EnableStudent);
     private async void OnUnlockAll(object sender,RoutedEventArgs e)=>await BulkAsync(NetCommand.DisableStudent);
     private async Task BulkAsync(NetCommand command)
     {
         if(_busy || _polling || _client is null || _discovery is null)return;
-        var machines=_discovery.Machines.Where(m=>DateTimeOffset.UtcNow-m.LastSeen<OfflineAfter).ToList();
-        if(MessageBox.Show($"Apply {command} to {machines.Count} online classroom PCs? Teacher unlock expires after 30 minutes or session end.","Confirm",MessageBoxButton.YesNo)!=MessageBoxResult.Yes)return;
+        var machines=_discovery.Machines.Where(m=>!m.IdentityConflict && DateTimeOffset.UtcNow-m.LastSeen<OfflineAfter).ToList();
+        if(MessageBox.Show($"Apply {command} to {machines.Count} online PCs? {(command is NetCommand.LockScreen or NetCommand.UnlockScreen ? "Screen lock persists until explicitly released. Offline PCs are not included." : "Teacher restriction unlock expires after 30 minutes or session end.")}","Confirm",MessageBoxButton.YesNo)!=MessageBoxResult.Yes)return;
         _busy=true;RefreshMachines();
         try
         {
@@ -289,7 +309,7 @@ public partial class MainWindow : Window
             PolicyValidator.Validate(state);
             if(MessageBox.Show("Save this baseline and apply it to online classroom PCs? Offline PCs receive it when they return. This also activates student mode on updated PCs.","Apply policy",MessageBoxButton.YesNo)!=MessageBoxResult.Yes)return;
             _sync.SetIntended(state);_busy=true;
-            var results=await _sync.PushAllAsync(_discovery.Machines.Where(m=>DateTimeOffset.UtcNow-m.LastSeen<OfflineAfter));
+            var results=await _sync.PushAllAsync(_discovery.Machines.Where(m=>!m.IdentityConflict && DateTimeOffset.UtcNow-m.LastSeen<OfflineAfter));
             PushStatus.Text=$"Saved. {results.Count(r=>r.Ok)}/{results.Count} online devices applied; offline devices pending.";
             ShowResults("Policy",results);
         }

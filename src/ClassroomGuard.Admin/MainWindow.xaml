@@ -1,15 +1,15 @@
-<Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Class="ClassroomGuard.Admin.MainWindow" Title="ClassroomGuard Master — O‘qituvchi" Height="740" Width="1120" MinHeight="460" MinWidth="800" WindowStartupLocation="CenterScreen" Icon="app.ico" Background="{StaticResource BgApp}" UseLayoutRounding="True">
+<Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Class="ClassroomGuard.Admin.MainWindow" Title="ClassroomGuard Master — O‘qituvchi" Height="740" Width="1120" MinHeight="460" MinWidth="800" WindowStartupLocation="CenterScreen" Icon="app.ico" Background="{StaticResource BgApp}" UseLayoutRounding="True" SizeChanged="OnAdminResize">
 
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="200" x:Name="AdminSidebarColumn"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
         
         <Border Grid.Column="0" Background="{StaticResource BgSidebar}" BorderBrush="{StaticResource Border}" BorderThickness="0,0,1,0">
             <DockPanel>
-                <StackPanel DockPanel.Dock="Top" Margin="22,28,22,20">
+                <Button DockPanel.Dock="Top" Content="" FontFamily="Segoe MDL2 Assets" Style="{StaticResource BtnSecondary}" MinWidth="40" HorizontalAlignment="Left" Margin="12" Click="OnToggleAdminSidebar" ToolTip="Menyuni yig‘ish / yoyish" AutomationProperties.Name="Menyuni yig‘ish yoki yoyish"/><StackPanel DockPanel.Dock="Top" Margin="22,28,22,20" x:Name="AdminSidebarBrand">
                     <StackPanel Orientation="Horizontal">
                         <Border Width="36" Height="36" CornerRadius="10" Background="{StaticResource HeaderBg}" Margin="0,0,12,0">
                             <ContentControl Template="{StaticResource SchoolMarkTemplate}" Width="19" Height="19" Foreground="White" Tag="{StaticResource TassleAccent}"/>
@@ -22,7 +22,7 @@
                     </StackPanel>
                 </StackPanel>
 
-                <StackPanel DockPanel.Dock="Bottom" Margin="16,0,16,20">
+                <StackPanel DockPanel.Dock="Bottom" Margin="16,0,16,20" x:Name="AdminSidebarFooter">
                     <TextBlock x:Name="DashStatus" Style="{StaticResource Muted}" TextWrapping="Wrap"/>
                 </StackPanel>
 
@@ -55,7 +55,7 @@
             
             <DockPanel x:Name="PageDash" Visibility="Visible">
                 <StackPanel DockPanel.Dock="Top" Margin="0,0,0,18" Orientation="Vertical">
-                    <StackPanel Orientation="Horizontal" DockPanel.Dock="Left" VerticalAlignment="Center">
+                    <WrapPanel DockPanel.Dock="Left" VerticalAlignment="Center">
                         <Border Width="34" Height="34" CornerRadius="9" Background="{StaticResource AccentSoft}" Margin="0,0,12,0">
                             <ContentControl Template="{StaticResource IconDashboard}" Width="16" Height="16" Foreground="{StaticResource Accent}"/>
                         </Border>
@@ -64,17 +64,19 @@
                             <TextBlock Style="{StaticResource HelpIconText}"/>
                         </Border>
                         <TextBlock x:Name="MachineCount" Style="{StaticResource Muted}" VerticalAlignment="Center" Margin="12,0,0,0"/>
-                    </StackPanel>
+                    </WrapPanel>
                     <WrapPanel HorizontalAlignment="Left" Margin="0,12,0,0">
                         <Button Content="Yangilash" Style="{StaticResource BtnSecondary}" Click="OnRefresh"/>
-                        <Button Content="Hammasini qulflash" Style="{StaticResource BtnPrimary}" Click="OnLockAll"/>
-                        <Button Content="Hammasini ochish" Style="{StaticResource BtnSecondary}" Click="OnUnlockAll"/>
+                        <Button Content="Ekranlarni qulflash" Style="{StaticResource BtnPrimary}" Click="OnScreenLockAll"/>
+                        <Button Content="Ekranlarni ochish" Style="{StaticResource BtnSecondary}" Click="OnScreenUnlockAll"/>
+                        <Button Content="Barchasini cheklash" Style="{StaticResource BtnPrimary}" Click="OnLockAll"/>
+                        <Button Content="30 daqiqa ruxsat" Style="{StaticResource BtnSecondary}" Click="OnUnlockAll"/>
                         <Button Content="Sinxronlash" Style="{StaticResource BtnSecondary}" Click="OnReconcile"/>
                     </WrapPanel>
-                </StackPanel>
+                <TextBox x:Name="MachineSearch" ToolTip="PC nomi, IP manzili yoki ID bo‘yicha qidirish" AutomationProperties.Name="Kompyuterlarni qidirish" TextChanged="OnMachineSearch" Margin="0,12,0,0"/></StackPanel>
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
-                    <StackPanel x:Name="MachinePanel"/>
-                </ScrollViewer>
+                    <StackPanel><TextBlock x:Name="MachineEmpty" Text="Kompyuter topilmadi. Qidiruvni tozalang yoki agent, tarmoq va UDP portini tekshiring." TextWrapping="Wrap" Margin="0,20,0,20" Foreground="{StaticResource TextMuted}"/><WrapPanel x:Name="MachinePanel"/>
+                </StackPanel></ScrollViewer>
             </DockPanel>
 
             

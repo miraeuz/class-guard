@@ -2,6 +2,7 @@ namespace ClassroomGuard.Core.Models;
 public sealed record EnforcerHealth(string Name, bool Ok, string Detail);
 public sealed class AgentHealth
 {
+    public bool ScreenLocked { get; set; }
     public bool StudentMode { get; set; }
     public DateTimeOffset? UnlockUntil { get; set; }
     public DateTimeOffset CheckedAt { get; set; } = DateTimeOffset.UtcNow;

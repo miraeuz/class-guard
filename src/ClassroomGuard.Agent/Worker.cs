@@ -14,6 +14,7 @@ public sealed class Worker : BackgroundService
     private readonly ILogger<Worker> _log;
     private readonly AgentConfig _config;
     private readonly PolicyStore _store;
+    private readonly ScreenLockStore _screenLock;
     private readonly CredentialStore _credentials;
     private readonly TelegramNotifier _telegram;
     private readonly InstallInterceptor _installer;
@@ -41,6 +42,7 @@ public sealed class Worker : BackgroundService
     {
         _log=log;_config=AgentConfig.Load(log);
         if(_config.CommandPort is <1024 or >65535 || _config.AnnouncePort is <1024 or >65535)throw new InvalidDataException("Invalid configured port.");
+        _screenLock=new(Path.Combine(AppPaths.DataDir,"screen-lock.json"),log);
         _store=new(AppPaths.StateFile,log);_baseline=_store.Load();
         _credentials=new(AppPaths.UsersFile,AppPaths.BootstrapFile,log);
         _key=ClassroomKey.FromBase64(File.ReadAllText(AppPaths.ClassroomKeyFile).Trim());
@@ -81,7 +83,7 @@ public sealed class Worker : BackgroundService
     }
     private void Reconcile()
     {
-        _health=_coordinator.ApplyStudentModeOrRelease(Effective());_health.UnlockUntil=_unlockUntil;
+        _health=_coordinator.ApplyStudentModeOrRelease(Effective());_health.UnlockUntil=_unlockUntil;_health.ScreenLocked=_screenLock.Locked;
     }
     private void Unlock(int session)
     {
@@ -113,6 +115,13 @@ public sealed class Worker : BackgroundService
             if(r.Command!=NetCommand.EnableStudent && !Authorized(r,management,caller,out var why))return NetResponse.Fail(why);
             switch(r.Command)
             {
+                case NetCommand.LockScreen:
+                case NetCommand.UnlockScreen:
+                    _screenLock.Set(r.Command==NetCommand.LockScreen);
+                    _health.ScreenLocked=_screenLock.Locked;
+                    var lockedResponse=Status();
+                    lockedResponse.Message=_screenLock.Locked?"Screen lock saved; awaiting student shell display.":"Screen lock released; app restrictions unchanged.";
+                    return lockedResponse;
                 case NetCommand.EnableStudent:_unlockUntil=null;_preparedUntil=null;break;
                 case NetCommand.DisableStudent:Unlock(caller?.SessionId??-1);break;
                 case NetCommand.SetState:
@@ -122,6 +131,7 @@ public sealed class Worker : BackgroundService
                 case NetCommand.Uninstall:
                     var restored=_coordinator.RevertAll();_health=restored;
                     if(!restored.Healthy)return new(){Ok=false,Message="Recovery incomplete. Keep files and backup; inspect control errors.",Health=restored};
+                    _screenLock.Set(false);_health.ScreenLocked=false;
                     _preparedUntil=DateTimeOffset.UtcNow.AddMinutes(5);
                     return new(){Ok=true,Message="Restrictions restored. Stop/remove service within 5 minutes; a restart resumes protection.",Health=restored};
                 default:return NetResponse.Fail("Unsupported command.");
@@ -158,7 +168,7 @@ public sealed class Worker : BackgroundService
             {
                 var(ok,msg)=_installer.ApproveByCode(r.Code??"");return ok?ControlResponse.Success(msg):ControlResponse.Fail(msg);
             }
-            var command=r.Action switch{ControlAction.GetStatus=>NetCommand.GetStatus,ControlAction.EnableStudentMode=>NetCommand.EnableStudent,ControlAction.DisableStudentMode=>NetCommand.DisableStudent,ControlAction.SetState=>NetCommand.SetState,ControlAction.Uninstall=>NetCommand.Uninstall,_=>NetCommand.Hello};
+            var command=r.Action switch{ControlAction.LockScreen=>NetCommand.LockScreen,ControlAction.UnlockScreen=>NetCommand.UnlockScreen,ControlAction.GetStatus=>NetCommand.GetStatus,ControlAction.EnableStudentMode=>NetCommand.EnableStudent,ControlAction.DisableStudentMode=>NetCommand.DisableStudent,ControlAction.SetState=>NetCommand.SetState,ControlAction.Uninstall=>NetCommand.Uninstall,_=>NetCommand.Hello};
             var response=Apply(new(){Command=command,Username=r.Username,Password=r.Password,Code=r.Code??(r.Password?.Length==6?r.Password:null),State=r.State},false,caller);
             // No answer keys or other privileged fields in student IPC status.
             return new(){Ok=response.Ok,Message=response.Message,State=response.State?.StudentView(),Health=response.Health};

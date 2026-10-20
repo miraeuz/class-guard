@@ -31,7 +31,7 @@ public static class PolicyValidator
                 throw new ArgumentException("Invalid test: unique ID, title, 1–200 questions and 0–180 minutes required.");
             count += t.Questions.Count;
             foreach (var q in t.Questions)
-                if (q is null || string.IsNullOrWhiteSpace(q.Text) || q.Text.Length > 4000 || q.Options is null || q.Options.Count < 2 || q.Options.Count > 8 || q.Options.Any(x=>string.IsNullOrWhiteSpace(x) || x.Length>2000) || q.Options.Distinct(StringComparer.OrdinalIgnoreCase).Count()!=q.Options.Count || q.CorrectIndex<0 || q.CorrectIndex>=q.Options.Count)
+                if (q is null || string.IsNullOrWhiteSpace(q.Text) || q.Text.Length > 4000 || q.TextHtml is null || q.TextHtml.Length>12000 || q.Code is null || q.Code.Length>12000 || q.Latex is null || q.Latex.Length>4000 || q.Language is null || q.Language.Length>40 || q.Topic is null || q.Topic.Length>120 || q.Difficulty is null || q.Difficulty.Length>40 || q.Explanation is null || q.Explanation.Length>8000 || q.Options is null || q.Options.Count < 2 || q.Options.Count > 8 || q.Options.Any(x=>string.IsNullOrWhiteSpace(x) || x.Length>2000) || q.Options.Distinct(StringComparer.OrdinalIgnoreCase).Count()!=q.Options.Count || q.CorrectIndex<0 || q.CorrectIndex>=q.Options.Count)
                     throw new ArgumentException("Invalid question/options/answer index.");
         }
         if (count>1000 || JsonSerializer.SerializeToUtf8Bytes(s).Length>Wire.MaxChars/2) throw new ArgumentException("Policy exceeds v2 capacity (1000 questions / 512 KiB).");
