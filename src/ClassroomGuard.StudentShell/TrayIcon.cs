@@ -31,11 +31,11 @@ public sealed class TrayIcon : IDisposable
         _icon = new Forms.NotifyIcon
         {
             Icon = LoadIcon(),
-            Text = "ClassroomGuard — o'qituvchi kirishi uchun bosing",
+            Text = "ClassroomGuard — dashboardni ochish",
             Visible = true,
             ContextMenuStrip = menu,
         };
-        _icon.DoubleClick += (_, _) => ShowTeacherLogin();
+        _icon.DoubleClick += (_, _) => ShowDashboard();
     }
 
     private void ShowTeacherLogin()

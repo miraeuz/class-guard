@@ -24,6 +24,7 @@
   <ItemGroup>
     <!-- Resource: TrayIcon loads pack://application:,,,/app.ico -->
     <Resource Include="app.ico" />
+    <Resource Include="Assets\*.png" />
     <Content Include="Learning\**\*" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
     <Using Remove="System.Windows.Forms" />
     <Using Remove="System.Drawing" />

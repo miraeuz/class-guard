@@ -93,7 +93,7 @@ public partial class MainWindow : Window
         PageInstallCode.Visibility = Visibility.Collapsed;
         page.Visibility = Visibility.Visible;
 
-        if (!animate)
+        if (!animate || _reduceMotion)
         {
             page.BeginAnimation(OpacityProperty, null);
             page.Opacity = 1;
@@ -107,6 +107,38 @@ public partial class MainWindow : Window
             page.Opacity = 1;
         };
         page.BeginAnimation(OpacityProperty, fadeIn);
+    }
+
+    private bool _reduceMotion;
+    private void OnGoToPc(object sender, RoutedEventArgs e)
+    {
+        StopAutoClose();
+        // UI-only: never send Unlock or change service policy. Timer remains active.
+        WindowState = WindowState.Minimized;
+    }
+    private void OnLayoutSizeChanged(object sender, SizeChangedEventArgs e)
+    {
+        if (SidebarColumn is null || QuickCards is null || RoleCards is null) return;
+        SidebarColumn.Width = new GridLength(ActualWidth < 1000 ? 190 : 230);
+        QuickCards.Columns = ActualWidth < 1120 ? 2 : 4;
+        RoleCards.Columns = ActualWidth < 760 ? 1 : 2;
+        HomeArtwork.Visibility = ActualWidth < 900 ? Visibility.Collapsed : Visibility.Visible;
+        MachineNameText.Visibility = ActualWidth < 850 ? Visibility.Collapsed : Visibility.Visible;
+        DashboardScroll.Padding = new Thickness(ActualWidth < 900 ? 16 : 28);
+    }
+    private void OnPasswordKeyState(object sender, RoutedEventArgs e) =>
+        CapsLockHint.Visibility = System.Windows.Input.Keyboard.IsKeyToggled(System.Windows.Input.Key.CapsLock) ? Visibility.Visible : Visibility.Collapsed;
+    private void OnReduceMotion(object sender, RoutedEventArgs e) =>
+        _reduceMotion = (sender as System.Windows.Controls.CheckBox)?.IsChecked == true;
+    private async void OnRefreshConnection(object sender, RoutedEventArgs e)
+    {
+        await CheckConnectionOnceAsync();
+        UtilityStatus.Text = ConnectionText.Text;
+    }
+    private void OnCopyPc(object sender, RoutedEventArgs e)
+    {
+        try { System.Windows.Clipboard.SetText(MachineIdentity.Name); UtilityStatus.Text = "PC nomi nusxalandi."; }
+        catch { UtilityStatus.Text = "Nusxalab bo‘lmadi. Qayta urinib ko‘ring."; }
     }
 
     private void OnTeacherLoginClick(object sender, RoutedEventArgs e) => ShowTeacherLogin();
@@ -146,7 +178,7 @@ public partial class MainWindow : Window
         _actionBusy=false;
         if (resp.Ok)
         {
-            // Cheklovlar AGENT da qoladi. Dashboard ochiq qoladi (yopib bo‘lmaydi).
+            // Cheklovlar AGENT da qoladi. Dashboard yashirilganda ham Agent cheklovlari saqlanadi.
             StudentStatus.Text = "Himoya faol";
             var pc = MachineIdentity.Name;
             if (string.IsNullOrWhiteSpace(pc)) pc = Environment.MachineName;
@@ -158,7 +190,7 @@ public partial class MainWindow : Window
             ShowPage(PageStudent);
             await ResumeAttemptAsync();
             await CheckConnectionOnceAsync();
-            // Auto-close YO‘Q — o‘quvchi dashboardda ishlaydi, faqat tray orqali yashirish mumkin.
+            // Dashboard can be minimized independently of service enforcement.
         }
         else
         {

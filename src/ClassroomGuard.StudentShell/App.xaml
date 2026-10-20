@@ -3,25 +3,27 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              ShutdownMode="OnExplicitShutdown">
     <Application.Resources>
-        <SolidColorBrush x:Key="BgApp" Color="#F4F6F9"/>
+        <LinearGradientBrush x:Key="HeroGradient" StartPoint="0,0" EndPoint="1,1"><GradientStop Color="#EEE5FF" Offset="0"/><GradientStop Color="#E0F5F5" Offset="1"/></LinearGradientBrush>
+        <Style TargetType="ScrollViewer"><Setter Property="PanningMode" Value="VerticalFirst"/></Style>
+        <SolidColorBrush x:Key="BgApp" Color="#F5F3FC"/>
         <SolidColorBrush x:Key="BgCard" Color="#FFFFFF"/>
-        <SolidColorBrush x:Key="BgInput" Color="#F8FAFC"/>
-        <SolidColorBrush x:Key="Border" Color="#E2E8F0"/>
-        <SolidColorBrush x:Key="Text" Color="#0F172A"/>
-        <SolidColorBrush x:Key="TextSecondary" Color="#475569"/>
-        <SolidColorBrush x:Key="TextMuted" Color="#526174"/>
-        <SolidColorBrush x:Key="Accent" Color="#0369A1"/>
-        <SolidColorBrush x:Key="AccentHover" Color="#0369A1"/>
-        <SolidColorBrush x:Key="AccentSoft" Color="#E0F2FE"/>
+        <SolidColorBrush x:Key="BgInput" Color="#FAF9FE"/>
+        <SolidColorBrush x:Key="Border" Color="#E5DFF2"/>
+        <SolidColorBrush x:Key="Text" Color="#211A38"/>
+        <SolidColorBrush x:Key="TextSecondary" Color="#514763"/>
+        <SolidColorBrush x:Key="TextMuted" Color="#6B607C"/>
+        <SolidColorBrush x:Key="Accent" Color="#6D3CE8"/>
+        <SolidColorBrush x:Key="AccentHover" Color="#5427BD"/>
+        <SolidColorBrush x:Key="AccentSoft" Color="#EEE7FF"/>
         <SolidColorBrush x:Key="Success" Color="#059669"/>
         <SolidColorBrush x:Key="SuccessSoft" Color="#D1FAE5"/>
         <SolidColorBrush x:Key="Danger" Color="#DC2626"/>
         <SolidColorBrush x:Key="DangerSoft" Color="#FEE2E2"/>
-        <SolidColorBrush x:Key="StudentTint" Color="#EFF6FF"/>
-        <SolidColorBrush x:Key="TeacherTint" Color="#F8FAFC"/>
-        <SolidColorBrush x:Key="HeaderBg" Color="#0F172A"/>
+        <SolidColorBrush x:Key="StudentTint" Color="#EEE7FF"/>
+        <SolidColorBrush x:Key="TeacherTint" Color="#E9F7F4"/>
+        <SolidColorBrush x:Key="HeaderBg" Color="#26194A"/>
         <SolidColorBrush x:Key="HeaderText" Color="#F1F5F9"/>
-        <SolidColorBrush x:Key="HeaderTextMuted" Color="#526174"/>
+        <SolidColorBrush x:Key="HeaderTextMuted" Color="#D6C8EE"/>
         <SolidColorBrush x:Key="TassleAccent" Color="#38BDF8"/>
 
         <!-- Brand mark: graduation cap, vector — matches app.ico exactly. -->
@@ -40,7 +42,7 @@
             </Viewbox>
         </ControlTemplate>
 
-        <Style TargetType="Window">
+        <Style TargetType="Window"><Setter Property="UseLayoutRounding" Value="True"/><Setter Property="SnapsToDevicePixels" Value="True"/>
             <Setter Property="Background" Value="{StaticResource BgApp}"/>
             <Setter Property="Foreground" Value="{StaticResource Text}"/>
             <Setter Property="FontFamily" Value="Segoe UI"/>
@@ -140,7 +142,7 @@
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsKeyboardFocused" Value="True"><Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource Accent}"/><Setter TargetName="Bd" Property="BorderThickness" Value="2"/></Trigger>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="Bd" Property="Background" Value="#F1F5F9"/>
+                                <Setter TargetName="Bd" Property="Background" Value="#EEE7FF"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -166,7 +168,7 @@
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsKeyboardFocused" Value="True"><Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource Accent}"/><Setter TargetName="Bd" Property="BorderThickness" Value="2"/></Trigger>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="Bd" Property="Background" Value="#F1F5F9"/>
+                                <Setter TargetName="Bd" Property="Background" Value="#EEE7FF"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
