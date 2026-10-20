@@ -1,0 +1,9 @@
+PASS parse emergency-password.ps1
+PASS parse verify-release.ps1
+PASS parse install.ps1
+PASS parse uninstall.ps1
+PASS parse install-admin-firewall.ps1
+PASS parse publish-master.ps1
+PASS parse sign-release.ps1
+PASS parse build.ps1
+PASS parse emergency-uninstall.ps1
