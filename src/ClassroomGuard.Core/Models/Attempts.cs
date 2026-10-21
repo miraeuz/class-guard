@@ -5,6 +5,8 @@ public sealed class AttemptView
     public TestPackage Test {get;set;}=new();
     public int[] Answers {get;set;}=Array.Empty<int>();
     public DateTimeOffset? Deadline {get;set;}
+    public bool Paused {get;set;}
+    public double? RemainingSeconds {get;set;}
     public bool Finished {get;set;}
     public int Correct {get;set;}
     public string Delivery {get;set;}="Saved";
@@ -17,14 +19,17 @@ public sealed class StoredAttempt
     public int[] Answers {get;set;}=Array.Empty<int>();
     public DateTimeOffset Started {get;set;}=DateTimeOffset.UtcNow;
     public DateTimeOffset? Deadline {get;set;}
+    public bool Paused {get;set;}
+    public double? RemainingSeconds {get;set;}
     public bool Finished {get;set;}
     public int Correct {get;set;}
     public string Delivery {get;set;}="Saved";
+    public List<string> TimingHistory {get;set;}=new();
     public AttemptView View()
     {
         var test=new TestPackage{Id=Test.Id,Title=Test.Title,ClassName=Test.ClassName,Subject=Test.Subject,TimeLimitMinutes=Test.TimeLimitMinutes,
             ShowReviewAfterFinish=Test.ShowReviewAfterFinish,
             Questions=Test.Questions.Select(q=>q.Copy(Finished && Test.ShowReviewAfterFinish)).ToList()};
-        return new(){Id=Id,Test=test,Answers=(int[])Answers.Clone(),Deadline=Deadline,Finished=Finished,Correct=Correct,Delivery=Delivery};
+        return new(){Id=Id,Test=test,Answers=(int[])Answers.Clone(),Deadline=Deadline,Paused=Paused,RemainingSeconds=RemainingSeconds,Finished=Finished,Correct=Correct,Delivery=Delivery};
     }
 }

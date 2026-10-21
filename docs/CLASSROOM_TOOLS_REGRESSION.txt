@@ -1,0 +1,117 @@
+PASS: teacher pauses active attempt
+PASS: pause stores exact remaining time
+PASS: repeated pause does not grant extra time
+PASS: paused attempt rejects answer changes
+PASS: paused attempt rejects finish
+PASS: pause survives restart and elapsed wall time
+PASS: teacher resumes paused attempt
+PASS: resume restores remaining duration
+PASS: repeated resume cannot extend deadline
+PASS: injected disk failure rejects answer commit
+PASS: failed answer commit leaves memory unchanged
+PASS: failed pause write leaves timer running
+PASS: pause cannot resurrect an expired exam
+PASS: pause and resume timing events are durable
+PASS: lesson stores an isolated policy snapshot
+PASS: lesson survives service restart
+PASS: retry of same lesson is idempotent
+PASS: stale lesson end cannot stop another lesson
+PASS: active lesson cannot be silently replaced
+PASS: failed lesson end write retains active lesson
+PASS: lesson end persists
+PASS: activity records request and outcome
+PASS: routine status polling does not flood activity history
+PASS: failed command remains in activity history
+PASS: journal write failure prevents unrecorded command dispatch
+PASS: fresh enrolled endpoint can receive selected action
+PASS: unenrolled endpoint excluded from selected action
+PASS: identity conflict excluded even with cached verification
+PASS: stale verification excludes selected target
+PASS: selection does not silently follow changed IP
+PASS: replacement identity does not inherit enrollment
+PASS: screen confirmation absent before shell report
+PASS: old screen token rejected
+PASS: background session cannot confirm console screen
+PASS: zero monitor confirmation rejected
+PASS: two-monitor current-generation report accepted
+PASS: screen report expires after lost heartbeat
+PASS: console switch invalidates screen confirmation
+PASS: future screen report is not trusted
+PASS: uncovered report removes confirmation
+PASS: new lock generation rejects replayed heartbeat
+PASS: first installation starts screen unlocked
+PASS: screen lock survives service reconstruction / reboot
+PASS: repeat lock is idempotent
+PASS: explicit release persists
+PASS: corrupted lock state fails closed
+PASS: missing lock property fails closed
+PASS: failed durable unlock does not change in-memory lock
+PASS: existing network command IDs preserved
+PASS: existing IPC command IDs preserved
+PASS: UDP listener retains all ten simultaneous cloned-ID endpoints
+PASS: discovery accepts endpoint 1
+PASS: discovery accepts endpoint 2
+PASS: discovery accepts endpoint 3
+PASS: discovery accepts endpoint 4
+PASS: discovery accepts endpoint 5
+PASS: discovery accepts endpoint 6
+PASS: discovery accepts endpoint 7
+PASS: discovery accepts endpoint 8
+PASS: discovery accepts endpoint 9
+PASS: discovery accepts endpoint 10
+PASS: ten cloned IDs remain ten visible endpoints
+PASS: duplicate live identities flagged before commands
+PASS: offline endpoints stay visible
+PASS: expired endpoints do not permanently block a moved IP
+PASS: malformed null announcement rejected
+PASS: invalid announcement port rejected
+PASS: re-enrollment replaces the same endpoint without a ghost row
+PASS: same computer names do not merge distinct identities
+PASS: rich fields survive policy cloning
+PASS: student policy hides explanations
+PASS: active rich attempts hide answers and explanations
+PASS: opt-in finished review includes explanation
+PASS: review remains disabled by default
+PASS: oversized rich content rejected
+PASS: valid policy accepted
+PASS: negative correct index rejected
+PASS: duplicate options rejected
+PASS: null tests rejected
+PASS: unsupported whitelist rejected
+PASS: hosts newline injection rejected
+PASS: unrestricted baseline rejected
+PASS: student view hides key without mutating baseline
+PASS: library file URI rejected for online item
+PASS: credential-bearing URL rejected
+PASS: weak classroom key rejected
+PASS: RFC TOTP vector (six digits)
+PASS: password change requires current password
+PASS: bootstrap enrollment authenticated
+PASS: bootstrap secret deleted
+PASS: new credential usable
+PASS: incomplete primary policy recovers known-good baseline
+PASS: persisted teacher mode never resumes
+PASS: attempt response excludes keys
+PASS: attempt bound to account SID
+PASS: out-of-range submitted answer rejected
+PASS: answers durable across service object restart
+PASS: service computes score
+PASS: finished attempt immutable and submit idempotent
+PASS: answers after deadline cannot change score
+PASS: install approval code consumed once
+PASS: enforcer failure is surfaced
+PASS: no reconciliation before baseline initialized
+PASS: different policy ID reconciles despite higher agent version
+PASS: identical policy does not re-lock or repush
+PASS: Admin baseline survives recreation
+PASS: targeted test policy reaches only intended device
+PASS: unselected device retains baseline policy
+PASS: targeted policy survives teacher restart
+PASS: automatic synchronization does not overwrite active lesson
+PASS: targeted policy returns after lesson ends
+PASS: explicit global baseline supersedes older targeted assignments
+PASS: bounded framing preserves consecutive messages
+PASS: oversized frame rejected
+PASS: unenrolled device rejected before connecting
+PASS: real TLS connection rejects mismatched certificate
+ALL 116 REGRESSION CHECKS PASSED

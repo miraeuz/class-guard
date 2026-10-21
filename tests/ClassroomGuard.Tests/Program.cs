@@ -22,6 +22,74 @@ TestPackage Test()=>new(){Id="test",Title="Example",TimeLimitMinutes=5,Questions
 EnforcementState Policy(){var s=EnforcementState.FailClosedDefault();s.PolicyId=Guid.NewGuid().ToString("N");s.Tests.Add(Test());return s;}
 try
 {
+    var clock=DateTimeOffset.UtcNow;
+    var pausePath=Path.Combine(root,"pause-tests.json");var pauseStore=new AttemptStore(log,pausePath,()=>clock);
+    var timed=pauseStore.Start("pupil",Test());clock=clock.AddSeconds(70);
+    Check(pauseStore.SetPaused(true,"teacher")==1,"teacher pauses active attempt");
+    var held=pauseStore.Resume("pupil")!;
+    Check(held.Paused&&held.Deadline is null&&Math.Abs(held.RemainingSeconds!.Value-230)<.01,"pause stores exact remaining time");
+    Check(pauseStore.SetPaused(true,"teacher")==0,"repeated pause does not grant extra time");
+    Check(Throws(()=>pauseStore.Update("pupil",timed.Id,new[]{1},false)),"paused attempt rejects answer changes");
+    Check(Throws(()=>pauseStore.Update("pupil",timed.Id,new[]{1},true)),"paused attempt rejects finish");
+    clock=clock.AddHours(2);pauseStore=new AttemptStore(log,pausePath,()=>clock);
+    Check(pauseStore.Resume("pupil")!.Paused,"pause survives restart and elapsed wall time");
+    Check(pauseStore.SetPaused(false,"teacher")==1,"teacher resumes paused attempt");
+    Check(Math.Abs((pauseStore.Resume("pupil")!.Deadline!.Value-clock).TotalSeconds-230)<.01,"resume restores remaining duration");
+    Check(pauseStore.SetPaused(false,"teacher")==0,"repeated resume cannot extend deadline");
+    var oldDisk=File.ReadAllText(pausePath);File.Delete(pausePath);Directory.CreateDirectory(pausePath);
+    Check(Throws(()=>pauseStore.Update("pupil",timed.Id,new[]{1},false)),"injected disk failure rejects answer commit");
+    Check(pauseStore.Resume("pupil")!.Answers[0]==-1,"failed answer commit leaves memory unchanged");
+    Check(Throws(()=>pauseStore.SetPaused(true,"teacher"))&&!pauseStore.Resume("pupil")!.Paused,"failed pause write leaves timer running");
+    Directory.Delete(pausePath);File.WriteAllText(pausePath,oldDisk);
+    clock=clock.AddSeconds(231);
+    Check(pauseStore.SetPaused(true,"teacher")==0&&pauseStore.Resume("pupil")!.Finished,"pause cannot resurrect an expired exam");
+    var historyStored=JsonSerializer.Deserialize<List<StoredAttempt>>(File.ReadAllText(pausePath))!;
+    Check(historyStored[0].TimingHistory.Count==2,"pause and resume timing events are durable");
+    var lessonPath=Path.Combine(root,"lesson.json");var lessons=new LessonStore(lessonPath,log);
+    var lesson=new LessonSession{Id=Guid.NewGuid().ToString("N"),Title="Python lesson",Group="IT-1",Policy=Policy()};
+    lessons.Begin(lesson);var lessonPolicyId=lessons.Active!.Policy.PolicyId;
+    lesson.Policy.Sites.Add("external.example");
+    Check(lessons.Active.Policy.Sites.Count==0,"lesson stores an isolated policy snapshot");
+    Check(new LessonStore(lessonPath,log).Active?.Id==lesson.Id,"lesson survives service restart");
+    lessons.Begin(lesson);Check(lessons.Active.Policy.PolicyId==lessonPolicyId,"retry of same lesson is idempotent");
+    Check(Throws(()=>lessons.End("other-session"))&&lessons.Active is not null,"stale lesson end cannot stop another lesson");
+    Check(Throws(()=>lessons.Begin(new(){Id=Guid.NewGuid().ToString("N"),Title="Other",Policy=Policy()})),"active lesson cannot be silently replaced");
+    var savedLesson=File.ReadAllText(lessonPath);File.Delete(lessonPath);Directory.CreateDirectory(lessonPath);
+    Check(Throws(()=>lessons.End(lesson.Id))&&lessons.Active is not null,"failed lesson end write retains active lesson");
+    Directory.Delete(lessonPath);File.WriteAllText(lessonPath,savedLesson);lessons.End(lesson.Id);
+    Check(new LessonStore(lessonPath,log).Active is null,"lesson end persists");
+    var auditPath=Path.Combine(root,"activity.json");var journal=new ActivityJournal(auditPath,log);var auditFake=new FakeClient();var audited=new AuditedAdminClient(auditFake,()=>journal);
+    await audited.SendAsync(new(){MachineId="logged-device"},new(){Command=NetCommand.LockScreen});
+    Check(journal.Read().Count==2&&journal.Read()[0].Result=="Requested"&&journal.Read()[1].Result=="Succeeded","activity records request and outcome");
+    await audited.SendAsync(new(){MachineId="logged-device"},new(){Command=NetCommand.GetStatus});
+    Check(journal.Read().Count==2,"routine status polling does not flood activity history");
+    auditFake.Reject=true;await audited.SendAsync(new(){MachineId="logged-device"},new(){Command=NetCommand.UnlockScreen});
+    Check(journal.Read().Last().Result=="Failed","failed command remains in activity history");
+    var commandsBefore=auditFake.Commands;File.Delete(auditPath);Directory.CreateDirectory(auditPath);
+    Check(!(await audited.SendAsync(new(){MachineId="logged-device"},new(){Command=NetCommand.LockScreen})).Ok&&auditFake.Commands==commandsBefore,"journal write failure prevents unrecorded command dispatch");
+    Directory.Delete(auditPath);
+    var targetTime=DateTimeOffset.UtcNow;
+    var targetPc=new MachineInfo { MachineId="pc-a",Ip="192.168.1.2",Port=8787,Verified=true,LastSeen=targetTime,LastVerified=targetTime };
+    Check(DashboardTargeting.CanTarget(targetPc,targetTime),"fresh verified endpoint can receive selected action");
+    targetPc.IdentityConflict=true;
+    Check(!DashboardTargeting.CanTarget(targetPc,targetTime),"identity conflict excluded even with cached verification");
+    targetPc.IdentityConflict=false;
+    Check(!DashboardTargeting.CanTarget(targetPc,targetTime.AddSeconds(46)),"stale verification excludes selected target");
+    var oldEndpoint=DashboardTargeting.EndpointKey(targetPc);targetPc.Ip="192.168.1.3";
+    Check(oldEndpoint!=DashboardTargeting.EndpointKey(targetPc),"selection does not silently follow changed IP");
+    var cover=new ScreenCoverTracker();var coverNow=DateTimeOffset.UtcNow;
+    Check(!cover.IsFresh(1,coverNow),"screen confirmation absent before shell report");
+    Check(!cover.Report("old",true,1,1,1,coverNow),"old screen token rejected");
+    Check(!cover.Report(cover.Token,true,1,2,1,coverNow),"background session cannot confirm console screen");
+    Check(!cover.Report(cover.Token,true,0,1,1,coverNow),"zero monitor confirmation rejected");
+    Check(cover.Report(cover.Token,true,2,1,1,coverNow)&&cover.IsFresh(1,coverNow),"two-monitor current-generation report accepted");
+    Check(!cover.IsFresh(1,coverNow.AddSeconds(9)),"screen report expires after lost heartbeat");
+    Check(!cover.IsFresh(2,coverNow),"console switch invalidates screen confirmation");
+    Check(!cover.IsFresh(1,coverNow.AddSeconds(-1)),"future screen report is not trusted");
+    cover.Report(cover.Token,false,2,1,1,coverNow);
+    Check(!cover.IsFresh(1,coverNow),"uncovered report removes confirmation");
+    var previousToken=cover.Token;cover.Reset();
+    Check(cover.Token!=previousToken&&!cover.Report(previousToken,true,1,1,1,coverNow),"new lock generation rejects replayed heartbeat");
     var screenPath=Path.Combine(root,"screen-lock.json");
     var screenStore=new ScreenLockStore(screenPath,log);
     Check(!screenStore.Locked,"first installation starts screen unlocked");
@@ -114,6 +182,16 @@ try
     sync.SetIntended(Policy());await sync.ReconcileAsync(machine);Check(fake.Pushes==1 && fake.State.PolicyId==sync.Intended!.PolicyId,"different policy ID reconciles despite higher agent version");
     await sync.ReconcileAsync(machine);Check(fake.Pushes==1,"identical policy does not re-lock or repush");
     Check(new SyncEngine(fake,syncPath).Intended?.PolicyId==sync.Intended!.PolicyId,"Admin baseline survives recreation");
+    var targeted=Policy();targeted.Tests[0].Title="Selected test";
+    sync.SetDeviceIntended(new[]{"device"},targeted);
+    await sync.ReconcileAsync(machine);
+    Check(fake.State.Tests[0].Title=="Selected test","targeted test policy reaches only intended device");
+    Check(sync.ForDevice("another-device")!.PolicyId==sync.Intended!.PolicyId,"unselected device retains baseline policy");
+    Check(new SyncEngine(fake,syncPath).ForDevice("device")!.Tests[0].Title=="Selected test","targeted policy survives teacher restart");
+    fake.LessonId="active-lesson";fake.State=Policy();var beforeLessonPoll=fake.Pushes;
+    await sync.ReconcileAsync(machine);Check(fake.Pushes==beforeLessonPoll,"automatic synchronization does not overwrite active lesson");
+    fake.LessonId=null;await sync.ReconcileAsync(machine);Check(fake.State.Tests[0].Title=="Selected test","targeted policy returns after lesson ends");
+    sync.SetIntended(Policy());Check(sync.ForDevice("device")!.PolicyId==sync.Intended!.PolicyId,"explicit global baseline supersedes older targeted assignments");
     using(var stream=new MemoryStream(Encoding.UTF8.GetBytes("one\ntwo\n")))using(var reader=new StreamReader(stream))
     {Check(await Wire.ReadAsync(reader,CancellationToken.None)=="one" && await Wire.ReadAsync(reader,CancellationToken.None)=="two","bounded framing preserves consecutive messages");}
     using(var stream=new MemoryStream(Encoding.UTF8.GetBytes(new string('x',Wire.MaxChars+1)+"\n")))using(var reader=new StreamReader(stream))
@@ -161,10 +239,11 @@ finally{Directory.Delete(root,true);}
 sealed class FailingEnforcer:IEnforcer{public string Name=>"test";public void Apply(EnforcementState s)=>throw new IOException("injected failure");public void Revert()=>throw new IOException("injected failure");}
 sealed class FakeClient:IAdminClient
 {
-    public int Pushes;public EnforcementState State=EnforcementState.FailClosedDefault();
+    public int Pushes;public int Commands;public bool Reject;public string? LessonId;public EnforcementState State=EnforcementState.FailClosedDefault();
     public Task<NetResponse> SendAsync(MachineInfo machine,NetRequest request,int timeoutMs=10000)
     {
-        if(request.Command==NetCommand.SetState){State=request.State!.Clone();Pushes++;}
-        return Task.FromResult(new NetResponse{Ok=true,State=State.Clone(),Machine=new(){MachineId=machine.MachineId},Health=new(){StudentMode=true}});
+        if(request.Command!=NetCommand.GetStatus)Commands++;
+        if(request.Command==NetCommand.SetState&&!Reject){State=request.State!.Clone();Pushes++;}
+        return Task.FromResult(new NetResponse{Ok=!Reject,State=State.Clone(),Machine=new(){MachineId=machine.MachineId},Health=new(){StudentMode=true,LessonId=LessonId}});
     }
 }

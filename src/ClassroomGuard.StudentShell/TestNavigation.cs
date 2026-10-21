@@ -23,7 +23,7 @@ public partial class MainWindow
     private void OnFlagQuestion(object sender,RoutedEventArgs e){if(!_flagged.Add(_qIndex))_flagged.Remove(_qIndex);UpdateQuestionPalette();}
     private async void OnClearAnswer(object sender,RoutedEventArgs e)
     {
-        if(_attempt is null || _attempt.Finished || _finishing)return;
+        if(_attempt is null || _attempt.Finished || _attempt.Paused || _finishing)return;
         _answers[_qIndex]=-1;RenderQuestion();await SaveAnswersAsync();
     }
     private void BuildTestReview(AttemptView view)

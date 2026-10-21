@@ -15,7 +15,7 @@ public partial class MainWindow : Window
 {
     private readonly AdminConfig _config = AdminConfig.Load();
     private Discovery? _discovery;
-    private AdminClient? _client;
+    private IAdminClient? _client;
     private SyncEngine? _sync;
     private ClassroomKey? _key;
     private readonly TelegramClient _telegram = new();
@@ -28,10 +28,11 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
+        InitializeDashboard();
         LoadSettingsIntoUi();
         InitKeyAndServices();
 
-        _timer.Interval=TimeSpan.FromSeconds(15);
+        _timer.Interval=TimeSpan.FromSeconds(4);
         _timer.Tick += async (_, _) => await PollAsync();
         Closed += (_, _) => { _timer.Stop(); _displayTimer.Stop(); _discovery?.Dispose(); };
         _timer.Start();
@@ -52,7 +53,7 @@ public partial class MainWindow : Window
         {
             KeyStatus.Text = "Kalit yuklangan";
             KeyStatus.Foreground = (Brush)FindResource("Success");
-            _client = new AdminClient(_key);
+            _client = new AuditedAdminClient(new AdminClient(_key),GetActivityJournal);
             _sync = new SyncEngine(_client);
         }
         else
@@ -96,135 +97,58 @@ public partial class MainWindow : Window
     }
 
     // ---- dashboard ---------------------------------------------------------
-    private void OnAdminResize(object sender, SizeChangedEventArgs e) { if(IsLoaded)RefreshMachines(); }
+    private void OnAdminResize(object sender, SizeChangedEventArgs e) { if(IsLoaded){LayoutDashboard();RefreshMachines();} }
     private void OnMachineSearch(object sender, TextChangedEventArgs e) { if(IsLoaded)RefreshMachines(); }
     private async void OnRefresh(object sender, RoutedEventArgs e) => await PollAsync();
 
     private void RefreshMachines()
     {
         if (_discovery is null) return;
-        var all = _discovery.Machines.OrderBy(m => m.Name).ThenBy(m=>m.Ip).ToList();
+        var all = _discovery.Machines.Where(MatchesGroup).OrderBy(m => m.Name).ThenBy(m=>m.Ip).ToList();
         var query=MachineSearch?.Text?.Trim()??"";
-        var machines=all.Where(m=>($"{m.Name} {m.Ip} {m.MachineId}").Contains(query,StringComparison.OrdinalIgnoreCase)).ToList();
-        MachinePanel.Children.Clear();
-
-        foreach (var m in machines)
-            MachinePanel.Children.Add(BuildCard(m));
-
-        MachineCount.Text = $"{all.Count} ta PC · {all.Count(m=>DateTimeOffset.UtcNow-m.LastSeen<OfflineAfter)} tarmoqda · {all.Count(m=>m.IdentityConflict)} ID ziddiyat";
-        if(MachineEmpty is not null) MachineEmpty.Visibility=machines.Count==0?Visibility.Visible:Visibility.Collapsed;
+        var machines=all.Where(m=>MatchesGroup(m) && ($"{StudentLabel(m)} {m.Ip} {m.MachineId}").Contains(query,StringComparison.OrdinalIgnoreCase)).ToList();
+        RenderMachines(machines);
+        MachineCount.Text=$"{all.Count(m=>m.Health?.HelpRequested==true&&IsOnline(m))} ta yordam so‘rovi · {all.Count} ta PC  ·  {all.Count(IsOnline)} tarmoqda  ·  {all.Count(m=>!IsOnline(m))} uzilgan";
+        OverviewText.Text=$"{all.Count(IsCoverFresh)} ta ekran yopilganligi xabar qilingan · {all.Count(m=>m.Health?.ScreenLocked==true&&!IsCoverFresh(m))} ta qulf tasdig‘i kutilmoqda · {all.Count(m=>m.IdentityConflict || !string.IsNullOrEmpty(m.LastContactError))} ta muammo";
+        MachineEmpty.Visibility=machines.Count==0?Visibility.Visible:Visibility.Collapsed;
+        UpdateSelection();UpdateDetails();
         if(!string.IsNullOrEmpty(_discovery.LastError))DashStatus.Text="Discovery: "+_discovery.LastError;
     }
 
     private Border BuildCard(MachineInfo m)
     {
-        var status = m.StatusText(OfflineAfter);
-        var online = status.StartsWith("online", StringComparison.OrdinalIgnoreCase);
-        var verified=!m.IdentityConflict && m.Verified && DateTimeOffset.UtcNow-m.LastVerified<TimeSpan.FromSeconds(45);
-        var locked = m.ReportedState?.StudentModeActive ?? true;
-
-        var statusBrush = online
-            ? (locked ? (Brush)FindResource("Danger") : (Brush)FindResource("Success"))
-            : (Brush)FindResource("Warning");
-        var statusSoftBrush = online
-            ? (locked ? (Brush)FindResource("DangerSoft") : (Brush)FindResource("SuccessSoft"))
-            : (Brush)FindResource("WarningSoft");
-
-        var statusLabel = m.IdentityConflict ? "ID ZIDDIYATI" : !online ? "OFFLINE" : !verified ? "UNVERIFIED" : m.Health?.Healthy!=true ? "PARTIAL FAILURE" : locked ? "STUDENT MODE" : "TEACHER · 30 MIN";
-
-        var root = new Grid { Margin = new Thickness(0) };
-        root.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
-        root.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
-        root.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
-
-        var left = new StackPanel { Orientation = Orientation.Vertical };
-
-        var pillContent = new StackPanel { Orientation = Orientation.Horizontal };
-        pillContent.Children.Add(new System.Windows.Shapes.Ellipse
+        var key=EndpointKey(m);
+        var ready=CanTarget(m);
+        var panel=new StackPanel();
+        var title=new CheckBox { Content=StudentLabel(m),IsChecked=_selected.Contains(key),FontWeight=FontWeights.SemiBold,FontSize=16,Margin=new Thickness(0,0,0,12) };
+        title.Checked+=(_,_)=>{_selected.Add(key);UpdateSelection();};
+        title.Unchecked+=(_,_)=>{_selected.Remove(key);UpdateSelection();};
+        panel.Children.Add(title);
+        panel.Children.Add(new TextBlock { Text=DescribeStatus(m),TextWrapping=TextWrapping.Wrap,Foreground=(Brush)FindResource(m.IdentityConflict || !string.IsNullOrEmpty(m.LastContactError)?"Danger":m.Health?.ScreenCoverConfirmed==true?"Success":"TextSecondary"),FontWeight=FontWeights.SemiBold,Margin=new Thickness(0,0,0,8) });
+        panel.Children.Add(new TextBlock { Text=$"{m.Ip}:{m.Port}",Foreground=(Brush)FindResource("TextMuted"),FontSize=12,TextWrapping=TextWrapping.Wrap });
+        if(m.Health?.HelpRequested==true)
         {
-            Style = (Style)FindResource("StatusDot"),
-            Fill = statusBrush,
-        });
-        pillContent.Children.Add(new TextBlock
+            var acknowledge=new Button { Content="✋ Yordamni qabul qilish",Style=(Style)FindResource("BtnSecondary"),IsEnabled=ready&&!_busy };
+            acknowledge.Click+=async (_,_)=>await SendOne(m,new(){Command=NetCommand.AcknowledgeHelp});panel.Children.Add(acknowledge);
+        }
+        if(m.Health?.PausedTests>0)panel.Children.Add(new TextBlock { Text=$"⏸ {m.Health.PausedTests} test pauzada",Margin=new Thickness(0,6,0,0),Foreground=(Brush)FindResource("AccentText") });
+        if(m.Health?.LessonId is not null)panel.Children.Add(new TextBlock { Text="Dars: "+m.Health.LessonTitle,TextWrapping=TextWrapping.Wrap,Margin=new Thickness(0,6,0,0),Foreground=(Brush)FindResource("TextMuted") });
+        var actions=new WrapPanel { Margin=new Thickness(0,12,0,0) };
+        var details=new Button { Content="Tafsilotlar",Style=(Style)FindResource("BtnSecondary"),Padding=new Thickness(10,7,10,7) };
+        details.Click+=(_,_)=>SelectDetails(m);
+        var locked=m.Health?.ScreenLocked==true;
+        var screen=new Button { Content=locked?"Ekranni ochish":"Ekranni qulflash",Style=(Style)FindResource("BtnPrimary"),Padding=new Thickness(10,7,10,7),IsEnabled=ready&&!_busy };
+        screen.Click+=async (_,_)=>await SendOne(m,new(){Command=locked?NetCommand.UnlockScreen:NetCommand.LockScreen});
+        actions.Children.Add(details);actions.Children.Add(screen);panel.Children.Add(actions);
+        var restrictions=new WrapPanel();
+        foreach(var action in new[]{("Cheklash",NetCommand.EnableStudent),("30 daqiqa ruxsat",NetCommand.DisableStudent)})
         {
-            Text = statusLabel,
-            Style = (Style)FindResource("StatusPillText"),
-            Foreground = statusBrush,
-        });
-        left.Children.Add(new Border
-        {
-            Style = (Style)FindResource("StatusPill"),
-            Background = statusSoftBrush,
-            Child = pillContent,
-            VerticalAlignment = VerticalAlignment.Center,
-            Margin = new Thickness(0, 0, 14, 0),
-        });
+            var button=new Button { Content=action.Item1,Style=(Style)FindResource("BtnSecondary"),IsEnabled=ready&&!_busy,Padding=new Thickness(10,6,10,6) };
+            button.Click+=async (_,_)=>await SendOne(m,new(){Command=action.Item2});restrictions.Children.Add(button);
+        }
+        panel.Children.Add(new Expander { Header="Ilova cheklovlari",Content=restrictions,Margin=new Thickness(0,8,0,0) });
 
-        var info = new StackPanel();
-        info.Children.Add(new TextBlock
-        {
-            Text = $"{m.Name}",
-            FontWeight = FontWeights.SemiBold,
-            FontSize = 14,
-        });
-        info.Children.Add(new TextBlock
-        {
-            Text = $"{m.Ip}:{m.Port}  ·  {m.MachineId}" + (m.IdentityConflict?"\nBir ID bir nechta manzilda. Qo‘llanmadagi tiklash bosqichlarini bajaring.":""),
-            TextWrapping=TextWrapping.Wrap,
-            MaxWidth=450,
-            Foreground = (Brush)FindResource("TextMuted"),
-            FontSize = 12,
-            Margin = new Thickness(0, 2, 0, 0),
-        });
-        left.Children.Add(info);
-        Grid.SetColumn(left, 0);
-        root.Children.Add(left);
-
-        var actions = new WrapPanel
-        {
-            Orientation = Orientation.Horizontal,
-            VerticalAlignment = VerticalAlignment.Center,
-        };
-
-        var lockBtn = new Button
-        {
-            Content = "Cheklash",
-            Style = (Style)FindResource("BtnPrimary"),
-            Padding = new Thickness(14, 8, 14, 8),
-            MinWidth = 80,
-        };
-        lockBtn.IsEnabled = online && verified && !_busy;
-        lockBtn.Click += async (_, _) =>
-            await SendOne(m, new NetRequest { Command = NetCommand.EnableStudent });
-
-        var unlockBtn = new Button
-        {
-            Content = "30 daq. ruxsat",
-            Style = (Style)FindResource("BtnSecondary"),
-            Padding = new Thickness(14, 8, 14, 8),
-            MinWidth = 80,
-        };
-        unlockBtn.IsEnabled = online && verified && !_busy;
-        unlockBtn.Click += async (_, _) =>
-            await SendOne(m, new NetRequest { Command = NetCommand.DisableStudent });
-
-        var screenButton = new Button { Content = m.Health?.ScreenLocked==true ? "Ekranni ochish" : "Ekranni qulflash", Style=(Style)FindResource("BtnPrimary"), Padding=new Thickness(12,8,12,8), IsEnabled=online && verified && !_busy };
-        screenButton.Click += async (_,_) => await SendOne(m,new NetRequest { Command=m.Health?.ScreenLocked==true?NetCommand.UnlockScreen:NetCommand.LockScreen });
-        actions.Children.Add(screenButton);
-        actions.Children.Add(lockBtn);
-        actions.Children.Add(unlockBtn);
-        Grid.SetColumn(actions, 0);
-        Grid.SetRow(actions, 1);
-        actions.Margin=new Thickness(0,12,0,0);
-        root.Children.Add(actions);
-
-        return new Border
-        {
-            Style = (Style)FindResource("MachineCard"),
-            Width = Math.Max(280,(Math.Max(300,MachinePanel.ActualWidth)-24)/(MachinePanel.ActualWidth>=1000?3:MachinePanel.ActualWidth>=680?2:1)-12),
-            Margin=new Thickness(0,0,12,12),
-            Child = root,
-        };
+        return new Border { Style=(Style)FindResource("MachineCard"),Width=CardWidth(),Margin=new Thickness(0,0,12,12),Child=panel,MinHeight=180 };
     }
 
     private async Task SendOne(MachineInfo m, NetRequest req)
@@ -234,7 +158,7 @@ public partial class MainWindow : Window
             MessageBox.Show("Avval Sozlamalardan sinf kalitini yuklang.", "ClassroomGuard");
             return;
         }
-        if(_busy)return;
+        if(_busy || _polling){DashStatus.Text="Joriy tekshiruv tugashini kuting.";return;}
         _busy=true;RefreshMachines();
         NetResponse resp;
         try{resp=await _client.SendAsync(m,req);SyncEngine.Update(m,resp);}finally{_busy=false;}
@@ -259,17 +183,22 @@ public partial class MainWindow : Window
     private async void OnScreenUnlockAll(object sender,RoutedEventArgs e)=>await BulkAsync(NetCommand.UnlockScreen);
     private async void OnLockAll(object sender,RoutedEventArgs e)=>await BulkAsync(NetCommand.EnableStudent);
     private async void OnUnlockAll(object sender,RoutedEventArgs e)=>await BulkAsync(NetCommand.DisableStudent);
-    private async Task BulkAsync(NetCommand command)
+    private async Task BulkAsync(NetCommand command,bool selectedOnly=false)
     {
-        if(_busy || _polling || _client is null || _discovery is null)return;
-        var machines=_discovery.Machines.Where(m=>!m.IdentityConflict && DateTimeOffset.UtcNow-m.LastSeen<OfflineAfter).ToList();
-        if(MessageBox.Show($"Apply {command} to {machines.Count} online PCs? {(command is NetCommand.LockScreen or NetCommand.UnlockScreen ? "Screen lock persists until explicitly released. Offline PCs are not included." : "Teacher restriction unlock expires after 30 minutes or session end.")}","Confirm",MessageBoxButton.YesNo)!=MessageBoxResult.Yes)return;
+        if(_busy || _polling){DashStatus.Text="Tekshiruv yoki buyruq davom etmoqda. Yakunlanishini kuting.";return;}
+        if(_client is null || _discovery is null){DashStatus.Text="Avval Sozlamalarda sinf kalitini yuklang.";return;}
+        var requested=_discovery.Machines.Where(m=>selectedOnly?_selected.Contains(EndpointKey(m)):MatchesGroup(m)).ToList();
+        var machines=requested.Where(CanTarget).ToList();
+        var skipped=requested.Count-machines.Count;
+        if(machines.Count==0){DashStatus.Text="Yuborish mumkin bo‘lgan PC yo‘q. Tafsilotlardan ulanish va ro‘yxatdan o‘tishni tekshiring.";return;}
+        if(MessageBox.Show($"{(selectedOnly?"Tanlangan":"Barcha")} PC: {machines.Count} ta qabul qiluvchi, {skipped} ta o‘tkazib yuboriladi. Buyruq: {command}. {(command is NetCommand.LockScreen or NetCommand.UnlockScreen ? "Screen lock persists until explicitly released. Offline PCs are not included." : "Only the explicit 30-minute permission command expires automatically. Exam pause persists until resumed.")}","Confirm",MessageBoxButton.YesNo)!=MessageBoxResult.Yes)return;
         _busy=true;RefreshMachines();
         try
         {
             using var slots=new SemaphoreSlim(6);
             var results=await Task.WhenAll(machines.Select(async m=>{await slots.WaitAsync();try{var r=await _client.SendAsync(m,new(){Command=command});SyncEngine.Update(m,r);return new SyncEngine.PushResult(m,r.Ok,r.Message);}finally{slots.Release();}}));
             ShowResults(command.ToString(),results);
+            DashStatus.Text+=$" · {skipped} ta yuborilmadi";
         }
         finally{_busy=false;RefreshMachines();}
     }
@@ -467,6 +396,9 @@ public partial class MainWindow : Window
 
     private async void OnSaveSettings(object sender, RoutedEventArgs e)
     {
+
+        try
+        {
         if(!int.TryParse(PortBox.Text.Trim(),out var validPort) || validPort is <1024 or >65535) { MessageBox.Show("Port must be 1024–65535.");return; }
         _config.TelegramBotToken = TgToken.Text.Trim();
         _config.TelegramChatId = TgChat.Text.Trim();
@@ -481,5 +413,8 @@ public partial class MainWindow : Window
                 "ClassroomGuard admin connected.");
             SettingsStatus.Text = ok ? "Saqlandi. Telegram test yuborildi." : "Saqlandi. Telegram: " + m;
         }
+        }
+        catch(Exception ex){MessageBox.Show("Sozlamalar saqlanmadi: "+ex.Message);}
+
     }
 }

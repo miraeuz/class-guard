@@ -20,6 +20,7 @@ public partial class MainWindow : Window
     {
         UiStrings.Apply(ClassroomGuard.Core.I18n.Loc.Current);
         InitializeComponent();
+        ThemeManager.Load();ThemeButton.Content=ThemeManager.Dark?"☀":"☾";
         MachineNameText.Text = $"· {MachineIdentity.Name}";
         ShowPage(PageStarter, animate: false);
 
@@ -56,11 +57,17 @@ public partial class MainWindow : Window
         try
         {
             var resp=await AgentPipeClient.SendAsync(new ControlRequest{Action=ControlAction.GetStatus},timeoutMs:3000);
-            if(resp.Ok && resp.Health is not null) ApplyScreenLock(resp.Health.ScreenLocked);
+            if(resp.Ok && resp.Health is not null)
+            {
+                ApplyScreenLock(resp.Health.ScreenLocked);
+                if(resp.Health.ScreenLocked && !string.IsNullOrEmpty(resp.Health.ScreenLockToken))
+                    await AgentPipeClient.SendAsync(new ControlRequest { Action=ControlAction.ReportScreenCover,ScreenLockToken=resp.Health.ScreenLockToken,ScreenCovered=_lockWindows.Count>0 && _lockWindows.All(w=>w.CoverageReady),MonitorCount=_lockWindows.Count },timeoutMs:1500);
+            }
             ConnectionDot.Fill=(System.Windows.Media.Brush)FindResource(resp.Ok?"Success":"Danger");
             ConnectionText.Text=resp.Ok?"Agent bilan aloqa bor":"Agent topilmadi";
             StudentStatus.Text=resp.Ok?(resp.Health?.Summary??"Holat tekshirilmoqda") : "Aloqa yo‘q — holat noma’lum";
             ModeText.Text=resp.Ok?(resp.State?.StudentModeActive==true?"O‘quv rejimi":"O‘qituvchi rejimi"):"Noma’lum";
+            if(resp.Ok && resp.Health is not null){ReflectClassroom(resp.Health);await RefreshAttemptStateAsync();}
             if(resp.Health?.UnlockUntil is {} until)ModeText.Text+=$" · {until.ToLocalTime():HH:mm} gacha";
         }
         finally{_checking=false;}
@@ -112,6 +119,12 @@ public partial class MainWindow : Window
         page.BeginAnimation(OpacityProperty, fadeIn);
     }
 
+    private void OnToggleTheme(object sender,RoutedEventArgs e)
+    {
+        try { ThemeManager.Toggle();ThemeButton.Content=ThemeManager.Dark?"☀":"☾";SendRichQuestion();ApplyLearningTheme(); }
+        catch(Exception ex) { MessageBox.Show("Ko‘rinish saqlanmadi: "+ex.Message); }
+    }
+
     private bool _reduceMotion;
     private void OnGoToPc(object sender, RoutedEventArgs e)
     {
@@ -122,12 +135,13 @@ public partial class MainWindow : Window
     }
     private void OnLayoutSizeChanged(object sender, SizeChangedEventArgs e)
     {
+        if(MachineNameText is not null)MachineNameText.Visibility=ActualWidth<1050?Visibility.Collapsed:Visibility.Visible;
         if (SidebarColumn is null || QuickCards is null || RoleCards is null) return;
         SidebarColumn.Width = new GridLength(_sidebarCollapsed ? 76 : (ActualWidth < 1000 ? 190 : 230));
         QuickCards.Columns = ActualWidth < 1120 ? 2 : 4;
         RoleCards.Columns = ActualWidth < 760 ? 1 : 2;
         HomeArtwork.Visibility = ActualWidth < 900 ? Visibility.Collapsed : Visibility.Visible;
-        MachineNameText.Visibility = ActualWidth < 850 ? Visibility.Collapsed : Visibility.Visible;
+
         DashboardScroll.Padding = new Thickness(ActualWidth < 900 ? 16 : 28);
     }
     private void OnPasswordKeyState(object sender, RoutedEventArgs e) =>
@@ -382,13 +396,14 @@ public partial class MainWindow : Window
         _attempt=view;_currentTest=view.Test;_answers=(int[])view.Answers.Clone();_qIndex=0;
         ShowDashboardSection("Tests");TestTakingTitle.Text=view.Test.Title;TestTakingMeta.Text=$"{view.Test.ClassName} · {view.Test.Subject}";
         if(view.Finished){ShowResult(view);return;}
-        ShowTestPanel("taking");RenderQuestion();
+        ShowTestPanel("taking");RenderQuestion();ApplyPauseUi();
         if(!_testTimerStarted){_testTimer.Tick+=async (_,_)=>await UpdateDeadlineAsync();_testTimerStarted=true;}
         _testTimer.Start();
     }
     private async Task UpdateDeadlineAsync()
     {
         if(_attempt is null || _attempt.Finished)return;
+        if(_attempt.Paused){ApplyPauseUi();return;}
         if(_attempt.Deadline is {} end)
         {
             var left=end-DateTimeOffset.UtcNow;
@@ -410,7 +425,7 @@ public partial class MainWindow : Window
             {
                 var option=i;var question=_qIndex;
                 var rb=new System.Windows.Controls.RadioButton{Content=new System.Windows.Controls.TextBlock{Text=$"{(char)(65+i)}.  {q.Options[i]}",TextWrapping=TextWrapping.Wrap,MaxWidth=650},GroupName="Answer",Margin=new Thickness(0,0,0,12),FontSize=15,IsChecked=_answers[question]==option};
-                rb.Checked+=async(_,_)=>{if(_rendering)return;_answers[question]=option;UpdateQuestionPalette();await SaveAnswersAsync();};
+                rb.Checked+=async(_,_)=>{if(_rendering || _attempt?.Paused==true)return;_answers[question]=option;UpdateQuestionPalette();await SaveAnswersAsync();};
                 TestOptionsPanel.Children.Add(rb);
             }
             _ = ShowRichQuestionAsync();
@@ -422,11 +437,12 @@ public partial class MainWindow : Window
     }
     private async Task SaveAnswersAsync()
     {
-        if(_attempt is null)return;var id=_attempt.Id;var answers=(int[])_answers.Clone();
+        if(_attempt is null || _attempt.Paused)return;var id=_attempt.Id;var answers=(int[])_answers.Clone();
         await _attemptGate.WaitAsync();
         try
         {
             var r=await AgentPipeClient.SendAsync(new(){Action=ControlAction.SaveAnswers,AttemptId=id,Answers=answers});
+            if(_attempt?.Id!=id)return;
             TestSaveStatus.Text=r.Ok?"Javoblar saqlandi":"Saqlanmadi: "+r.Message;
             if(r.Ok && r.Attempt is {Finished:true} finished)ShowResult(finished);
         }
@@ -437,7 +453,7 @@ public partial class MainWindow : Window
     private async void OnTestFinish(object sender,RoutedEventArgs e)=>await FinishAsync(true);
     private async Task FinishAsync(bool confirm)
     {
-        if(_attempt is null || _finishing)return;
+        if(_attempt is null || _finishing || _attempt.Paused)return;
         if(confirm && MessageBox.Show($"Testni yakunlaysizmi? Javobsiz: {_answers.Count(x=>x<0)}","Tasdiqlash",MessageBoxButton.YesNo)!=MessageBoxResult.Yes)return;
         _finishing=true;await _attemptGate.WaitAsync();
         try

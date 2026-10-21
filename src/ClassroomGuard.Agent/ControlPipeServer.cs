@@ -7,7 +7,7 @@ using ClassroomGuard.Core;
 using ClassroomGuard.Core.Ipc;
 using Microsoft.Extensions.Logging;
 namespace ClassroomGuard.Agent;
-public sealed record LocalCaller(string Sid,bool Administrator,int SessionId);
+public sealed record LocalCaller(string Sid,bool Administrator,int SessionId,string ExecutablePath="");
 public sealed class ControlPipeServer
 {
     private readonly ILogger _log;
@@ -38,13 +38,13 @@ public sealed class ControlPipeServer
                 using var writer=new StreamWriter(pipe,leaveOpen:true){AutoFlush=true};
                 var line=await Wire.ReadAsync(reader,deadline.Token);
                 LocalCaller? caller=null;
-                var session=-1;
+                var session=-1;var executable="";
                 if(GetNamedPipeClientProcessId(pipe.SafePipeHandle,out var pid))
-                    using(var p=System.Diagnostics.Process.GetProcessById((int)pid))session=p.SessionId;
+                    using(var p=System.Diagnostics.Process.GetProcessById((int)pid)) { session=p.SessionId;try { executable=p.MainModule?.FileName??""; } catch { } }
                 pipe.RunAsClient(()=>
                 {
                     using var identity=WindowsIdentity.GetCurrent();
-                    caller=new(identity.User?.Value??"",new WindowsPrincipal(identity).IsInRole(WindowsBuiltInRole.Administrator),session);
+                    caller=new(identity.User?.Value??"",new WindowsPrincipal(identity).IsInRole(WindowsBuiltInRole.Administrator),session,executable);
                 });
                 var request=JsonSerializer.Deserialize<ControlRequest>(line??"")??throw new InvalidDataException();
                 ControlResponse response;

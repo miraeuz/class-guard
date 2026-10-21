@@ -38,6 +38,7 @@ public partial class MainWindow
             web.PermissionRequested += (_, e) => e.State = CoreWebView2PermissionState.Deny;
             web.NavigationCompleted += (_, e) =>
             {
+                if(e.IsSuccess)ApplyLearningTheme();
                 if (!e.IsSuccess)
                 {
                     _learningReady = false;
@@ -56,6 +57,11 @@ public partial class MainWindow
                     LearningErrorPanel.Visibility = Visibility.Visible;
         }
         finally { _learningBusy = false; }
+    }
+    private void ApplyLearningTheme()
+    {
+        if(Uri.TryCreate(LearningView.CoreWebView2?.Source,UriKind.Absolute,out var page) && page.Scheme=="https" && page.Host=="learning.mirae.local" && page.AbsolutePath=="/index.html")
+            LearningView.CoreWebView2.PostWebMessageAsJson(System.Text.Json.JsonSerializer.Serialize(new { kind="theme",dark=ThemeManager.Dark }));
     }
     private void OnRetryLearning(object sender, RoutedEventArgs e) => _ = EnsureLearningAsync();
     private void OnOpenLearning(object sender, RoutedEventArgs e)

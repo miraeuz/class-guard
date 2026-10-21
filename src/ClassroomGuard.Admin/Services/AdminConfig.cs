@@ -1,6 +1,8 @@
 using System.IO;
 using System.Text.Json;
 using ClassroomGuard.Core;
+using ClassroomGuard.Core.Persistence;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace ClassroomGuard.Admin.Services;
 
@@ -27,7 +29,13 @@ public sealed class AdminConfig
         try
         {
             if (File.Exists(File_))
-                config = JsonSerializer.Deserialize<AdminConfig>(File.ReadAllText(File_)) ?? new AdminConfig();
+                {
+                    var c=JsonSerializer.Deserialize<AdminConfig>(File.ReadAllText(File_))??new();
+                    c.DevicePins??=new();c.ClassroomKeyBase64??="";c.TelegramBotToken??="";c.TelegramChatId??="";
+                    c.DevicePins=c.DevicePins.Where(x=>!string.IsNullOrWhiteSpace(x.Key)&&x.Value is not null&&x.Value.Length==64&&x.Value.All(Uri.IsHexDigit)).ToDictionary(x=>x.Key,x=>x.Value);
+                    if(c.AnnouncePort is <1024 or >65535)c.AnnouncePort=AppPaths.DefaultAnnouncePort;
+                    return c;
+                }
         }
         catch { /* ignore */ }
         // The key installed by Setup wins, so re-running Setup with a new classroom password
@@ -47,6 +55,6 @@ public sealed class AdminConfig
     public void Save()
     {
         Directory.CreateDirectory(Dir);
-        File.WriteAllText(File_, JsonSerializer.Serialize(this, new JsonSerializerOptions { WriteIndented = true }));
+        new AtomicJsonStore<AdminConfig>(File_,()=>new(),NullLogger.Instance).Save(this);
     }
 }

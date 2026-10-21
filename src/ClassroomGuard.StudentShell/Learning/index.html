@@ -225,6 +225,8 @@ button:focus-visible,input:focus-visible,[tabindex]:focus-visible{outline:3px so
   .field.two{grid-template-columns:1fr}.pgrid{grid-template-columns:repeat(5,1fr)}
   .head-title small{display:none}
 }
+
+:root.dark { color-scheme:dark; --canvas:#10121e; --panel:#1c2033; --ink:#f3f2fa; --ink-soft:#d1cee1; --ink-faint:#b0acc5; --line:#414962; --line-strong:#58627c; --primary:#bca5ff; --primary-ink:#d1bcff; --primary-tint:#352957; --code:#68e0ba; --code-tint:#163e39; }
 </style>
 </head>
 <body>
@@ -967,5 +969,21 @@ setInterval(()=>{updateTimer();},1000);setInterval(()=>{if(state.active)save();}
 routeView();updateTimer();
 })();
 </script>
-</body>
+<script>
+if(window.chrome?.webview)window.chrome.webview.addEventListener('message',event=>{
+ if(event.data?.kind==='theme')document.documentElement.classList.toggle('dark',event.data.dark===true);
+});
+</script><style>
+:root.dark{--c-ink:#f3f2fa;--c-muted:#b0acc5;--c-green:#7540d8;--c-line:#414962;--c-bg:#10121e;--primary:#7540d8;--primary-ink:#6935c8;--ok:#247948;--ok-tint:#163e39;--bad:#d64061;--bad-tint:#492a38;--warn:#ffd080}
+.dark body{background:#10121e;color:#f3f2fa}
+.dark .c-top,.dark .c-sidebar,.dark .c-card,.dark .c-block,.dark .c-question,.dark .c-option,.dark .c-lesson-row,.dark .c-exam-bar,.dark .c-input,.dark .c-btn,.dark .c-skip,.dark .c-table th,.dark .c-steps span,.dark .rule,.dark .field input,.dark .btn-ghost,.dark .station-badge,.dark .timer,.dark .pcell,.dark .opt,.dark .ring .inner,.dark .stat,.dark .rev-exp,.dark .modal-card,.dark .palette .pal-close{background:#1c2033;color:#f3f2fa}
+.dark .c-hero,.dark .info-top{background:linear-gradient(135deg,#302747,#193737)}
+.dark .c-tab,.dark .c-side-btn,.dark .c-offline{color:#c8acff}
+.dark .c-tab.active,.dark .c-side-btn.selected,.dark .c-side-btn:hover,.dark .c-btn:hover,.dark .c-option:has(input:checked),.dark .c-lesson-row:hover,.dark .c-notice,.dark .c-info,.dark .c-number{background:#352957;color:#f3f2fa}
+.dark .c-btn.primary,.dark .pcell.current{background:#7540d8;color:white}
+.dark .exam-head{background:#171a2af0}
+.dark .timer.warn{background:#493922;color:#ffd080}
+.dark a{color:#c8acff}.dark input::placeholder,.dark textarea::placeholder{color:#b0acc5}
+@media print{.dark body,.dark .c-block,.dark .c-card,.dark .c-question{background:white;color:black}}
+</style></body>
 </html>

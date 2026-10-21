@@ -25,10 +25,13 @@ public enum NetCommand
     Ping,
     LockScreen,
     UnlockScreen,
+    BeginLesson, EndLesson, AcknowledgeHelp, PauseTests, ResumeTests,
 }
 
 public sealed class NetRequest
 {
+    public LessonSession? Lesson { get; set; }
+    public string? LessonId { get; set; }
     public NetCommand Command { get; set; }
     public string? AuthHmac { get; set; }
     public EnforcementState? State { get; set; }
@@ -39,6 +42,7 @@ public sealed class NetRequest
 
 public sealed class NetResponse
 {
+    public LessonSummary? LessonSummary { get; set; }
     public bool Ok { get; set; }
     public string Message { get; set; } = "";
     public string? Nonce { get; set; }
@@ -64,6 +68,8 @@ public sealed class MachineInfo
     public bool StudentMode { get; set; }
     public DateTimeOffset LastSeen { get; set; }
     public EnforcementState? ReportedState { get; set; }
+    public string LastContactError { get; set; } = "";
+    public DateTimeOffset? LastContactAttempt { get; set; }
     public bool Verified { get; set; }
     public bool IdentityConflict { get; set; }
     public DateTimeOffset LastVerified { get; set; }

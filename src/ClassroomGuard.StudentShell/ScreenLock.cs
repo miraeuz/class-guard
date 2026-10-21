@@ -61,6 +61,17 @@ internal sealed class LessonLockWindow : Window
     private bool _released;
     private readonly TextBlock _message;
     private readonly System.Drawing.Rectangle _bounds;
+    private bool _positioned;
+    [StructLayout(LayoutKind.Sequential)] private struct Rect { public int Left,Top,Right,Bottom; }
+    [DllImport("user32.dll")] private static extern bool GetWindowRect(IntPtr hwnd,out Rect rect);
+    public bool CoverageReady
+    {
+        get
+        {
+            if(!_positioned || !IsLoaded || !IsVisible || WindowState==WindowState.Minimized)return false;
+            return GetWindowRect(new WindowInteropHelper(this).Handle,out var rect) && rect.Left<=_bounds.Left && rect.Top<=_bounds.Top && rect.Right>=_bounds.Right && rect.Bottom>=_bounds.Bottom;
+        }
+    }
     [DllImport("user32.dll",SetLastError=true)] private static extern bool SetWindowPos(IntPtr hwnd,IntPtr after,int x,int y,int cx,int cy,uint flags);
     public LessonLockWindow(System.Drawing.Rectangle bounds,Func<Task> refresh)
     {
@@ -76,11 +87,14 @@ internal sealed class LessonLockWindow : Window
         panel.Children.Add(_message);
         panel.Children.Add(Text("O‘qituvchi ekranni ochguncha kuting.\nQayta ishga tushirish qulfni bekor qilmaydi.",17,FontWeights.Normal));
         panel.Children.Add(Text(Environment.MachineName+"  •  O‘quv mashg‘uloti",14,FontWeights.Normal));
+        var help=new Button { Content="✋ Yordam so‘rash",Padding=new Thickness(16,8,16,8),Margin=new Thickness(0,12,0,0) };
+        help.Click+=async (_,_)=> {help.IsEnabled=false;try {var r=await AgentPipeClient.SendAsync(new(){Action=ControlAction.RaiseHand});help.Content=r.Ok?"✋ So‘rov yuborildi":r.Message;}finally{help.IsEnabled=true;} };
+        panel.Children.Add(help);
         var expander=new Expander { Header="O‘qituvchi uchun mahalliy ochish",Foreground=Brushes.White,Margin=new Thickness(0,24,0,0) };
         var form=new StackPanel();
         form.Children.Add(Text("Tarmoq ishlamasa, o‘qituvchi hisobi yoki bir martalik koddan foydalaning.",14,FontWeights.Normal));
-        var username=new TextBox { Text="teacher",FontSize=16,Margin=new Thickness(0,6,0,6),Padding=new Thickness(10),Foreground=Brushes.Black,MaxLength=128 };
-        var password=new PasswordBox { FontSize=16,Margin=new Thickness(0,6,0,6),Padding=new Thickness(10),Foreground=Brushes.Black,MaxLength=256 };
+        var username=new TextBox { Text="teacher",FontSize=16,Margin=new Thickness(0,6,0,6),Padding=new Thickness(10),Foreground=Brushes.Black,Background=Brushes.White,MaxLength=128 };
+        var password=new PasswordBox { FontSize=16,Margin=new Thickness(0,6,0,6),Padding=new Thickness(10),Foreground=Brushes.Black,Background=Brushes.White,MaxLength=256 };
         var status=Text("Agent holati har 2 soniyada tekshiriladi. Aloqa uzilsa, qulf saqlanadi.",13,FontWeights.Normal);
         var button=new Button { Content="Ekranni ochish",Padding=new Thickness(18,10,18,10),Margin=new Thickness(0,8,0,8) };
         button.Click+=async (_,_) =>
@@ -104,7 +118,7 @@ internal sealed class LessonLockWindow : Window
     }
     private static TextBlock Text(string value,double size,FontWeight weight,string font="Segoe UI") => new()
     { Text=value,FontSize=size,FontWeight=weight,FontFamily=new FontFamily(font),TextWrapping=TextWrapping.Wrap,TextAlignment=TextAlignment.Center,Margin=new Thickness(0,10,0,10) };
-    private void Position()=>SetWindowPos(new WindowInteropHelper(this).Handle,new IntPtr(-1),_bounds.X,_bounds.Y,_bounds.Width,_bounds.Height,0x0010|0x0040);
+    private void Position()=>_positioned=SetWindowPos(new WindowInteropHelper(this).Handle,new IntPtr(-1),_bounds.X,_bounds.Y,_bounds.Width,_bounds.Height,0x0010|0x0040);
     public void SetConfirmed(bool confirmed) => _message.Text=confirmed?"Kompyuter o‘qituvchi tomonidan qulflangan.":"Agent javobi kutilmoqda. Aloqa tiklanmasa, o‘qituvchiga murojaat qiling.";
     public void KeepVisible() { if(!IsVisible)Show();if(WindowState==WindowState.Minimized)WindowState=WindowState.Normal;Position(); }
     public void Release() { _released=true;Close(); }

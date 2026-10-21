@@ -1,3 +1,5 @@
+> See DASHBOARD-UPDATE.md for the newer expiring StudentShell display reports and dashboard labels. The persistence and recovery instructions below still apply.
+
 # Teacher-controlled lesson screen lock
 
 This release adds a separate lesson screen lock. Existing app restrictions, tests, rich question rendering and multi-PC discovery remain in place.

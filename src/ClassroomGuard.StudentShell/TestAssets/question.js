@@ -19,6 +19,7 @@ function paintCode(text,language){
  let end=0;for(const match of text.matchAll(pattern)){target.append(document.createTextNode(text.slice(end,match.index)));const span=document.createElement('span');span.textContent=match[0];span.className=/^(#|\/\/)/.test(match[0])?'tok-comment':/^['"]/.test(match[0])?'tok-string':/^\d/.test(match[0])?'tok-number':'tok-key';target.append(span);end=match.index+match[0].length;}target.append(document.createTextNode(text.slice(end)));
 }
 function renderQuestion(q){
+ document.documentElement.classList.toggle("dark",q.Dark===true);
  const prompt=document.getElementById('prompt');prompt.replaceChildren();
  if(q.TextHtml)prompt.append(cleanHtml(String(q.TextHtml).slice(0,12000)));else prompt.textContent=q.Text||'';
  document.getElementById('meta').textContent=[q.Topic,q.Difficulty].filter(Boolean).join(' · ');

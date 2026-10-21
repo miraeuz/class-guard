@@ -1,4 +1,4 @@
-<Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Class="ClassroomGuard.Admin.MainWindow" Title="ClassroomGuard Master — O‘qituvchi" Height="740" Width="1120" MinHeight="460" MinWidth="800" WindowStartupLocation="CenterScreen" Icon="app.ico" Background="{StaticResource BgApp}" UseLayoutRounding="True" SizeChanged="OnAdminResize">
+<Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Class="ClassroomGuard.Admin.MainWindow" Title="ClassroomGuard Master — O‘qituvchi" Height="740" Width="1120" MinHeight="460" MinWidth="800" WindowStartupLocation="CenterScreen" Icon="app.ico" Background="{DynamicResource BgApp}" UseLayoutRounding="True" SizeChanged="OnAdminResize">
 
     <Grid>
         <Grid.ColumnDefinitions>
@@ -7,16 +7,16 @@
         </Grid.ColumnDefinitions>
 
         
-        <Border Grid.Column="0" Background="{StaticResource BgSidebar}" BorderBrush="{StaticResource Border}" BorderThickness="0,0,1,0">
+        <Border Grid.Column="0" Background="{DynamicResource BgSidebar}" BorderBrush="{DynamicResource Border}" BorderThickness="0,0,1,0">
             <DockPanel>
                 <Button DockPanel.Dock="Top" Content="" FontFamily="Segoe MDL2 Assets" Style="{StaticResource BtnSecondary}" MinWidth="40" HorizontalAlignment="Left" Margin="12" Click="OnToggleAdminSidebar" ToolTip="Menyuni yig‘ish / yoyish" AutomationProperties.Name="Menyuni yig‘ish yoki yoyish"/><StackPanel DockPanel.Dock="Top" Margin="22,28,22,20" x:Name="AdminSidebarBrand">
                     <StackPanel Orientation="Horizontal">
-                        <Border Width="36" Height="36" CornerRadius="10" Background="{StaticResource HeaderBg}" Margin="0,0,12,0">
-                            <ContentControl Template="{StaticResource SchoolMarkTemplate}" Width="19" Height="19" Foreground="White" Tag="{StaticResource TassleAccent}"/>
+                        <Border Width="36" Height="36" CornerRadius="10" Background="{DynamicResource HeaderBg}" Margin="0,0,12,0">
+                            <ContentControl Template="{StaticResource SchoolMarkTemplate}" Width="19" Height="19" Foreground="White" Tag="{DynamicResource TassleAccent}"/>
                         </Border>
                         <StackPanel VerticalAlignment="Center">
                             <TextBlock Text="ClassroomGuard" FontSize="15" FontWeight="Bold"/>
-                            <TextBlock Text="Master" FontSize="11" Foreground="{StaticResource TextMuted}"/>
+                            <TextBlock Text="Master" FontSize="11" Foreground="{DynamicResource TextMuted}"/>
                             <TextBlock x:Name="KeyStatus" Text="Kalit yuklanmagan" Style="{StaticResource Muted}"/>
                         </StackPanel>
                     </StackPanel>
@@ -53,38 +53,72 @@
         <Grid Grid.Column="1" Margin="28,24">
 
             
-            <DockPanel x:Name="PageDash" Visibility="Visible">
-                <StackPanel DockPanel.Dock="Top" Margin="0,0,0,18" Orientation="Vertical">
-                    <WrapPanel DockPanel.Dock="Left" VerticalAlignment="Center">
-                        <Border Width="34" Height="34" CornerRadius="9" Background="{StaticResource AccentSoft}" Margin="0,0,12,0">
-                            <ContentControl Template="{StaticResource IconDashboard}" Width="16" Height="16" Foreground="{StaticResource Accent}"/>
-                        </Border>
-                        <TextBlock Text="Kompyuterlar" Style="{StaticResource H1}" Margin="0,0,8,0"/>
-                        <Border Style="{StaticResource HelpIcon}" ToolTip="Tarmoqdagi agentlar. Yashil — ochiq, qizil — Student Mode, sariq — offline. Veyon Master dagi kabi barcha PC lar shu yerda.">
-                            <TextBlock Style="{StaticResource HelpIconText}"/>
-                        </Border>
-                        <TextBlock x:Name="MachineCount" Style="{StaticResource Muted}" VerticalAlignment="Center" Margin="12,0,0,0"/>
+            <DockPanel x:Name="PageDash"><ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled"><StackPanel>
+                <StackPanel DockPanel.Dock="Top" Margin="0,0,0,16">
+                    <TextBlock Text="{Binding Text, ElementName=DashStatus}" TextWrapping="Wrap" Foreground="{DynamicResource TextSecondary}" Margin="0,0,0,8"/>
+                    <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
+                        <StackPanel><TextBlock Text="Sinf boshqaruvi" Style="{StaticResource H1}"/><TextBlock Text="MIRAE ACADEMY · O‘QITUVCHI ISH MAYDONI" Style="{StaticResource Muted}" Margin="0,5,0,0"/></StackPanel>
+                        <Button Grid.Column="1" x:Name="ThemeButton" Content="☾ Tun" Click="OnToggleTheme" Style="{StaticResource BtnSecondary}" ToolTip="Kunduzgi / tungi ko‘rinish"/>
+                    </Grid>
+                    <Border Background="{DynamicResource HeroGradient}" CornerRadius="18" Padding="16" Margin="0,16,0,12">
+                        <StackPanel><TextBlock x:Name="MachineCount" FontSize="18" FontWeight="SemiBold" TextWrapping="Wrap"/><TextBlock x:Name="OverviewText" Style="{StaticResource Muted}" TextWrapping="Wrap" Margin="0,6,0,0"/></StackPanel>
+                    </Border>
+                    <WrapPanel>
+                        <Button Content="↻ Yangilash" Style="{StaticResource BtnSecondary}" Click="OnRefresh"/>
+                        <Button Content="Barcha ekranlarni qulflash" Style="{StaticResource BtnPrimary}" Click="OnScreenLockAll"/>
+                        <Button Content="Barcha ekranlarni ochish" Style="{StaticResource BtnSecondary}" Click="OnScreenUnlockAll"/>
+                        <Button Content="Faoliyat tarixi" Click="OnActivityHistory" Style="{StaticResource BtnSecondary}"/><Button Content="Sinxronlash" Style="{StaticResource BtnSecondary}" Click="OnReconcile"/>
+                        <Expander Header="Ilova cheklovlari" Margin="8"><WrapPanel><Button Content="Barchasini cheklash" Click="OnLockAll" Style="{StaticResource BtnSecondary}"/><Button Content="30 daqiqa ruxsat" Click="OnUnlockAll" Style="{StaticResource BtnSecondary}"/></WrapPanel></Expander>
                     </WrapPanel>
-                    <WrapPanel HorizontalAlignment="Left" Margin="0,12,0,0">
-                        <Button Content="Yangilash" Style="{StaticResource BtnSecondary}" Click="OnRefresh"/>
-                        <Button Content="Ekranlarni qulflash" Style="{StaticResource BtnPrimary}" Click="OnScreenLockAll"/>
-                        <Button Content="Ekranlarni ochish" Style="{StaticResource BtnSecondary}" Click="OnScreenUnlockAll"/>
-                        <Button Content="Barchasini cheklash" Style="{StaticResource BtnPrimary}" Click="OnLockAll"/>
-                        <Button Content="30 daqiqa ruxsat" Style="{StaticResource BtnSecondary}" Click="OnUnlockAll"/>
-                        <Button Content="Sinxronlash" Style="{StaticResource BtnSecondary}" Click="OnReconcile"/>
+                    <WrapPanel Margin="0,10,0,0">
+                        <ComboBox x:Name="GroupSelector" Width="180" Margin="0,0,10,0" SelectionChanged="OnGroupChanged" ToolTip="Guruhni tanlang"/><TextBox x:Name="MachineSearch" Width="200" TextChanged="OnMachineSearch" ToolTip="PC nomi, IP yoki ID bo‘yicha qidirish" AutomationProperties.Name="Kompyuterlarni qidirish" Margin="0,0,10,0"/>
+                        <CheckBox x:Name="SeatingToggle" Content="O‘tirish rejasi" VerticalAlignment="Center" Click="OnViewChanged" Margin="0,0,12,0"/>
+                        <TextBlock Text="Ustunlar:" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                        <ComboBox x:Name="SeatColumns" Width="65" SelectedIndex="2" SelectionChanged="OnColumnsChanged"><ComboBoxItem Content="2"/><ComboBoxItem Content="3"/><ComboBoxItem Content="4"/><ComboBoxItem Content="5"/><ComboBoxItem Content="6"/></ComboBox>
                     </WrapPanel>
-                <TextBox x:Name="MachineSearch" ToolTip="PC nomi, IP manzili yoki ID bo‘yicha qidirish" AutomationProperties.Name="Kompyuterlarni qidirish" TextChanged="OnMachineSearch" Margin="0,12,0,0"/></StackPanel>
-                <ScrollViewer VerticalScrollBarVisibility="Auto">
-                    <StackPanel><TextBlock x:Name="MachineEmpty" Text="Kompyuter topilmadi. Qidiruvni tozalang yoki agent, tarmoq va UDP portini tekshiring." TextWrapping="Wrap" Margin="0,20,0,20" Foreground="{StaticResource TextMuted}"/><WrapPanel x:Name="MachinePanel"/>
-                </StackPanel></ScrollViewer>
+                    <Border CornerRadius="12" Background="{DynamicResource AccentSoft}" Padding="10" Margin="0,10,0,0">
+                        <WrapPanel><TextBlock x:Name="SelectionText" Text="0 ta tanlangan" VerticalAlignment="Center" Margin="0,0,12,0"/>
+                        <Button Content="Ko‘rinayotganlarni tanlash" Click="OnSelectVisible" Style="{StaticResource BtnSecondary}"/><Button Content="Tozalash" Click="OnClearSelection" Style="{StaticResource BtnSecondary}"/>
+                        <Button x:Name="SelectedLockButton" Content="Tanlanganlarni qulflash" Click="OnLockSelected" Style="{StaticResource BtnPrimary}"/>
+                        <Button x:Name="SelectedUnlockButton" Content="Tanlanganlarni ochish" Click="OnUnlockSelected" Style="{StaticResource BtnSecondary}"/><Button Content="Testni pauza qilish" Click="OnPauseSelected" Style="{StaticResource BtnSecondary}"/><Button Content="Testni davom ettirish" Click="OnResumeSelected" Style="{StaticResource BtnSecondary}"/><Expander Header="Tanlangan PC ilovalari" Margin="8"><WrapPanel><Button Content="Cheklash" Click="OnRestrictSelected" Style="{StaticResource BtnSecondary}"/><Button Content="30 daqiqa ruxsat" Click="OnPermitSelected" Style="{StaticResource BtnSecondary}"/></WrapPanel></Expander></WrapPanel>
+                    </Border>
+                    <Expander Header="Dars sessiyasi · tanlangan PC yoki joriy guruh" Margin="0,12,0,0">
+                        <StackPanel><WrapPanel><TextBox x:Name="LessonTitleBox" Width="220" MaxLength="120" ToolTip="Dars nomi" Margin="0,8,10,8"/><TextBox x:Name="LessonGroupBox" Width="140" MaxLength="80" ToolTip="Dars guruhi" Margin="0,8,10,8"/><Button Content="Darsni boshlash" Click="OnBeginLesson" Style="{StaticResource BtnPrimary}"/><Button Content="Darsni yakunlash" Click="OnEndLesson" Style="{StaticResource BtnSecondary}"/></WrapPanel>
+                        <TextBlock Text="Push sahifasidagi ilovalar, saytlar va testlar dars siyosati sifatida olinadi. Ekran qulfi va test pauzasi alohida." TextWrapping="Wrap" Foreground="{DynamicResource TextMuted}"/></StackPanel>
+                    </Expander>
+                </StackPanel>
+                <Grid x:Name="WorkspaceGrid">
+                        <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition x:Name="DetailsColumn" Width="280"/></Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
+                        <StackPanel x:Name="MachineHost" Margin="0,0,16,0">
+                            <Border x:Name="TeacherDesk" Visibility="Collapsed" Background="{DynamicResource BgCard}" CornerRadius="10" Padding="10" Margin="0,0,0,12"><TextBlock Text="DOSKA · O‘QITUVCHI" HorizontalAlignment="Center" FontWeight="SemiBold"/></Border>
+                            <TextBlock x:Name="MachineEmpty" Text="Kompyuter topilmadi. Agent va tarmoq ulanishini tekshiring." TextWrapping="Wrap" Margin="0,20" Foreground="{DynamicResource TextMuted}"/>
+                            <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled"><WrapPanel x:Name="MachinePanel" SizeChanged="OnMachineAreaResize"/></ScrollViewer>
+                        </StackPanel>
+                        <Border x:Name="DetailsPanel" Grid.Column="1" Background="{DynamicResource BgCard}" BorderBrush="{DynamicResource Border}" BorderThickness="1" CornerRadius="18" Padding="18" VerticalAlignment="Top">
+                            <StackPanel><TextBlock Text="PC tafsilotlari" FontSize="18" FontWeight="SemiBold"/>
+                            <TextBlock x:Name="DetailTitle" Text="Kompyuterni tanlang" FontSize="16" FontWeight="SemiBold" Margin="0,16,0,6" TextWrapping="Wrap"/>
+                            <TextBlock x:Name="DetailText" Text="Holat, ulanish sababi va keyingi qadam shu yerda ko‘rinadi." TextWrapping="Wrap" Foreground="{DynamicResource TextSecondary}"/>
+                            <Separator Margin="0,16"/>
+                            <TextBlock Text="O‘quvchi nomi (qo‘lda biriktiriladi)"/><TextBox x:Name="StudentNameBox" MaxLength="80" Margin="0,6,0,10"/>
+                            <TextBlock Text="Guruh"/><TextBox x:Name="StudentGroupBox" MaxLength="80" Margin="0,6,0,10"/><Button Content="Nom va guruhni saqlash" Click="OnSaveProfile" Style="{StaticResource BtnSecondary}"/>
+                            <TextBlock Text="O‘rindiq raqami (1–120)"/>
+                            <TextBox x:Name="SeatNumberBox" MaxLength="3" Margin="0,6,0,10" AutomationProperties.Name="O‘rindiq raqami"/>
+                            <WrapPanel><Button Content="Saqlash" Click="OnSaveSeat" Style="{StaticResource BtnPrimary}"/><Button Content="Olib tashlash" Click="OnRemoveSeat" Style="{StaticResource BtnSecondary}"/></WrapPanel>
+                            <TextBlock x:Name="SeatStatus" TextWrapping="Wrap" Style="{StaticResource Muted}" Margin="0,8,0,0"/>
+                            <TextBlock Text="O‘rindiq joylashuvi faqat ushbu o‘qituvchi hisobida saqlanadi." Style="{StaticResource Muted}" TextWrapping="Wrap" Margin="0,14,0,0"/>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+
+            </StackPanel></ScrollViewer>
             </DockPanel>
 
-            
             <ScrollViewer x:Name="PagePush" Visibility="Collapsed" VerticalScrollBarVisibility="Auto">
                 <StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0,0,0,16">
-                        <Border Width="34" Height="34" CornerRadius="9" Background="{StaticResource AccentSoft}" Margin="0,0,12,0">
-                            <ContentControl Template="{StaticResource IconPush}" Width="16" Height="16" Foreground="{StaticResource Accent}"/>
+                        <Border Width="34" Height="34" CornerRadius="9" Background="{DynamicResource AccentSoft}" Margin="0,0,12,0">
+                            <ContentControl Template="{StaticResource IconPush}" Width="16" Height="16" Foreground="{DynamicResource Accent}"/>
                         </Border>
                         <TextBlock Text="Push — o‘zgarishlarni yuborish" Style="{StaticResource H1}"/>
                         <Border Style="{StaticResource HelpIcon}" ToolTip="Saytlar va qoidalarni o‘zgartiring, keyin bitta tugma bilan barcha topilgan kompyuterlarga yuboring (Veyon uslubi).">
@@ -145,13 +179,13 @@
                         </StackPanel>
                     </Border>
 
-                    <Border Style="{StaticResource Card}" BorderBrush="{StaticResource Accent}" BorderThickness="1.5">
+                    <Border Style="{StaticResource Card}" BorderBrush="{DynamicResource Accent}" BorderThickness="1.5">
                         <StackPanel>
                             <TextBlock Text="6. Yuborish" FontWeight="SemiBold" FontSize="15" Margin="0,0,0,8"/>
                             <TextBlock Style="{StaticResource Muted}" Margin="0,0,0,12" Text="Saytlar + qoidalar + dasturlar + kutubxona + testlar barcha online agentlarga yuboriladi."/>
                             <StackPanel Orientation="Horizontal">
-                                <Button Content="Barcha kompyuterlarga Push" Style="{StaticResource BtnPrimary}" FontSize="14" Padding="20,12" Click="OnPushAll"/>
-                                <TextBlock x:Name="PushStatus" VerticalAlignment="Center" Margin="14,0,0,0" Foreground="{StaticResource Success}"/>
+                                <Button Content="Barcha kompyuterlarga Push" Style="{StaticResource BtnPrimary}" FontSize="14" Padding="20,12" Click="OnPushAll"/><Button Content="Tanlangan PC ga siyosat / testlar" Click="OnPushSelected" Style="{StaticResource BtnSecondary}"/>
+                                <TextBlock x:Name="PushStatus" VerticalAlignment="Center" Margin="14,0,0,0" Foreground="{DynamicResource Success}"/>
                             </StackPanel>
                         </StackPanel>
                     </Border>
@@ -162,8 +196,8 @@
             <ScrollViewer x:Name="PageSettings" Visibility="Collapsed" VerticalScrollBarVisibility="Auto">
                 <StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0,0,0,16">
-                        <Border Width="34" Height="34" CornerRadius="9" Background="{StaticResource AccentSoft}" Margin="0,0,12,0">
-                            <ContentControl Template="{StaticResource IconSettings}" Width="16" Height="16" Foreground="{StaticResource Accent}"/>
+                        <Border Width="34" Height="34" CornerRadius="9" Background="{DynamicResource AccentSoft}" Margin="0,0,12,0">
+                            <ContentControl Template="{StaticResource IconSettings}" Width="16" Height="16" Foreground="{DynamicResource Accent}"/>
                         </Border>
                         <TextBlock Text="Sozlamalar" Style="{StaticResource H1}"/>
                         <Border Style="{StaticResource HelpIcon}" ToolTip="Sinf kaliti, offline kod va Telegram.">
@@ -189,7 +223,7 @@
                             <StackPanel Orientation="Horizontal">
                                 <TextBox x:Name="UnlockMachineId" Width="220"/>
                                 <Button Content="Kodni ko‘rsatish" Style="{StaticResource BtnPrimary}" Click="OnShowCode"/>
-                                <TextBlock x:Name="UnlockCode" FontSize="22" FontWeight="Bold" Foreground="{StaticResource Accent}" VerticalAlignment="Center" Margin="14,0,0,0"/>
+                                <TextBlock x:Name="UnlockCode" FontSize="22" FontWeight="Bold" Foreground="{DynamicResource AccentText}" VerticalAlignment="Center" Margin="14,0,0,0"/>
                             </StackPanel>
                         </StackPanel>
                     </Border>
@@ -205,7 +239,7 @@
                             <TextBox x:Name="PortBox" Width="120" HorizontalAlignment="Left"/>
                             <StackPanel Orientation="Horizontal" Margin="0,14,0,0">
                                 <Button Content="Saqlash" Style="{StaticResource BtnPrimary}" Click="OnSaveSettings"/>
-                                <TextBlock x:Name="SettingsStatus" Foreground="{StaticResource Success}" VerticalAlignment="Center" Margin="12,0,0,0"/>
+                                <TextBlock x:Name="SettingsStatus" Foreground="{DynamicResource Success}" VerticalAlignment="Center" Margin="12,0,0,0"/>
                             </StackPanel>
                         </StackPanel>
                     </Border>

@@ -20,12 +20,15 @@ public enum ControlAction
     ChangePassword,
     ApproveInstall,      // redeem a Telegram-delivered one-time install code (no teacher auth needed locally — the code IS the auth)
     StartTest, SaveAnswers, FinishTest, ResumeTest,
-    LockScreen = 12, UnlockScreen = 13,
+    LockScreen = 12, UnlockScreen = 13, ReportScreenCover = 14, RaiseHand = 15, LowerHand = 16,
     ReportTestResult = 11,    // student finished a test — Agent forwards summary to teacher Telegram
 }
 
 public sealed class ControlRequest
 {
+    public string? ScreenLockToken { get; set; }
+    public bool ScreenCovered { get; set; }
+    public int MonitorCount { get; set; }
     public ControlAction Action { get; set; }
     public string? Username { get; set; }
     public string? Password { get; set; }

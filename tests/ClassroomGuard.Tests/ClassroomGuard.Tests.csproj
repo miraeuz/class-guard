@@ -6,4 +6,6 @@
 <Compile Include="../../src/ClassroomGuard.Admin/Services/AdminClient.cs" Link="AdminClient.cs"/>
 <Compile Include="../../src/ClassroomGuard.Admin/Services/DiscoveryCatalog.cs" Link="DiscoveryCatalog.cs"/>
 <Compile Include="../../src/ClassroomGuard.Admin/Services/Discovery.cs" Link="Discovery.cs"/>
+<Compile Include="../../src/ClassroomGuard.Admin/Services/DashboardTargeting.cs" Link="DashboardTargeting.cs"/>
+<Compile Include="../../src/ClassroomGuard.Admin/Services/AuditedAdminClient.cs" Link="AuditedAdminClient.cs"/>
 </ItemGroup></Project>

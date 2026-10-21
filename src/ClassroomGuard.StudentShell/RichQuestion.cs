@@ -46,7 +46,7 @@ public partial class MainWindow
     {
         if(!_richReady || _currentTest is null || QuestionRichView.CoreWebView2.Source!=RichOrigin)return;
         var q=_currentTest.Questions[_qIndex];
-        QuestionRichView.CoreWebView2.PostWebMessageAsJson(JsonSerializer.Serialize(new {q.Text,q.TextHtml,q.Code,q.Language,q.Latex,q.Topic,q.Difficulty}));
+        QuestionRichView.CoreWebView2.PostWebMessageAsJson(JsonSerializer.Serialize(new {Dark=ThemeManager.Dark,q.Text,q.TextHtml,q.Code,q.Language,q.Latex,q.Topic,q.Difficulty}));
         QuestionRichView.Visibility=Visibility.Visible;TestQuestionText.Visibility=Visibility.Collapsed;
     }
 }

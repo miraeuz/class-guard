@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              ShutdownMode="OnExplicitShutdown">
     <Application.Resources>
+        <SolidColorBrush x:Key="AccentText" Color="#6D3CE8"/>
         <LinearGradientBrush x:Key="HeroGradient" StartPoint="0,0" EndPoint="1,1"><GradientStop Color="#EEE5FF" Offset="0"/><GradientStop Color="#E0F5F5" Offset="1"/></LinearGradientBrush>
         <Style TargetType="ScrollViewer"><Setter Property="PanningMode" Value="VerticalFirst"/></Style>
         <SolidColorBrush x:Key="BgApp" Color="#F5F3FC"/>
@@ -43,8 +44,8 @@
         </ControlTemplate>
 
         <Style TargetType="Window"><Setter Property="UseLayoutRounding" Value="True"/><Setter Property="SnapsToDevicePixels" Value="True"/>
-            <Setter Property="Background" Value="{StaticResource BgApp}"/>
-            <Setter Property="Foreground" Value="{StaticResource Text}"/>
+            <Setter Property="Background" Value="{DynamicResource BgApp}"/>
+            <Setter Property="Foreground" Value="{DynamicResource Text}"/>
             <Setter Property="FontFamily" Value="Segoe UI"/>
         </Style>
 
@@ -52,7 +53,7 @@
             <Setter Property="Width" Value="18"/>
             <Setter Property="Height" Value="18"/>
             <Setter Property="CornerRadius" Value="9"/>
-            <Setter Property="Background" Value="{StaticResource AccentSoft}"/>
+            <Setter Property="Background" Value="{DynamicResource AccentSoft}"/>
             <Setter Property="Cursor" Value="Help"/>
             <Setter Property="Margin" Value="6,0,0,0"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
@@ -63,7 +64,7 @@
             <Setter Property="Text" Value="?"/>
             <Setter Property="FontSize" Value="11"/>
             <Setter Property="FontWeight" Value="Bold"/>
-            <Setter Property="Foreground" Value="{StaticResource Accent}"/>
+            <Setter Property="Foreground" Value="{DynamicResource Accent}"/>
             <Setter Property="HorizontalAlignment" Value="Center"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
         </Style>
@@ -100,7 +101,7 @@
         </Style>
 
         <Style x:Key="BtnPrimary" TargetType="Button">
-            <Setter Property="Background" Value="{StaticResource Accent}"/>
+            <Setter Property="Background" Value="{DynamicResource Accent}"/>
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Padding" Value="20,12"/>
@@ -114,9 +115,9 @@
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                         <ControlTemplate.Triggers>
-                            <Trigger Property="IsKeyboardFocused" Value="True"><Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource Accent}"/><Setter TargetName="Bd" Property="BorderThickness" Value="2"/></Trigger>
+                            <Trigger Property="IsKeyboardFocused" Value="True"><Setter TargetName="Bd" Property="BorderBrush" Value="{DynamicResource Accent}"/><Setter TargetName="Bd" Property="BorderThickness" Value="2"/></Trigger>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="Bd" Property="Background" Value="{StaticResource AccentHover}"/>
+                                <Setter TargetName="Bd" Property="Background" Value="{DynamicResource AccentHover}"/>
                             </Trigger>
                             <Trigger Property="IsEnabled" Value="False">
                                 <Setter TargetName="Bd" Property="Opacity" Value="0.55"/>
@@ -129,7 +130,7 @@
 
         <Style x:Key="BtnGhost" TargetType="Button">
             <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="Foreground" Value="{StaticResource TextSecondary}"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextSecondary}"/>
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Padding" Value="10,8"/>
             <Setter Property="Cursor" Value="Hand"/>
@@ -140,7 +141,7 @@
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                         <ControlTemplate.Triggers>
-                            <Trigger Property="IsKeyboardFocused" Value="True"><Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource Accent}"/><Setter TargetName="Bd" Property="BorderThickness" Value="2"/></Trigger>
+                            <Trigger Property="IsKeyboardFocused" Value="True"><Setter TargetName="Bd" Property="BorderBrush" Value="{DynamicResource Accent}"/><Setter TargetName="Bd" Property="BorderThickness" Value="2"/></Trigger>
                             <Trigger Property="IsMouseOver" Value="True">
                                 <Setter TargetName="Bd" Property="Background" Value="#EEE7FF"/>
                             </Trigger>
@@ -153,7 +154,7 @@
         <!-- Sidebar navigation button (Lingora-style) -->
         <Style x:Key="NavBtn" TargetType="Button">
             <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="Foreground" Value="{StaticResource Text}"/>
+            <Setter Property="Foreground" Value="{DynamicResource Text}"/>
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Padding" Value="14,12"/>
             <Setter Property="HorizontalContentAlignment" Value="Left"/>
@@ -166,7 +167,7 @@
                             <ContentPresenter HorizontalAlignment="Left" VerticalAlignment="Center"/>
                         </Border>
                         <ControlTemplate.Triggers>
-                            <Trigger Property="IsKeyboardFocused" Value="True"><Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource Accent}"/><Setter TargetName="Bd" Property="BorderThickness" Value="2"/></Trigger>
+                            <Trigger Property="IsKeyboardFocused" Value="True"><Setter TargetName="Bd" Property="BorderBrush" Value="{DynamicResource Accent}"/><Setter TargetName="Bd" Property="BorderThickness" Value="2"/></Trigger>
                             <Trigger Property="IsMouseOver" Value="True">
                                 <Setter TargetName="Bd" Property="Background" Value="#EEE7FF"/>
                             </Trigger>
@@ -181,7 +182,7 @@
             <Setter Property="Background" Value="White"/>
             <Setter Property="CornerRadius" Value="16"/>
             <Setter Property="Padding" Value="18"/>
-            <Setter Property="BorderBrush" Value="{StaticResource Border}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource Border}"/>
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="Cursor" Value="Hand"/>
         </Style>
@@ -191,7 +192,7 @@
             <Setter Property="Background" Value="White"/>
             <Setter Property="CornerRadius" Value="16"/>
             <Setter Property="Padding" Value="22"/>
-            <Setter Property="BorderBrush" Value="{StaticResource Border}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource Border}"/>
             <Setter Property="BorderThickness" Value="1"/>
         </Style>
 
@@ -199,10 +200,10 @@
              default control template = square corners + native blue focus ring that
              clashed with the rest of the palette). -->
         <Style TargetType="TextBox">
-            <Setter Property="Background" Value="{StaticResource BgInput}"/>
-            <Setter Property="Foreground" Value="{StaticResource Text}"/>
-            <Setter Property="CaretBrush" Value="{StaticResource Text}"/>
-            <Setter Property="BorderBrush" Value="{StaticResource Border}"/>
+            <Setter Property="Background" Value="{DynamicResource BgInput}"/>
+            <Setter Property="Foreground" Value="{DynamicResource Text}"/>
+            <Setter Property="CaretBrush" Value="{DynamicResource Text}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource Border}"/>
             <Setter Property="BorderThickness" Value="1.5"/>
             <Setter Property="Padding" Value="12,10"/>
             <Setter Property="FontSize" Value="14"/>
@@ -216,9 +217,9 @@
                                           VerticalAlignment="Center"/>
                         </Border>
                         <ControlTemplate.Triggers>
-                            <Trigger Property="IsKeyboardFocused" Value="True"><Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource Accent}"/><Setter TargetName="Bd" Property="BorderThickness" Value="2"/></Trigger>
+                            <Trigger Property="IsKeyboardFocused" Value="True"><Setter TargetName="Bd" Property="BorderBrush" Value="{DynamicResource Accent}"/><Setter TargetName="Bd" Property="BorderThickness" Value="2"/></Trigger>
                             <Trigger Property="IsFocused" Value="True">
-                                <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource Accent}"/>
+                                <Setter TargetName="Bd" Property="BorderBrush" Value="{DynamicResource Accent}"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -226,10 +227,10 @@
             </Setter>
         </Style>
         <Style TargetType="PasswordBox">
-            <Setter Property="Background" Value="{StaticResource BgInput}"/>
-            <Setter Property="Foreground" Value="{StaticResource Text}"/>
-            <Setter Property="CaretBrush" Value="{StaticResource Text}"/>
-            <Setter Property="BorderBrush" Value="{StaticResource Border}"/>
+            <Setter Property="Background" Value="{DynamicResource BgInput}"/>
+            <Setter Property="Foreground" Value="{DynamicResource Text}"/>
+            <Setter Property="CaretBrush" Value="{DynamicResource Text}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource Border}"/>
             <Setter Property="BorderThickness" Value="1.5"/>
             <Setter Property="Padding" Value="12,10"/>
             <Setter Property="FontSize" Value="14"/>
@@ -243,9 +244,9 @@
                                           VerticalAlignment="Center"/>
                         </Border>
                         <ControlTemplate.Triggers>
-                            <Trigger Property="IsKeyboardFocused" Value="True"><Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource Accent}"/><Setter TargetName="Bd" Property="BorderThickness" Value="2"/></Trigger>
+                            <Trigger Property="IsKeyboardFocused" Value="True"><Setter TargetName="Bd" Property="BorderBrush" Value="{DynamicResource Accent}"/><Setter TargetName="Bd" Property="BorderThickness" Value="2"/></Trigger>
                             <Trigger Property="IsFocused" Value="True">
-                                <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource Accent}"/>
+                                <Setter TargetName="Bd" Property="BorderBrush" Value="{DynamicResource Accent}"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -266,6 +267,22 @@
         </Style>
     <Style TargetType="RadioButton">
 <Setter Property="HorizontalContentAlignment" Value="Stretch"/><Setter Property="Padding" Value="16"/><Setter Property="Cursor" Value="Hand"/>
-<Setter Property="Template"><Setter.Value><ControlTemplate TargetType="RadioButton"><Border x:Name="OptionBorder" Background="#FAF8FE" BorderBrush="{StaticResource Border}" BorderThickness="1" CornerRadius="12" Padding="{TemplateBinding Padding}"><ContentPresenter/></Border><ControlTemplate.Triggers><Trigger Property="IsChecked" Value="True"><Setter TargetName="OptionBorder" Property="Background" Value="{StaticResource AccentSoft}"/><Setter TargetName="OptionBorder" Property="BorderBrush" Value="{StaticResource Accent}"/><Setter TargetName="OptionBorder" Property="BorderThickness" Value="2"/></Trigger><Trigger Property="IsKeyboardFocused" Value="True"><Setter TargetName="OptionBorder" Property="BorderBrush" Value="{StaticResource Accent}"/><Setter TargetName="OptionBorder" Property="BorderThickness" Value="2"/></Trigger><Trigger Property="IsMouseOver" Value="True"><Setter TargetName="OptionBorder" Property="Background" Value="{StaticResource AccentSoft}"/></Trigger></ControlTemplate.Triggers></ControlTemplate></Setter.Value></Setter>
-</Style></Application.Resources>
+<Setter Property="Template"><Setter.Value><ControlTemplate TargetType="RadioButton"><Border x:Name="OptionBorder" Background="{DynamicResource BgInput}" BorderBrush="{DynamicResource Border}" BorderThickness="1" CornerRadius="12" Padding="{TemplateBinding Padding}"><ContentPresenter/></Border><ControlTemplate.Triggers><Trigger Property="IsChecked" Value="True"><Setter TargetName="OptionBorder" Property="Background" Value="{DynamicResource AccentSoft}"/><Setter TargetName="OptionBorder" Property="BorderBrush" Value="{DynamicResource Accent}"/><Setter TargetName="OptionBorder" Property="BorderThickness" Value="2"/></Trigger><Trigger Property="IsKeyboardFocused" Value="True"><Setter TargetName="OptionBorder" Property="BorderBrush" Value="{DynamicResource Accent}"/><Setter TargetName="OptionBorder" Property="BorderThickness" Value="2"/></Trigger><Trigger Property="IsMouseOver" Value="True"><Setter TargetName="OptionBorder" Property="Background" Value="{DynamicResource AccentSoft}"/></Trigger></ControlTemplate.Triggers></ControlTemplate></Setter.Value></Setter>
+</Style>        <Style TargetType="ComboBox">
+            <Setter Property="Foreground" Value="{DynamicResource Text}"/><Setter Property="Background" Value="{DynamicResource BgInput}"/><Setter Property="BorderBrush" Value="{DynamicResource Border}"/>
+            <Setter Property="Padding" Value="10,8"/>
+            <Setter Property="Template"><Setter.Value><ControlTemplate TargetType="ComboBox">
+                <Grid>
+                    <ToggleButton Focusable="False" IsChecked="{Binding IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}">
+                        <ToggleButton.Template><ControlTemplate TargetType="ToggleButton"><Border Background="{DynamicResource BgInput}" BorderBrush="{DynamicResource Border}" BorderThickness="1" CornerRadius="8"><TextBlock Text="⌄" HorizontalAlignment="Right" Margin="0,0,8,0" VerticalAlignment="Center" Foreground="{DynamicResource Text}"/></Border></ControlTemplate></ToggleButton.Template>
+                    </ToggleButton>
+                    <ContentPresenter Content="{TemplateBinding SelectionBoxItem}" ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}" Margin="10,8,24,8" IsHitTestVisible="False"/>
+                    <Popup x:Name="PART_Popup" IsOpen="{TemplateBinding IsDropDownOpen}" Placement="Bottom" AllowsTransparency="True" Focusable="False">
+                        <Border Background="{DynamicResource BgCard}" BorderBrush="{DynamicResource Border}" BorderThickness="1" CornerRadius="8" MinWidth="{Binding ActualWidth,RelativeSource={RelativeSource TemplatedParent}}"><ScrollViewer MaxHeight="280"><ItemsPresenter KeyboardNavigation.DirectionalNavigation="Contained"/></ScrollViewer></Border>
+                    </Popup>
+                </Grid>
+            </ControlTemplate></Setter.Value></Setter>
+        </Style>
+        <Style TargetType="ComboBoxItem"><Setter Property="Foreground" Value="{DynamicResource Text}"/><Setter Property="Background" Value="{DynamicResource BgCard}"/><Setter Property="Padding" Value="10,8"/><Style.Triggers><Trigger Property="IsHighlighted" Value="True"><Setter Property="Background" Value="{DynamicResource AccentSoft}"/></Trigger></Style.Triggers></Style>
+</Application.Resources>
 </Application>

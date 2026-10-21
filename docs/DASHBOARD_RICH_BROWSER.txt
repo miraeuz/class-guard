@@ -1,0 +1,19 @@
+PASS rich text bold rendered
+PASS code indentation preserved
+PASS code syntax tokens rendered
+PASS LaTeX rendered offline
+PASS HTML table retained
+PASS executable tags and links stripped
+PASS HTML attributes stripped
+PASS HTML and code do not execute
+PASS code shown literally
+PASS LaTeX links disabled
+PASS invalid LaTeX falls back to text
+PASS no document overflow 390
+PASS no document overflow 800
+PASS no document overflow 1200
+PASS night mode activated
+PASS formula uses dark surface
+PASS day mode restored
+PASS no external requests
+PASS no JavaScript runtime errors

@@ -9,4 +9,10 @@ check(await page.locator('#prompt script,#prompt img,#prompt iframe,#prompt svg,
 await page.evaluate(()=>renderQuestion({Text:'Math',Latex:'\\href{https://evil.invalid}{click}'}));check(await page.locator('#math a').count()===0,'LaTeX links disabled');
 await page.evaluate(()=>renderQuestion({Text:'Math',Latex:'\\notarealcommand'}));check((await page.locator('#math-error').innerText()).length>0,'invalid LaTeX falls back to text');
 for(const width of [390,800,1200]){await page.setViewportSize({width,height:700});await page.evaluate(q=>renderQuestion(q),samples[0]);check(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'no document overflow '+width);}
+await page.evaluate(q=>renderQuestion({...q,Dark:true}),samples[1]);
+check(await page.evaluate(()=>document.documentElement.classList.contains('dark')),'night mode activated');
+check(await page.locator('#math').evaluate(el=>getComputedStyle(el).backgroundColor)==='rgb(41, 36, 62)','formula uses dark surface');
+await page.screenshot({path:'rich-night.png',fullPage:true});
+await page.evaluate(q=>renderQuestion({...q,Dark:false}),samples[0]);
+check(await page.evaluate(()=>!document.documentElement.classList.contains('dark')),'day mode restored');
 check(external.length===0,'no external requests');check(errors.length===0,'no JavaScript runtime errors');fs.writeFileSync('rich-results.json',JSON.stringify({passed:count,errors,external},null,2));await browser.close();server.close();})().catch(e=>{console.error(e);process.exit(1);});
